@@ -4,7 +4,7 @@ import LoginTenantPages from "../pages/login";
 import LandingPages from "../pages/landingPage";
 import DashboardTenantPages from "../pages/dashboardTenant";
 import PropertiesAndRoomTenantPages from "../pages/propertiesAndRoomTenant";
-
+import RoomPropertyPages from "../pages/room";
 const routes = [
   <Route
     path="/registertenant"
@@ -48,6 +48,15 @@ const routes = [
     element={
       // <ProtectedPage>
       <PropertiesAndRoomTenantPages />
+      // </ProtectedPage>
+    }
+  />,
+  <Route
+    path="/roompropertiestenant"
+    key={"dashboardtenant"}
+    element={
+      // <ProtectedPage>
+      <RoomPropertyPages />
       // </ProtectedPage>
     }
   />,

@@ -67,21 +67,22 @@ db.PropertyImages = require("./property_images")(sequelize, Sequelize);
 
 // -------------------  property  ---------------------
 
-db.PropertyModel.belongsTo(db.TenantModel, {
-  foreignKey: "tenant_id",
-});
+// db.PropertyModel.belongsTo(db.TenantModel, {
+//   foreignKey: "tenant_id",
+// });
 
-db.TenantModel.hasMany(db.PropertyModel, {
-  foreignKey: "tenant_id",
-});
+// db.TenantModel.hasMany(db.PropertyModel, {
+//   foreignKey: "tenant_id",
+// });
 
-db.PropertyModel.belongsTo(db.ProductCategoriesMaster, {
-  foreignKey: "pcm_id",
-});
+// db.PropertyModel.belongsTo(db.ProductCategoriesMaster, {
+//   foreignKey: "pcm_id",
+//   as: "location",
+// });
 
-db.ProductCategoriesMaster.hasMany(db.PropertyModel, {
-  foreignKey: "pcm_id",
-});
+// db.ProductCategoriesMaster.hasMany(db.PropertyModel, {
+//   foreignKey: "pcm_id",
+// });
 
 db.PropertyImages.belongsTo(db.PropertyModel, {
   foreignKey: "property_id",
@@ -91,13 +92,22 @@ db.PropertyModel.hasMany(db.PropertyImages, {
   foreignKey: "property_id",
 });
 
-db.PropertyModel.belongsTo(db.RoomModel, {
-  foreignKey: "room_id",
+db.PropertyModel.belongsTo(db.CitiesModel, {
+  foreignKey: "city_id",
+  targetKey: "city_id",
 });
 
-db.RoomModel.hasMany(db.PropertyModel, {
-  foreignKey: "room_id",
-});
+// db.PropertyModel.hasMany(db.CitiesModel, {
+//   foreignKey: "city_id",
+// });
+
+// db.PropertyModel.belongsTo(db.PropertyImages, {
+//   foreignKey: "picture",
+// });
+
+// db.PropertyImages.hasMany(db.PropertyModel, {
+//   foreignKey: "picture",
+// });
 
 // -------------------  room  ---------------------
 
@@ -106,7 +116,7 @@ db.RoomModel.belongsTo(db.PropertyModel, {
 });
 
 db.PropertyModel.hasMany(db.RoomModel, {
-  foreignKey: "room_id",
+  foreignKey: "property_id",
 });
 
 db.ProvinceModel.hasMany(db.CitiesModel, {
@@ -171,12 +181,20 @@ db.RoomModel.hasMany(db.ReviewModel, {
 
 // -------------------  ProductCategoriesMaster  ---------------------
 
-db.ProductCategoriesMaster.belongsTo(db.CitiesModel, {
-  foreignKey: "city_id",
+// db.ProductCategoriesMaster.belongsTo(db.CitiesModel, {
+//   foreignKey: "city_id",
+// });
+
+// db.CitiesModel.hasMany(db.ProductCategoriesMaster, {
+//   foreignKey: "city_id",
+// });
+
+db.PropertyModel.belongsTo(db.ProductCategoriesMaster, {
+  foreignKey: "pcm_id",
 });
 
-db.CitiesModel.hasMany(db.ProductCategoriesMaster, {
-  foreignKey: "city_id",
+db.ProductCategoriesMaster.hasMany(db.PropertyModel, {
+  foreignKey: "pcm_id",
 });
 
 module.exports = db;

@@ -4,7 +4,7 @@ module.exports = (sequelize, Sequelize) => {
     {
       property_name: Sequelize.STRING,
       details_text: Sequelize.TEXT("long"),
-      // property_photos: Sequelize.STRING,
+      city_id: Sequelize.INTEGER,
     },
     {
       paranoid: true,

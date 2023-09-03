@@ -3,21 +3,24 @@ const { fileUploader } = require("../middlewares/multer");
 const router = express.Router();
 const propertyController = require("../controllers").propertyController;
 
-router.get("/", propertyController.getAllContent);
-
+router.get("/propertieslist", propertyController.getAllProperties);
+router.get("/:id", propertyController.getPropertiesDetailById);
+router.get("/", propertyController.getPropertyProv);
 router.post(
-  "/addproperty",
+  "/",
   fileUploader({
     destinationFolder: "property_img",
-  }).single("property_img"),
+    fileType: "image",
+  }).array("property_img", 3),
   propertyController.addProperties
 );
 
 router.patch(
-  "/editproperty/:id",
+  "/:id",
   fileUploader({
     destinationFolder: "property_img",
-  }).single("property_img"),
+    fileType: "image",
+  }).array("property_img", 3),
   propertyController.editProperties
 );
 

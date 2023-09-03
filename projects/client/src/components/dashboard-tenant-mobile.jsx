@@ -38,7 +38,10 @@ import { FaBed } from "react-icons/fa6";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { GoBookmarkSlash } from "react-icons/go";
 import { IoReorderThree } from "react-icons/io5";
+import { MdOutlineBedroomChild } from "react-icons/md";
 
+import { useEffect } from "react";
+import { api } from "../api/api";
 import { useSelector } from "react-redux";
 import { CiCalendarDate } from "react-icons/ci";
 import "react-datepicker/dist/react-datepicker.css";
@@ -154,7 +157,21 @@ export default function DashboardTenantMobile() {
                 >
                   <Icon as={HiHomeModern} />
                   <Link href="/propertiestenant" _hover={{ color: "#ab854f" }}>
-                    Property & Room
+                    Property
+                  </Link>
+                </Flex>
+
+                <Flex
+                  align={"center"}
+                  gap={"1em"}
+                  _hover={{ color: "#ab854f" }}
+                >
+                  <Icon as={MdOutlineBedroomChild} />
+                  <Link
+                    _hover={{ color: "#ab854f" }}
+                    href="/roompropertiestenant"
+                  >
+                    Room
                   </Link>
                 </Flex>
 

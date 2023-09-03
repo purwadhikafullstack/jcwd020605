@@ -34,9 +34,17 @@ app.get("/api/greetings", (req, res, next) => {
 app.use("/api/properties", routes.propertyRoutes);
 app.use("/api/provincelist", routes.provinceRoutes);
 app.use("/api/tenant", routes.tenantRoutes);
+app.use("/api/room", routes.roomRoutes);
 
-app.use("/api/post", express.static(`${__dirname}/public/id_card`));
-app.use("/api/post", express.static(`${__dirname}/public/property_img`));
+// app.use("/api/post", express.static(`${__dirname}/public/id_card`));
+app.use("/api/id_card", express.static(`${__dirname}/public/id_card`));
+
+app.use(
+  "/api/property_img",
+  express.static(`${__dirname}/public/property_img`)
+);
+
+app.use("/api/room_img", express.static(`${__dirname}/public/Room_img`));
 
 // ===========================
 

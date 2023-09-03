@@ -1,13 +1,4 @@
-import {
-  Box,
-  IconButton,
-  Video,
-  Button,
-  Flex,
-  Text,
-  Link,
-  Icon,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Link, Icon } from "@chakra-ui/react";
 import "@fontsource/gilda-display";
 import "@fontsource/barlow";
 import {
@@ -31,6 +22,8 @@ export default function FooterLandingPage() {
         justifyContent={"center"}
         alignItems={"center"}
         flexDir={"column"}
+        pos={"relative"}
+        zIndex={"3"}
       >
         <Box
           py={"5em"}

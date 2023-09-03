@@ -1,8 +1,10 @@
-import PropertiesAndRoom from "../components/propertiesAndRoom";
+import PropertiesComp from "../components/properties";
+import PropertiesDekstopComp from "../components/propertiesDekstop";
 export default function PropertiesAndRoomTenantPages() {
   return (
     <>
-      <PropertiesAndRoom />
+      <PropertiesComp />
+      <PropertiesDekstopComp />
     </>
   );
 }

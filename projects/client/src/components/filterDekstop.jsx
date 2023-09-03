@@ -23,6 +23,7 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { api } from "../api/api";
 import React, { useState, useEffect } from "react";
 import { BsList } from "react-icons/bs";
+import { useFetchCity, useFetchProv } from "../hooks/useProvAndCity";
 
 export default function FilterDekstop() {
   const [date1, setDate1] = useState(new Date());
@@ -38,46 +39,12 @@ export default function FilterDekstop() {
 
   //location
 
-  const [provinces, setProvinces] = useState([]);
-  const [cities, setCities] = useState([]);
+  const { provinces } = useFetchProv();
   const [provinceId, setProvinceId] = useState("");
-  // console.log(provinceId);
+  const { cities } = useFetchCity(provinceId);
 
-  useEffect(() => {
-    fetchProvinces();
-  }, []);
-
-  useEffect(() => {
-    fetchCities(provinceId);
-  }, [provinceId]);
-
-  const addProvinces = async () => {
-    try {
-      const addresponse = await api.post("/provincelist/addprovince");
-      setProvinces(addresponse.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchProvinces = async () => {
-    try {
-      const response = await api.get("/provincelist/");
-      setProvinces(response.data);
-    } catch (error) {
-      console.error("Error fetching provinces:", error);
-    }
-  };
-
-  const fetchCities = async (id) => {
-    try {
-      const response = await api.get("/provincelist/" + id);
-      setCities(response.data.cities);
-      // console.log(response.data.cities);
-    } catch (error) {
-      console.error("Error fetching cities:", error);
-    }
-  };
+  console.log(provinces);
+  console.log(cities);
 
   return (
     <>
@@ -291,18 +258,19 @@ export default function FilterDekstop() {
             alignItems={"center"}
           >
             <Select
-              placeholder="Province"
-              variant={"ghost"}
-              fontFamily={`'Barlow', sans-serif`}
-              fontSize={"1em"}
+              id="province"
+              placeholder="province"
               value={provinceId}
-              onChange={(e) => setProvinceId(e.target.value)}
+              onChange={(e) => {
+                setProvinceId(e.target.value);
+              }}
             >
-              {provinces?.map((province) => (
-                <option key={province.province_id} value={province.province_id}>
-                  {province.province}
-                </option>
-              ))}
+              {provinces &&
+                provinces.map((val, idx) => (
+                  <option key={val.province_id} value={val.province_id}>
+                    {val.province}
+                  </option>
+                ))}
             </Select>
           </Flex>
 

@@ -44,6 +44,20 @@ const provinceController = {
       });
     }
   },
+  getAllCities: async (req, res) => {
+    try {
+      const cities = await db.CitiesModel.findAll({
+        where: {
+          province_id: req.params.id,
+        },
+      });
+      return res.send(cities);
+    } catch (error) {
+      res.status(500).send({
+        messsage: error.message,
+      });
+    }
+  },
   getCitiesByProvinceId: async (req, res) => {
     try {
       const province = await db.ProvinceModel.findOne({
@@ -60,7 +74,8 @@ const provinceController = {
   getAllProvince: async (req, res) => {
     try {
       const allProvince = await db.ProvinceModel.findAll({
-        include: [db.CitiesModel],
+        // include: [db.CitiesModel],
+        raw: true,
       });
       return res.send(allProvince);
     } catch (error) {

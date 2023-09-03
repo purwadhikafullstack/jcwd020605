@@ -4,9 +4,10 @@ module.exports = (sequelize, Sequelize) => {
     {
       room_name: Sequelize.STRING,
       details: Sequelize.TEXT("long"),
-      max_guest: Sequelize.STRING,
-      room_photos: Sequelize.STRING,
       main_price: Sequelize.STRING,
+      max_guest: Sequelize.STRING,
+      room_picture: Sequelize.STRING,
+      room_status: Sequelize.ENUM("available", "unavailable"),
     },
     {
       paranoid: true,

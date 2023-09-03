@@ -16,34 +16,35 @@ import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 export default function DeleteProduct(props) {
-  console.log(props);
+  // console.log(props);
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  // const DeleteContent = async () => {
-  //   try {
-  //     await api
-  //       .delete("/posts/" + props.id)
-  //       .then((res) => {
-  //         console.log(res.data);
-  //         toast({
-  //           title: res.data.message,
-  //           status: "success",
-  //           position: "top",
-  //           duration: 1000,
-  //           isClosable: true,
-  //         });
-  //         props.onClose();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
-
+  const DeleteProperty = async () => {
+    try {
+      await api
+        .delete("/properties/" + props.id)
+        .then((res) => {
+          console.log(res.data);
+          toast({
+            title: res.data.message,
+            status: "success",
+            position: "top",
+            duration: 1000,
+            isClosable: true,
+          });
+          props.fetch();
+          props.onClose();
+          nav("/propertiestenant");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <>
       <Modal size={"xs"} isOpen={props.isOpen}>
@@ -55,7 +56,7 @@ export default function DeleteProduct(props) {
             justifyContent={"center"}
             fontWeight={"bold"}
           >
-            Delete this post?
+            Delete this property?
           </ModalHeader>
           <ModalBody
             textAlign={"center"}
@@ -65,8 +66,8 @@ export default function DeleteProduct(props) {
             gap={"40px"}
           >
             <Text>
-              You can restore this post from Recently deleted in Your activity
-              within 30 days. After that, it will be permanently deleted.
+              Are you sure to delete this property? all data from this property
+              will be deleted.
             </Text>
             <Box display={"flex"} flexDir={"column"} gap={"5px"}>
               <Box borderY={"1px solid #dbdbdb"}>
@@ -80,8 +81,8 @@ export default function DeleteProduct(props) {
                     setIsLoading(true);
                     setTimeout(() => {
                       setIsLoading(false);
-                      // DeleteContent();
-                      // nav("/profile");
+                      DeleteProperty();
+                      nav("/propertiestenant");
                     }, 2000);
                   }}
                 >

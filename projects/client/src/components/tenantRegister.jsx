@@ -53,27 +53,6 @@ export default function Registercomp() {
   };
   console.log(selectedFile);
 
-  // const upload = async () => {
-  //   const formData = new FormData();
-  //   formData.append("id_card", selectedFile);
-
-  //   await api
-  //     .post("/tenant/idcard", formData)
-  //     .then((res) => {
-  //       toast({
-  //         title: res.data.message,
-  //         status: "success",
-  //         position: "top",
-  //         duration: 1000,
-  //         isClosable: true,
-  //       });
-  //       nav("/");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //     });
-  // };
-
   const formik = useFormik({
     initialValues: {
       first_name: "",

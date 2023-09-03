@@ -14,7 +14,7 @@ export default function LandingPages() {
         <NavbarHome />
         <Slideshow />
         <FilterDekstop />
-        <Filter />
+        {/* <Filter /> */}
         <BannerPromo />
         <ProductSuggest />
         <FooterLandingPage />
