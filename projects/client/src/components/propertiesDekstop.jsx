@@ -112,7 +112,6 @@ export default function PropertiesDekstopComp() {
     <>
       <Box
         flexDir={"column"}
-        // gap={"2.1em"}
         bgColor={"#edf2f9"}
         h={"100vh"}
         display={{ base: "none", lg: "flex" }}
