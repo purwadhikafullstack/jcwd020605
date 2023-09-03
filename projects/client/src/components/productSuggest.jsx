@@ -96,7 +96,7 @@ export default function ProductSuggest() {
                       fontFamily={`'Barlow', sans-serif`}
                       textTransform={"uppercase"}
                     >
-                      ${/* {product.Room.main_price}  */}/ Night
+                      ${product.Room.main_price} / Night
                     </Text>
                     <Text fontSize={"27px"}>{product.property_name}</Text>
                     <Text borderBottom={"1px solid white"} w={"4em"}></Text>
