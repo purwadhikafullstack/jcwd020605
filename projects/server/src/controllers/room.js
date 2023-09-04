@@ -5,6 +5,10 @@ const Rooms_url = process.env.Properties_url;
 const roomController = {
   getAllRoom: async (req, res) => {
     try {
+      let page = req.query.page || 0;
+      const limit = 5;
+      const offset = limit * page;
+      const roomDataList = await db.RoomModel.findAll({});
       const roomData = await db.RoomModel.findAll({
         include: [
           {
@@ -12,8 +16,12 @@ const roomController = {
             attributes: ["property_name"],
           },
         ],
+        limit,
+        offset,
       });
-      return res.status(200).send(roomData);
+      return res
+        .status(200)
+        .send({ roomData, totalPage: Math.ceil(roomDataList.length / limit) });
     } catch (error) {
       res.status(500).send(error);
     }

@@ -3,13 +3,18 @@ import { api } from "../api/api";
 
 export const useFetchProperty = (filter) => {
   const [properties, setProperties] = useState();
-
+  const [totalPage, setTotalPage] = useState(0);
+  const [page, setPage] = useState(0);
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
   const fetch = async () => {
     try {
-      const res = await api.get("/properties/propertieslist", {
+      const res = await api.get(`/properties/propertieslist?page=${page}`, {
         params: filter,
       });
-      setProperties(res.data);
+      setProperties(res.data.property);
+      setTotalPage(res.data.totalPage);
     } catch (err) {
       console.log(err);
     }
@@ -17,7 +22,7 @@ export const useFetchProperty = (filter) => {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [page]);
 
-  return { properties, fetch };
+  return { properties, totalPage, handlePageClick, fetch };
 };

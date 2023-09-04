@@ -40,6 +40,7 @@ import AddRooms from "./addRoom";
 import PropertyDetail from "./propertyDetail";
 import AddPropertyModal from "./addProperty";
 import FooterLandingPage from "./footerLandingPage";
+import Pagination from "./Pagination";
 import { api } from "../api/api";
 import { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -84,6 +85,7 @@ export default function PropertiesDekstopComp() {
   const [propertyId, setPropertyID] = useState();
   const [keyword, setKeyword] = useState();
   const [selectedProperty, setSelectedProperty] = useState();
+  const [page, setPage] = useState(0);
 
   const [filter, setFilter] = useState({
     pcm: "",
@@ -98,7 +100,8 @@ export default function PropertiesDekstopComp() {
     provinces();
   }, []);
 
-  const { properties, fetch } = useFetchProperty(filter);
+  const { properties, totalPage, handlePageClick, fetch } =
+    useFetchProperty(filter);
 
   const provinces = () => {
     api
@@ -610,6 +613,8 @@ export default function PropertiesDekstopComp() {
             properties={properties}
           />
         </Grid>
+
+        <Pagination data={{ totalPage, handlePageClick }} />
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>

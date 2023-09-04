@@ -1,0 +1,45 @@
+/* CSS untuk komponen paginasi */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  background-color: #edf2f9;
+}
+
+.page-item {
+  margin: 0 5px;
+  display: inline-block;
+}
+
+.page-link {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.page-link:hover {
+  background-color: #f0f0f0;
+}
+
+.page-item.active .page-link {
+  background-color: #5c93e1;
+  color: #fff;
+  border: 1px solid #5c93e1;
+}
+
+/* Gaya untuk tombol "Previous" dan "Next" */
+.page-item:first-child .page-link {
+  margin-left: 0;
+}
+
+.page-item:last-child .page-link {
+  margin-right: 0;
+}

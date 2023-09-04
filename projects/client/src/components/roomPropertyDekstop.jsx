@@ -50,6 +50,7 @@ import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
 
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
+import PaginationRoom from "./Pagination_room";
 import EditRooms from "./editRoom";
 import DeleteRooms from "./deleteRoom";
 
@@ -83,7 +84,7 @@ export default function RoomPropertyDekstop() {
 
   const [roomId, setRoomId] = useState();
   const [selectedRoom, setSelectedRoom] = useState();
-  const { rooms, fetch } = useFetchRoom();
+  const { rooms, totalPage, handlePageClick, fetch } = useFetchRoom();
 
   useEffect(() => {
     fetch();
@@ -471,6 +472,7 @@ export default function RoomPropertyDekstop() {
             fetch={fetch}
           />
         </Grid>
+        <PaginationRoom data={{ totalPage, handlePageClick }} />
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>

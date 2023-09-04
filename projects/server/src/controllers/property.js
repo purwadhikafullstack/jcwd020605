@@ -8,7 +8,10 @@ const propertyController = {
       const pcm = req.query?.pcm || "";
       const search = req.query?.search || "";
       const whereClause = { [Op.and]: [] };
-      console.log(pcm);
+
+      let page = req.query.page || 0;
+      const limit = 5;
+      const offset = limit * page;
 
       if (pcm) {
         whereClause[Op.and].push({
@@ -31,6 +34,7 @@ const propertyController = {
           ],
         });
       }
+      let propertyData = await db.PropertyModel.findAll({});
 
       const content = await db.PropertyModel.findAndCountAll({
         include: [
@@ -48,9 +52,14 @@ const propertyController = {
           },
         ],
         where: whereClause,
+        limit,
+        offset,
       });
       const property = content.rows;
-      return res.status(200).send(property);
+      return res.status(200).send({
+        property: property,
+        totalPage: Math.ceil(propertyData.length / limit),
+      });
     } catch (error) {
       return res.status(500).send({
         error: error.message,
