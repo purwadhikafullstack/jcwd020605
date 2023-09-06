@@ -1,10 +1,10 @@
 module.exports = (sequelize, Sequelize) => {
   const SpecialPriceModel = sequelize.define("SpecialPrices", {
     room_id: Sequelize.INTEGER,
-    start_date: Sequelize.STRING,
-    end_date: Sequelize.STRING,
+    start_date: Sequelize.DATE,
+    end_date: Sequelize.DATE,
     nominal: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DOUBLE,
     },
     percent: {
       type: Sequelize.INTEGER,

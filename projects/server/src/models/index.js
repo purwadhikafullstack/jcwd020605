@@ -64,6 +64,7 @@ db.ProductCategoriesMaster = require("./product_category_master")(
   Sequelize
 );
 db.PropertyImages = require("./property_images")(sequelize, Sequelize);
+db.UnavailableRoomsModel = require("./unavailableRooms")(sequelize, Sequelize);
 
 // -------------------  property  ---------------------
 
@@ -130,6 +131,14 @@ db.SpecialPriceModel.belongsTo(db.RoomModel, {
 });
 
 db.RoomModel.hasMany(db.SpecialPriceModel, {
+  foreignKey: "room_id",
+});
+
+db.UnavailableRoomsModel.belongsTo(db.RoomModel, {
+  foreignKey: "room_id",
+});
+
+db.RoomModel.hasMany(db.UnavailableRoomsModel, {
   foreignKey: "room_id",
 });
 

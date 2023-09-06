@@ -5,6 +5,7 @@ import LandingPages from "../pages/landingPage";
 import DashboardTenantPages from "../pages/dashboardTenant";
 import PropertiesAndRoomTenantPages from "../pages/propertiesAndRoomTenant";
 import RoomPropertyPages from "../pages/room";
+import RoomDetailPage from "../pages/roomDetail";
 const routes = [
   <Route
     path="/registertenant"
@@ -57,6 +58,15 @@ const routes = [
     element={
       // <ProtectedPage>
       <RoomPropertyPages />
+      // </ProtectedPage>
+    }
+  />,
+  <Route
+    path="/roomdetailtenant/:id"
+    key={"dashboardtenant"}
+    element={
+      // <ProtectedPage>
+      <RoomDetailPage />
       // </ProtectedPage>
     }
   />,

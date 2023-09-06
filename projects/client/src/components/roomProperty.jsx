@@ -7,8 +7,8 @@ import {
   DrawerBody,
   DrawerFooter,
   useDisclosure,
-  Link,
   Text,
+  Link,
   Flex,
   IconButton,
   Icon,
@@ -41,6 +41,9 @@ import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
 
 import { BiPencil } from "react-icons/bi";
+import { CgDetailsMore } from "react-icons/cg";
+// import { Link } from "react-router-dom";
+
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -53,7 +56,7 @@ import "@fontsource/barlow";
 import EditRooms from "./editRoom";
 import DeleteRooms from "./deleteRoom";
 import FooterLandingPage from "./footerLandingPage";
-
+import RoomDetail from "./roomDetail";
 import { api } from "../api/api";
 import bgContent from "../assets/bgcontent.jpg";
 
@@ -169,7 +172,7 @@ export default function RoomProperty() {
           </Box>
 
           <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-            <DrawerContent bgColor={"#edf2f9"}>
+            <DrawerContent>
               <DrawerCloseButton />
               <DrawerHeader>
                 <Box
@@ -404,6 +407,25 @@ export default function RoomProperty() {
                     <MenuList minW={"100px"}>
                       <MenuItem
                         onClick={() => {
+                          setRoomId(val?.id);
+                        }}
+                      >
+                        <Link href={`/roomdetailtenant/${val?.id}`}>
+                          <Box
+                            display={"flex"}
+                            gap={"10px"}
+                            alignItems={"center"}
+                          >
+                            <Icon as={CgDetailsMore} />
+                            Room Detail
+                          </Box>
+                        </Link>
+                      </MenuItem>
+
+                      <Divider />
+
+                      <MenuItem
+                        onClick={() => {
                           EditRoom.onOpen();
                           setRoomId(val?.id);
                           // setProperty(val);
@@ -448,7 +470,7 @@ export default function RoomProperty() {
 
                   <Box display={"flex"} w={"90%"}>
                     <Flex
-                      flex={1}
+                      flex={2}
                       flexDir={"column"}
                       textAlign={"left"}
                       gap={"1em"}
@@ -497,8 +519,9 @@ export default function RoomProperty() {
                         gap={"0.2em"}
                       >
                         Rp
-                        <Text>
-                          {val.main_price ? val.main_price : "0"} / day
+                        <Text display={"flex"}>
+                          {val.main_price ? val.main_price : "0"}
+                          ,00 / day
                         </Text>
                       </Text>
                     </Flex>

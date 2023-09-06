@@ -24,3 +24,23 @@ export const useFetchRoom = () => {
 
   return { rooms, totalPage, handlePageClick, fetch };
 };
+
+export const useFetchRoomById = (id) => {
+  const [rooms, setRooms] = useState();
+  const [price, setPrice] = useState();
+  const fetch = async () => {
+    try {
+      const res = await api.get("/room/" + id);
+      setRooms(res.data);
+      setPrice(res.data.main_price);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  return { rooms, price, fetch };
+};

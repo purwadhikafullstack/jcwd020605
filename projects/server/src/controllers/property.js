@@ -1,6 +1,5 @@
 const { where, Op } = require("sequelize");
 const db = require("../models");
-const propertyImg_url = process.env.Properties_url;
 
 const propertyController = {
   getAllProperties: async (req, res) => {

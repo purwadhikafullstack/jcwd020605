@@ -78,7 +78,6 @@ export default function EditRooms(props) {
 
     validationSchema: Yup.object().shape({}),
   });
-  console.log(props);
   return (
     <>
       <Modal size={"sm"} isOpen={props.isOpen}>

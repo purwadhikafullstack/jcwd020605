@@ -26,6 +26,26 @@ const roomController = {
       res.status(500).send(error);
     }
   },
+
+  getAllRoomById: async (req, res) => {
+    try {
+      const roomData = await db.RoomModel.findOne({
+        include: [
+          {
+            model: db.PropertyModel,
+            attributes: ["property_name"],
+          },
+        ],
+        where: {
+          id: req.params.id,
+        },
+      });
+      return res.status(200).send(roomData);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  },
+
   addRoom: async (req, res) => {
     try {
       const { room_name, details, main_price, max_guest } = req.body;

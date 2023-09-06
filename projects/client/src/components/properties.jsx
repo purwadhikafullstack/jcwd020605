@@ -636,6 +636,7 @@ export default function PropertiesComp() {
           isOpen={addRoom.isOpen}
           onClose={addRoom.onClose}
           id={propertyId}
+          fetch={fetch}
         />
         <PropertyDetail
           isOpen={propertyDetail.isOpen}

@@ -41,6 +41,8 @@ import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
 
 import { BiPencil } from "react-icons/bi";
+import { CgDetailsMore } from "react-icons/cg";
+
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -61,9 +63,6 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import "@fontsource/barlow";
 import "@fontsource/gilda-display";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCards } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -344,6 +343,23 @@ export default function RoomPropertyDekstop() {
                         <Image as={BiDotsHorizontalRounded} boxSize={5} />
                       </MenuButton>
                       <MenuList minW={"100px"}>
+                        <MenuItem
+                          onClick={() => {
+                            setRoomId(val?.id);
+                          }}
+                        >
+                          <Link href={`/roomdetailtenant/${val?.id}`}>
+                            <Box
+                              display={"flex"}
+                              gap={"10px"}
+                              alignItems={"center"}
+                            >
+                              <Icon as={CgDetailsMore} />
+                              Room Detail
+                            </Box>
+                          </Link>
+                        </MenuItem>
+
                         <MenuItem
                           onClick={() => {
                             EditRoom.onOpen();
