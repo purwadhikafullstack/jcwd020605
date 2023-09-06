@@ -6,7 +6,7 @@ import c from "../assets/4(1).jpg";
 import d from "../assets/wallpaperflare.com_wallpaper.jpg";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "@fontsource/gilda-display";
 
 export default function BannerPromo() {
@@ -43,7 +43,6 @@ export default function BannerPromo() {
           display={"flex"}
           class="banner-container"
           justifyContent={"center"}
-          // px={{ base: "5px" }}
           my={{ lg: "8em" }}
           w={"100%"}
           h={"100%"}

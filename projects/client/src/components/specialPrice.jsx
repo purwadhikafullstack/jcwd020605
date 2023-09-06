@@ -17,24 +17,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { RangeDatepicker } from "chakra-dayzed-datepicker";
-
-import { BiPencil } from "react-icons/bi";
-import { BsArrowRight } from "react-icons/bs";
-import { RxCross2 } from "react-icons/rx";
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
-
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import YupPassword from "yup-password";
 import { useState } from "react";
-import { api } from "../api/api";
-import { useNavigate } from "react-router-dom";
 
 export default function SpecialPrice(props) {
-  const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
-  const [selectedFile, setSelectedFile] = useState(null);
 
   return (
     <>

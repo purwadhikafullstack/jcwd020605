@@ -4,28 +4,22 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useToast,
   Box,
-  Text,
   Input,
   Flex,
   Image,
-  Icon,
 } from "@chakra-ui/react";
 import { useState, useRef } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 
 export default function AddRooms(props) {
   YupPassword(Yup);
-  // console.log(props);
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -94,26 +88,13 @@ export default function AddRooms(props) {
 
     validationSchema: Yup.object().shape({}),
   });
-  // console.log(props);
   return (
     <>
       <Modal size={"sm"} isOpen={props.isOpen}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader display={"flex"} justifyContent={"space-between"}>
-            <Button onClick={props.onClose}>
-              <Icon
-                as={AiOutlineLeft}
-                display={"flex"}
-                alignItems={"center"}
-                border={"2px solid #dbdbdb"}
-                bgColor={"grey"}
-                boxSize={"30px"}
-                color={"white"}
-                cursor={"pointer"}
-                borderRadius={"20px"}
-              />
-            </Button>
+            <Button onClick={props.onClose}>Cancel</Button>
 
             <Box
               display={"flex"}
@@ -136,17 +117,7 @@ export default function AddRooms(props) {
                 }, 2000);
               }}
             >
-              <Icon
-                as={AiOutlineRight}
-                boxSize={"30px"}
-                borderRadius={"30px"}
-                border={"2px solid #dbdbdb"}
-                bgColor={"grey"}
-                color={"white"}
-                cursor={"pointer"}
-                display={"flex"}
-                alignItems={"center"}
-              />
+              Save
             </Button>
           </ModalHeader>
           <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>

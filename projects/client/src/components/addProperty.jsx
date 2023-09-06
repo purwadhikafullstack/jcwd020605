@@ -4,22 +4,17 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useToast,
   Box,
-  Text,
   Input,
   Flex,
   Image,
-  Icon,
   Select,
 } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
@@ -35,9 +30,6 @@ export default function AddPropertyModal(props) {
   const [provinceId, setProvinceId] = useState();
   const { provinces } = useFetchProv();
   const { cities } = useFetchCity(provinceId);
-
-  // console.log(provinceId);
-  // console.log(CitiesName);
 
   const inputHandler = (e) => {
     const { target } = e;
@@ -109,8 +101,6 @@ export default function AddPropertyModal(props) {
 
     // validationSchema: Yup.object().shape({}),
   });
-  // console.log(formik.values);
-  // console.log(provinceId);
 
   return (
     <>
@@ -118,19 +108,7 @@ export default function AddPropertyModal(props) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader display={"flex"} justifyContent={"space-between"}>
-            <Button onClick={props.onClose}>
-              <Icon
-                as={AiOutlineLeft}
-                display={"flex"}
-                alignItems={"center"}
-                border={"2px solid #dbdbdb"}
-                bgColor={"grey"}
-                boxSize={"30px"}
-                color={"white"}
-                cursor={"pointer"}
-                borderRadius={"20px"}
-              />
-            </Button>
+            <Button onClick={props.onClose}>Cancel</Button>
 
             <Box
               display={"flex"}
@@ -150,30 +128,17 @@ export default function AddPropertyModal(props) {
                 setTimeout(() => {
                   setIsLoading(false);
                   formik.handleSubmit();
-                  // nav("/profile");
                 }, 2000);
               }}
             >
-              <Icon
-                as={AiOutlineRight}
-                boxSize={"30px"}
-                borderRadius={"30px"}
-                border={"2px solid #dbdbdb"}
-                bgColor={"grey"}
-                color={"white"}
-                cursor={"pointer"}
-                display={"flex"}
-                alignItems={"center"}
-              />
+              Save
             </Button>
           </ModalHeader>
           <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>
             <Box pb={"10px"}>
               <Input
-                // py={"20px"}
                 id="property_name"
                 variant={"flushed"}
-                // defaultValue={props.caption}
                 placeholder="Property Name : "
                 onChange={inputHandler}
               />
@@ -181,7 +146,6 @@ export default function AddPropertyModal(props) {
 
             <Box pb={"10px"}>
               <Input
-                // py={"20px"}
                 id="details_text"
                 variant={"flushed"}
                 placeholder="Property description :"
@@ -193,7 +157,6 @@ export default function AddPropertyModal(props) {
               id="province"
               placeholder="Province"
               variant={"flushed"}
-              // value={provinceId}
               onChange={(e) => {
                 setProvinceId(e.target.value.split("/")[1]);
                 formik.setFieldValue("province", e.target.value.split("/")[0]);

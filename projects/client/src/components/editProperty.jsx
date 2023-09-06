@@ -121,19 +121,7 @@ export default function AddPropertyModal(props) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader display={"flex"} justifyContent={"space-between"}>
-            <Button onClick={props.onClose}>
-              <Icon
-                as={AiOutlineLeft}
-                display={"flex"}
-                alignItems={"center"}
-                border={"2px solid #dbdbdb"}
-                bgColor={"grey"}
-                boxSize={"30px"}
-                color={"white"}
-                cursor={"pointer"}
-                borderRadius={"20px"}
-              />
-            </Button>
+            <Button onClick={props.onClose}>Cancel</Button>
 
             <Box
               display={"flex"}
@@ -157,17 +145,7 @@ export default function AddPropertyModal(props) {
                 }, 2000);
               }}
             >
-              <Icon
-                as={AiOutlineRight}
-                boxSize={"30px"}
-                borderRadius={"30px"}
-                border={"2px solid #dbdbdb"}
-                bgColor={"grey"}
-                color={"white"}
-                cursor={"pointer"}
-                display={"flex"}
-                alignItems={"center"}
-              />
+              Save
             </Button>
           </ModalHeader>
           <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>
