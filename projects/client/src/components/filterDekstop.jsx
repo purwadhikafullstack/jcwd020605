@@ -261,6 +261,7 @@ export default function FilterDekstop() {
               id="province"
               placeholder="province"
               value={provinceId}
+              variant={"none"}
               onChange={(e) => {
                 setProvinceId(e.target.value);
               }}
