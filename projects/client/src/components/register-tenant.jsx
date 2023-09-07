@@ -168,17 +168,7 @@ export default function RegisterComp() {
                   conditions.
                 </Flex>
 
-                <Button
-                  w={{ lg: "30%", base: "20%" }}
-                  isLoading
-                  variant={"unstyled"}
-                  spinner={<BeatLoader size={13} color="white" />}
-                  justifyContent={"center"}
-                  display={{ lg: "flex", base: "none" }}
-                >
-                  Submit
-                </Button>
-
+                {/* sign up dekstop */}
                 <Box>
                   <Button
                     bgColor={"transparent"}
@@ -394,6 +384,7 @@ export default function RegisterComp() {
                         </Flex>
                       </Box>
 
+                      {/* sign up mobile */}
                       <Box w={"100%"} my={{ lg: "1em" }} mt={{ base: "0.5em" }}>
                         <Button
                           bgColor={"transparent"}
@@ -406,7 +397,8 @@ export default function RegisterComp() {
                           borderRadius={"7px"}
                           _hover={{ color: "#a07d4a" }}
                           textTransform={"uppercase"}
-                          display={{ lg: "none" }}
+                          display={{ lg: "none", base: "flex" }}
+                          justifyContent={"center"}
                           isLoading={isLoading}
                           onClick={() => {
                             setIsLoading(true);

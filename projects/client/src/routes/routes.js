@@ -6,68 +6,69 @@ import DashboardTenantPages from "../pages/dashboardTenant";
 import PropertiesAndRoomTenantPages from "../pages/propertiesAndRoomTenant";
 import RoomPropertyPages from "../pages/room";
 import RoomDetailPage from "../pages/roomDetail";
+import ProtectedPage from "./protectedPage";
 const routes = [
   <Route
     path="/registertenant"
     key={"register"}
     element={
-      // <ProtectedPage>
-      <RegisterTenantPages />
-      // </ProtectedPage>
-    }
-  />,
-  <Route
-    path="/landingpage"
-    key={"landingpage"}
-    element={
-      // <ProtectedPage>
-      <LandingPages />
-      // </ProtectedPage>
+      <ProtectedPage guestOnly={true}>
+        <RegisterTenantPages />
+      </ProtectedPage>
     }
   />,
   <Route
     path="/logintenant"
     key={"logintenant"}
     element={
-      // <ProtectedPage>
-      <LoginTenantPages />
-      // </ProtectedPage>
+      <ProtectedPage guestOnly={true}>
+        <LoginTenantPages />
+      </ProtectedPage>
+    }
+  />,
+  <Route
+    path="/landingpage"
+    key={"landingpage"}
+    element={
+      <ProtectedPage needLogin={true}>
+        <LandingPages />
+      </ProtectedPage>
     }
   />,
   <Route
     path="/dashboardtenant"
     key={"dashboardtenant"}
     element={
-      // <ProtectedPage>
-      <DashboardTenantPages />
-      // </ProtectedPage>
+      <ProtectedPage needLogin={true}>
+        <DashboardTenantPages />
+      </ProtectedPage>
     }
   />,
   <Route
     path="/propertiestenant"
     key={"dashboardtenant"}
     element={
-      // <ProtectedPage>
-      <PropertiesAndRoomTenantPages />
-      // </ProtectedPage>
+      <ProtectedPage needLogin={true}>
+        <PropertiesAndRoomTenantPages />
+      </ProtectedPage>
     }
   />,
   <Route
     path="/roompropertiestenant"
     key={"dashboardtenant"}
     element={
-      // <ProtectedPage>
-      <RoomPropertyPages />
-      // </ProtectedPage>
+      <ProtectedPage needLogin={true}>
+        <RoomPropertyPages />
+      </ProtectedPage>
     }
   />,
   <Route
     path="/roomdetailtenant/:id"
     key={"dashboardtenant"}
     element={
-      // <ProtectedPage>
-      <RoomDetailPage />
-      // </ProtectedPage>
+      <ProtectedPage needLogin={true}>
+        <RoomDetailPage />
+      </ProtectedPage>
     }
   />,
 ];

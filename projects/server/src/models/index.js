@@ -55,7 +55,6 @@ db.OrderModel = require("./order")(sequelize, Sequelize);
 db.SpecialPriceModel = require("./specialprice")(sequelize, Sequelize);
 db.TenantModel = require("./tenant")(sequelize, Sequelize);
 db.PropertyModel = require("./property")(sequelize, Sequelize);
-db.LocationModel = require("./location")(sequelize, Sequelize);
 db.RoomModel = require("./room")(sequelize, Sequelize);
 db.CitiesModel = require("./city")(sequelize, Sequelize);
 db.ProvinceModel = require("./province")(sequelize, Sequelize);
@@ -67,23 +66,6 @@ db.PropertyImages = require("./property_images")(sequelize, Sequelize);
 db.UnavailableRoomsModel = require("./unavailableRooms")(sequelize, Sequelize);
 
 // -------------------  property  ---------------------
-
-// db.PropertyModel.belongsTo(db.TenantModel, {
-//   foreignKey: "tenant_id",
-// });
-
-// db.TenantModel.hasMany(db.PropertyModel, {
-//   foreignKey: "tenant_id",
-// });
-
-// db.PropertyModel.belongsTo(db.ProductCategoriesMaster, {
-//   foreignKey: "pcm_id",
-//   as: "location",
-// });
-
-// db.ProductCategoriesMaster.hasMany(db.PropertyModel, {
-//   foreignKey: "pcm_id",
-// });
 
 db.PropertyImages.belongsTo(db.PropertyModel, {
   foreignKey: "property_id",
@@ -97,18 +79,6 @@ db.PropertyModel.belongsTo(db.CitiesModel, {
   foreignKey: "city_id",
   targetKey: "city_id",
 });
-
-// db.PropertyModel.hasMany(db.CitiesModel, {
-//   foreignKey: "city_id",
-// });
-
-// db.PropertyModel.belongsTo(db.PropertyImages, {
-//   foreignKey: "picture",
-// });
-
-// db.PropertyImages.hasMany(db.PropertyModel, {
-//   foreignKey: "picture",
-// });
 
 // -------------------  room  ---------------------
 

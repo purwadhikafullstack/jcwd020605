@@ -9,17 +9,13 @@ export default function ProtectedPage({
 }) {
   const userSelector = useSelector((state) => state.auth);
   const nav = useNavigate();
-  const token = JSON.parse(localStorage.getItem("user"));
-
-  // console.log(userSelector);
-  // console.log(needLogin);
-  // console.log(token);
+  const token = JSON.parse(localStorage.getItem("tenant"));
 
   useEffect(() => {
     if (guestOnly && userSelector?.email && token) {
-      return nav("/homepage");
+      return nav("/landingpage");
     } else if (needLogin && !userSelector.email && !token) {
-      return nav("/");
+      return nav("/logintenant");
     }
   }, [userSelector, needLogin]);
 

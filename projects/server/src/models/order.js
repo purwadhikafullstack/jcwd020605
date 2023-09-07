@@ -3,9 +3,10 @@ module.exports = (sequelize, Sequelize) => {
     "Orders",
     {
       room_id: Sequelize.INTEGER,
+      property_id: Sequelize.INTEGER,
       user_id: Sequelize.INTEGER,
-      checkin_date: Sequelize.STRING,
-      checkout_date: Sequelize.STRING,
+      checkin_date: Sequelize.DATE,
+      checkout_date: Sequelize.DATE,
       status: Sequelize.ENUM(
         "Menunggu Pembayaran",
         "Menunggu Konfirmasi Pembayaran",
@@ -14,7 +15,6 @@ module.exports = (sequelize, Sequelize) => {
         "Dibatalkan Tenant"
       ),
       payment_proof: Sequelize.STRING,
-      total_amount: Sequelize.INTEGER,
     },
     {
       paranoid: true,
