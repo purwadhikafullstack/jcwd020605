@@ -7,6 +7,7 @@ import PropertiesAndRoomTenantPages from "../pages/propertiesAndRoomTenant";
 import RoomPropertyPages from "../pages/room";
 import RoomDetailPage from "../pages/roomDetail";
 import ProtectedPage from "./protectedPage";
+import TransactionPages from "../pages/transaction";
 const routes = [
   <Route
     path="/registertenant"
@@ -46,7 +47,7 @@ const routes = [
   />,
   <Route
     path="/propertiestenant"
-    key={"dashboardtenant"}
+    key={"propertiestenant"}
     element={
       <ProtectedPage needLogin={true}>
         <PropertiesAndRoomTenantPages />
@@ -55,7 +56,7 @@ const routes = [
   />,
   <Route
     path="/roompropertiestenant"
-    key={"dashboardtenant"}
+    key={"roompropertiestenant"}
     element={
       <ProtectedPage needLogin={true}>
         <RoomPropertyPages />
@@ -64,10 +65,19 @@ const routes = [
   />,
   <Route
     path="/roomdetailtenant/:id"
-    key={"dashboardtenant"}
+    key={"roomdetailtenant"}
     element={
       <ProtectedPage needLogin={true}>
         <RoomDetailPage />
+      </ProtectedPage>
+    }
+  />,
+  <Route
+    path="/transaction/"
+    key={"transaction"}
+    element={
+      <ProtectedPage needLogin={true}>
+        <TransactionPages />
       </ProtectedPage>
     }
   />,

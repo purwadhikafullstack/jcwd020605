@@ -4,14 +4,12 @@ const db = require("../models");
 const propertyController = {
   getAllProperties: async (req, res) => {
     try {
-      const pcm = req.query?.pcm || "";
-      const search = req.query?.search || "";
+      const pcm = req?.query?.pcm || "";
+      const search = req?.query?.search || "";
       const whereClause = { [Op.and]: [] };
-
-      let page = req.query.page || 0;
+      const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
-      const offset = limit * page;
-
+      const offset = page * limit;
       if (pcm) {
         whereClause[Op.and].push({
           "$city.province$": { [Op.like]: `%${pcm}%` },
@@ -33,7 +31,6 @@ const propertyController = {
           ],
         });
       }
-      let propertyData = await db.PropertyModel.findAll({});
 
       const content = await db.PropertyModel.findAndCountAll({
         include: [
@@ -51,13 +48,13 @@ const propertyController = {
           },
         ],
         where: whereClause,
-        limit,
-        offset,
+        distinct: true,
       });
-      const property = content.rows;
+
+      const property = content.rows.slice(offset, limit * (page + 1));
       return res.status(200).send({
         property: property,
-        totalPage: Math.ceil(propertyData.length / limit),
+        totalPage: Math.ceil(content.count / limit),
       });
     } catch (error) {
       return res.status(500).send({

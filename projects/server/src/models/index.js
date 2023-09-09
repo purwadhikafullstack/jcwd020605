@@ -51,7 +51,6 @@ db.UserModel = require("./user")(sequelize, Sequelize);
 db.TokenModel = require("./token")(sequelize, Sequelize);
 db.ReviewModel = require("./review")(sequelize, Sequelize);
 db.OrderModel = require("./order")(sequelize, Sequelize);
-db.OrderModel = require("./order")(sequelize, Sequelize);
 db.SpecialPriceModel = require("./specialprice")(sequelize, Sequelize);
 db.TenantModel = require("./tenant")(sequelize, Sequelize);
 db.PropertyModel = require("./property")(sequelize, Sequelize);
@@ -128,6 +127,14 @@ db.OrderModel.belongsTo(db.UserModel, {
 
 db.UserModel.hasMany(db.OrderModel, {
   foreignKey: "user_id",
+});
+
+db.OrderModel.belongsTo(db.PropertyModel, {
+  foreignKey: "property_id",
+});
+
+db.PropertyModel.hasMany(db.OrderModel, {
+  foreignKey: "property_id",
 });
 
 // -------------------  token  ---------------------

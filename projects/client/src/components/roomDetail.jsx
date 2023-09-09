@@ -343,7 +343,9 @@ export default function RoomDetail(props) {
                     _hover={{ color: "#ab854f" }}
                   >
                     <Icon as={AiOutlineDollarCircle} />
-                    <Link _hover={{ color: "#ab854f" }}>Transaction</Link>
+                    <Link _hover={{ color: "#ab854f" }} href="/transaction">
+                      Transaction
+                    </Link>
                   </Flex>
 
                   <Flex

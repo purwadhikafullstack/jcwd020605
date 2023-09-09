@@ -1,6 +1,5 @@
 const { where } = require("sequelize");
 const db = require("../models");
-const Rooms_url = process.env.Properties_url;
 
 const roomController = {
   getAllRoom: async (req, res) => {

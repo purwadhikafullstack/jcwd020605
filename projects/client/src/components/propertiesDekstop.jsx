@@ -91,7 +91,7 @@ export default function PropertiesDekstopComp() {
     pcm: "",
     search: "",
   });
-
+  console.log(filter);
   useEffect(() => {
     fetch();
   }, [filter]);

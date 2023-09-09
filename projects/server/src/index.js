@@ -37,6 +37,7 @@ app.use("/api/tenant", routes.tenantRoutes);
 app.use("/api/room", routes.roomRoutes);
 app.use("/api/specialprice", routes.specialPriceRoutes);
 app.use("/api/unavailableroom", routes.unavailableRoomsRoutes);
+app.use("/api/order", routes.orderRoutes);
 
 // app.use("/api/post", express.static(`${__dirname}/public/id_card`));
 app.use("/api/id_card", express.static(`${__dirname}/public/id_card`));
@@ -45,8 +46,11 @@ app.use(
   "/api/property_img",
   express.static(`${__dirname}/public/property_img`)
 );
-
 app.use("/api/room_img", express.static(`${__dirname}/public/Room_img`));
+app.use(
+  "/api/payment_proof",
+  express.static(`${__dirname}/public/payment_proof`)
+);
 
 // ===========================
 

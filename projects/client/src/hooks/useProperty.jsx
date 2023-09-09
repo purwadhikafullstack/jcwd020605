@@ -15,6 +15,7 @@ export const useFetchProperty = (filter) => {
       });
       setProperties(res.data.property);
       setTotalPage(res.data.totalPage);
+      console.log(res.data.property);
     } catch (err) {
       console.log(err);
     }

@@ -37,6 +37,8 @@ import { useState } from "react";
 import DeleteProduct from "./deleteProduct";
 import EditProperty from "./editProperty";
 import FooterLandingPage from "./footerLandingPage";
+import Pagination from "./Pagination";
+
 import AddRooms from "./addRoom";
 import PropertyDetail from "./propertyDetail";
 import AddPropertyModal from "./addProperty";
@@ -88,7 +90,6 @@ export default function PropertiesComp() {
     pcm: "",
     search: "",
   });
-
   useEffect(() => {
     fetch();
   }, [filter]);
@@ -97,7 +98,8 @@ export default function PropertiesComp() {
     provinces();
   }, []);
 
-  const { properties, fetch } = useFetchProperty(filter);
+  const { properties, totalPage, handlePageClick, fetch } =
+    useFetchProperty(filter);
   const provinces = () => {
     api
       .get("/properties")
@@ -106,6 +108,8 @@ export default function PropertiesComp() {
       })
       .catch((err) => console.log(err.response.data));
   };
+  console.log(properties);
+
   return (
     <Box
       display={{ base: "flex", lg: "none" }}
@@ -645,6 +649,8 @@ export default function PropertiesComp() {
           properties={properties}
         />
       </Grid>
+      <Pagination data={{ totalPage, handlePageClick }} />
+
       <FooterLandingPage></FooterLandingPage>
     </Box>
   );
