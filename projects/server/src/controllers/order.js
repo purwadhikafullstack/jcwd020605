@@ -187,6 +187,17 @@ const orderController = {
           (message = "Rejected success")
         );
       } else if (status === "CANCELED") {
+        const paymentCheck = await db.OrderModel.findOne({
+          where: {
+            id,
+          },
+        });
+        const value = paymentCheck?.dataValues?.payment_proof;
+
+        if (value !== null) {
+          throw new Error("can't cancel when order has been paid");
+        }
+
         await db.OrderModel.update(
           {
             status,
@@ -205,27 +216,6 @@ const orderController = {
       res.status(500).send(error);
     }
   },
-
-  // cancelOrder: async (req, res) => {
-  //   try {
-  //     const { id, status } = req.params;
-  //     const cancel = await db.OrderModel.update(
-  //       {
-  //         status,
-  //       },
-  //       {
-  //         where: {
-  //           id,
-  //         },
-  //       },
-  //       (message = "Cancel success")
-  //     );
-  //     return res.status(200).send(cancel);
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(500).send(error);
-  //   }
-  // },
 };
 
 module.exports = orderController;
