@@ -9,11 +9,11 @@ module.exports = (sequelize, Sequelize) => {
       checkout_date: Sequelize.DATE,
       no_invoice: Sequelize.STRING,
       status: Sequelize.ENUM(
-        "Menunggu Pembayaran",
-        "Menunggu Konfirmasi Pembayaran",
-        "Diproses Tenant",
-        "Dibatalkan Customer",
-        "Dibatalkan Tenant"
+        "PAYMENT",
+        "CONFIRM_PAYMENT",
+        "PROCESSING",
+        "CANCELED",
+        "DONE"
       ),
       payment_proof: Sequelize.STRING,
     },

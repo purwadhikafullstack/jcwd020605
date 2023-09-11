@@ -4,7 +4,9 @@ const { fileUploader } = require("../middlewares/multer");
 const orderController = require("../controllers").orderController;
 
 router.get("/orderbystatus", orderController.getAllOrderByStatus);
+router.get("/:id", orderController.getOrderById);
 router.get("/", orderController.getAllOrder);
+router.post("/confirmorreject", orderController.confirmOrReject);
 
 router.post(
   "/addorder",

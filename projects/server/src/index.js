@@ -46,7 +46,7 @@ app.use(
   "/api/property_img",
   express.static(`${__dirname}/public/property_img`)
 );
-app.use("/api/room_img", express.static(`${__dirname}/public/Room_img`));
+app.use("/api/room_img", express.static(`${__dirname}/public/room_img`));
 app.use(
   "/api/payment_proof",
   express.static(`${__dirname}/public/payment_proof`)

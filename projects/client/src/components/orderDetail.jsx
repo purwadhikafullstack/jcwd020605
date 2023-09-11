@@ -19,20 +19,65 @@ import {
 import { useState, useRef, useEffect } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import YupPassword from "yup-password";
-import { useFetchCity, useFetchProv } from "../hooks/useProvAndCity";
-import { useFetchProperty } from "../hooks/useProperty";
+import moment from "moment";
 
 export default function OrderDetail(props) {
-  YupPassword(Yup);
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [orderData, setOrderData] = useState();
+  const [update, setUpdate] = useState();
   const toast = useToast();
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [provinceId, setProvinceId] = useState("");
+
+  const orderDataByID = async () => {
+    try {
+      const res = await api.get("/order/" + props.id);
+      setOrderData(res.data);
+    } catch (error) {
+      console.log("masuk");
+      console.log(error);
+    }
+  };
+
+  const confirmOrReject = async (status) => {
+    try {
+      const res = await api.post("/order/confirmorreject", status);
+      setUpdate(res.data);
+      console.log(res?.data);
+      if (res.data === "Rejected success") {
+        toast({
+          title: res.data,
+          status: "warning",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else if (res.data === "Cancel success") {
+        toast({
+          title: res.data,
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: res.data,
+          description: "We've send email to you",
+          status: "success",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+      props.onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    orderDataByID();
+  }, [props.id]);
 
   return (
     <>
@@ -51,31 +96,105 @@ export default function OrderDetail(props) {
             fontWeight={"bold"}
           >
             <Box>
+              <Image
+                src={`${process.env.REACT_APP_API_BASE_URL}${orderData?.payment_proof}`}
+              ></Image>
+            </Box>
+
+            <Box>
               <Text fontSize={"12px"}>Property Name :</Text>
-              {/* {propertyData && propertyData.property_name} */}
+              {orderData?.Property?.property_name}
             </Box>
 
             <Box>
-              <Text fontSize={"12px"}>Location :</Text>
-              {/* <Box>{propertyData && propertyData.city.city_name}</Box> */}
+              <Text fontSize={"12px"}>Room type :</Text>
+              {orderData?.Room?.room_name}
             </Box>
 
             <Box>
-              <Text fontSize={"12px"}>Property Description :</Text>
-              {/* <Box>{propertyData && propertyData.details_text}</Box> */}
+              <Text fontSize={"12px"}>Room price :</Text>
+              {orderData?.Room?.main_price}
             </Box>
 
             <Box>
-              <Text fontSize={"12px"}>Room lists :</Text>
-              {/* {propertyData &&
-                propertyData.Rooms.map((room, index) => (
-                  <Box key={index}>
-                    Room {index + 1}: {room.room_name}
-                  </Box>
-                ))} */}
+              <Text fontSize={"12px"}>Username :</Text>
+              {orderData?.User?.first_name}
+            </Box>
+
+            <Box>
+              <Text fontSize={"12px"}>Email :</Text>
+              {orderData?.User?.email}
+            </Box>
+
+            <Box>
+              <Text fontSize={"12px"}>Order Date :</Text>
+              {moment(orderData?.createdAt).format("DD MMM YYYY, HH:MM")}
+            </Box>
+
+            <Box>
+              <Text fontSize={"12px"}>No invoice :</Text>
+              {orderData?.no_invoice}
+            </Box>
+
+            <Box>
+              <Text fontSize={"12px"}>Status :</Text>
+              {orderData?.status}
             </Box>
           </ModalBody>
-          <ModalFooter justifyContent={"center"} display={"flex"}>
+          <ModalFooter
+            alignContent={"center"}
+            display={"flex"}
+            flexDir={"column"}
+            gap={"1em"}
+          >
+            <Flex w={"100%"} justify={"space-around"}>
+              <Button
+                w={"45%"}
+                onClick={() => {
+                  const shouldReject = window.confirm(
+                    "Apakah Anda yakin ingin menolak pembayaran pesanan ini?"
+                  );
+                  if (shouldReject) {
+                    confirmOrReject({ status: "PAYMENT", id: props.id });
+                  }
+                }}
+                value="PAYMENT"
+              >
+                Reject
+              </Button>
+
+              <Button
+                w={"45%"}
+                isLoading={isLoading}
+                onClick={() => {
+                  setIsLoading(true);
+                  setTimeout(() => {
+                    setIsLoading(false);
+                    confirmOrReject({ status: "PROCESSING", id: props.id });
+                  }, 3000);
+                }}
+                value="PROCESSING"
+              >
+                Confirm
+              </Button>
+            </Flex>
+
+            <Flex>
+              <Button
+                onClick={() => {
+                  const shouldReject = window.confirm(
+                    "Apakah Anda yakin ingin menolak pesanan ini?"
+                  );
+                  if (shouldReject) {
+                    confirmOrReject({ status: "CANCELED", id: props.id });
+                  }
+                }}
+                value="CANCELED"
+              >
+                Cancel Order
+              </Button>
+            </Flex>
+
             <Box>The Cappa</Box>
           </ModalFooter>
         </ModalContent>

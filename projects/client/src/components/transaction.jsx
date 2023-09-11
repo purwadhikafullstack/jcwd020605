@@ -47,8 +47,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
 import { BsFillCalendar2DateFill } from "react-icons/bs";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
+import { GrStatusInfo } from "react-icons/gr";
 import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
 import OrderDetail from "./orderDetail";
+import Pagination from "./Pagination";
+
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
 import bgContent from "../assets/bgcontent.jpg";
@@ -72,24 +75,26 @@ export default function Transaction() {
   const [orderData, setOrderData] = useState();
   const [filter, setFilter] = useState({
     status: "",
-    userId: userSelector.id,
   });
-  console.log(orderData);
-  console.log(userSelector.id);
+  const [orderId, setOrderId] = useState();
+
+  const [totalPage, setTotalPage] = useState(0);
+  const [page, setPage] = useState(0);
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
 
   useEffect(() => {
-    fetchOrderData();
+    fetchOrderData(filter);
   }, [filter]);
 
-  const fetchOrderData = async () => {
+  const fetchOrderData = async (filter) => {
     try {
-      const res = await api.get("/order/orderbystatus", {
-        params: {
-          status: filter.status,
-          userId: filter.userId,
-        },
+      const res = await api.get(`/order?page=${page}`, {
+        params: filter,
       });
-      setOrderData(res.data);
+      setOrderData(res.data.userOrders);
+      setTotalPage(res.data.totalPage);
     } catch (error) {
       console.log(error);
     }
@@ -377,13 +382,11 @@ export default function Transaction() {
             value={filter?.status}
           >
             <option value="">Order status</option>
-            <option value="Menunggu Pembayaran">Menunggu Pembayaran</option>
-            <option value="Menunggu Konfirmasi Pembayaran">
-              Menunggu Konfirmasi Pembayaran
-            </option>
-            <option value="Diproses Tenant">Diproses Tenant</option>
-            <option value="Dibatalkan Customer">Dibatalkan Customer</option>
-            <option value="Dibatalkan Tenant">Dibatalkan Tenant</option>
+            <option value="PAYMENT">PAYMENT</option>
+            <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
+            <option value="PROCESSING">PROCESSING</option>
+            <option value="CANCELED">CANCELED</option>
+            <option value="DONE">DONE</option>
           </Select>
         </Flex>
 
@@ -421,9 +424,7 @@ export default function Transaction() {
                       <MenuItem
                         onClick={() => {
                           orderDetails.onOpen();
-                          // propertyDetail.onOpen();
-
-                          // setPropertyID(val?.id);
+                          setOrderId(val?.id);
                         }}
                         display={"flex"}
                         gap={"10px"}
@@ -436,17 +437,6 @@ export default function Transaction() {
                 </Box>
 
                 <Box>
-                  <Box
-                    mb={"0.5em"}
-                    w={"90%"}
-                    display={"flex"}
-                    justifyContent={"left"}
-                    fontWeight={"bold"}
-                    fontSize={"1.5em"}
-                  >
-                    {/* {val?.property_name} */}
-                  </Box>
-
                   <Box display={"flex"} w={"90%"}>
                     <Flex
                       flex={1}
@@ -507,6 +497,22 @@ export default function Transaction() {
                         justifyContent={"center"}
                       >
                         <Flex align={"center"} gap={"0.5em"}>
+                          <Icon as={GrStatusInfo} />
+                          Status
+                        </Flex>
+                        <Box fontSize={"0.6em"} pl={"2.5em"}>
+                          {val?.status}
+                        </Box>
+                      </Text>
+
+                      <Text
+                        display={"flex"}
+                        flexDir={"column"}
+                        fontSize={"1.2em"}
+                        justifyContent={"center"}
+                        mb={"0.5em"}
+                      >
+                        <Flex align={"center"} gap={"0.5em"}>
                           <Icon as={BsFillCalendar2DateFill} />
                           Order Date
                         </Flex>
@@ -523,8 +529,14 @@ export default function Transaction() {
         </Grid>
         <OrderDetail
           isOpen={orderDetails.isOpen}
-          onClose={orderDetails.onClose}
+          onClose={() => {
+            orderDetails.onClose();
+            setOrderId("");
+          }}
+          id={orderId}
         />
+        <Pagination data={{ totalPage, handlePageClick }} />
+
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>
