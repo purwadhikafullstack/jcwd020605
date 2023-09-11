@@ -82,7 +82,6 @@ export default function TransactionDekstop() {
     status: "",
   });
   const [orderId, setOrderId] = useState();
-
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
   const handlePageClick = (data) => {
@@ -104,7 +103,6 @@ export default function TransactionDekstop() {
       console.log(error);
     }
   };
-  console.log(orderData);
   return (
     <>
       <Box
@@ -409,16 +407,15 @@ export default function TransactionDekstop() {
           </Table>
         </Flex>
 
-        {orderId && (
-          <OrderDetail
-            isOpen={orderDetails.isOpen}
-            onClose={() => {
-              orderDetails.onClose();
-              setOrderId("");
-            }}
-            id={orderId}
-          />
-        )}
+        <OrderDetail
+          isOpen={orderDetails.isOpen}
+          onClose={() => {
+            orderDetails.onClose();
+            setOrderId("");
+          }}
+          id={orderId}
+          fetch={fetchOrderData}
+        />
 
         <Pagination data={{ totalPage, handlePageClick }} />
 

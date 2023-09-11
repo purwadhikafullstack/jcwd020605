@@ -3,6 +3,8 @@ const db = require("../models");
 const dotenv = require("dotenv");
 const { where, Op } = require("sequelize");
 const mailer = require("../lib/mailer");
+const fs = require("fs");
+const path = require("path");
 
 const API_key = process.env.API_key;
 dotenv.config();
@@ -106,8 +108,11 @@ const orderController = {
         no_invoice,
         status,
       } = req.body;
-      const { filename } = req.file;
-      const imageUrl = "/payment_proof/" + filename;
+      let imageUrl = null;
+
+      if (req.file && req.file.filename) {
+        imageUrl = "/payment_proof/" + req.file.filename;
+      }
 
       const order = await db.OrderModel.create({
         room_id,
@@ -129,7 +134,21 @@ const orderController = {
     try {
       const { status, id } = req.body;
       let message = "";
+
       if (status === "PROCESSING") {
+        const paymentCheck = await db.OrderModel.findOne({
+          where: {
+            id,
+          },
+        });
+        const value = paymentCheck?.dataValues?.payment_proof;
+
+        if (value === null) {
+          throw new Error(
+            "Cannot confirm an order if there is no payment proof"
+          );
+        }
+
         await db.OrderModel.update(
           {
             status,
@@ -175,9 +194,28 @@ const orderController = {
           `,
         });
       } else if (status === "PAYMENT") {
+        const order = await db.OrderModel.findOne({
+          where: {
+            id,
+          },
+        });
+
+        if (!order) {
+          return res.status(404).send("Order not found");
+        }
+        const imagePath = path.join(
+          __dirname,
+          `../public/${order?.dataValues?.payment_proof}`
+        );
+
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+
         await db.OrderModel.update(
           {
             status,
+            payment_proof: null,
           },
           {
             where: {
@@ -193,9 +231,8 @@ const orderController = {
           },
         });
         const value = paymentCheck?.dataValues?.payment_proof;
-
         if (value !== null) {
-          throw new Error("can't cancel when order has been paid");
+          throw new Error("Can't cancel when order has payment proof");
         }
 
         await db.OrderModel.update(
@@ -212,8 +249,8 @@ const orderController = {
       }
       return res.status(200).send(message);
     } catch (error) {
-      console.log(error);
-      res.status(500).send(error);
+      console.log(error.message);
+      res.status(500).send(error.message);
     }
   },
 };

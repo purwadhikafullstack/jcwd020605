@@ -51,7 +51,6 @@ app.use(
   "/api/payment_proof",
   express.static(`${__dirname}/public/payment_proof`)
 );
-
 // ===========================
 
 // not found

@@ -12,7 +12,7 @@ import {
   Text,
   Input,
   Flex,
-  Image,
+  // Image,
   Icon,
   Select,
 } from "@chakra-ui/react";
@@ -20,6 +20,8 @@ import { useState, useRef, useEffect } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { Image } from "react-bootstrap";
+import paymentproof from "../assets/payment.png";
 
 export default function OrderDetail(props) {
   const nav = useNavigate();
@@ -27,6 +29,9 @@ export default function OrderDetail(props) {
   const [orderData, setOrderData] = useState();
   const [update, setUpdate] = useState();
   const toast = useToast();
+  const imageUrl = orderData?.payment_proof
+    ? `${process.env.REACT_APP_API_BASE_URL}${orderData?.payment_proof}`
+    : paymentproof;
 
   const orderDataByID = async () => {
     try {
@@ -54,7 +59,7 @@ export default function OrderDetail(props) {
       } else if (res.data === "Cancel success") {
         toast({
           title: res.data,
-          status: "error",
+          status: "info",
           position: "top",
           duration: 3000,
           isClosable: true,
@@ -69,8 +74,16 @@ export default function OrderDetail(props) {
           isClosable: true,
         });
       }
+      props.fetch();
       props.onClose();
     } catch (error) {
+      toast({
+        title: error?.response?.data,
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
       console.log(error);
     }
   };
@@ -96,9 +109,7 @@ export default function OrderDetail(props) {
             fontWeight={"bold"}
           >
             <Box>
-              <Image
-                src={`${process.env.REACT_APP_API_BASE_URL}${orderData?.payment_proof}`}
-              ></Image>
+              <Image src={imageUrl}></Image>
             </Box>
 
             <Box>
@@ -149,10 +160,10 @@ export default function OrderDetail(props) {
           >
             <Flex w={"100%"} justify={"space-around"}>
               <Button
-                w={"45%"}
+                w={"48%"}
                 onClick={() => {
                   const shouldReject = window.confirm(
-                    "Apakah Anda yakin ingin menolak pembayaran pesanan ini?"
+                    "Foto bukti pembayaran juga akan dihapus, yakin?"
                   );
                   if (shouldReject) {
                     confirmOrReject({ status: "PAYMENT", id: props.id });
@@ -164,7 +175,7 @@ export default function OrderDetail(props) {
               </Button>
 
               <Button
-                w={"45%"}
+                w={"48%"}
                 isLoading={isLoading}
                 onClick={() => {
                   setIsLoading(true);
@@ -179,8 +190,10 @@ export default function OrderDetail(props) {
               </Button>
             </Flex>
 
-            <Flex>
+            <Flex w={"100%"}>
               <Button
+                w={"100%"}
+                colorScheme="red"
                 onClick={() => {
                   const shouldReject = window.confirm(
                     "Apakah Anda yakin ingin menolak pesanan ini?"
