@@ -7,6 +7,7 @@ router.get("/orderbystatus", orderController.getAllOrderByStatus);
 router.get("/:id", orderController.getOrderById);
 router.get("/", orderController.getAllOrder);
 router.post("/confirmorreject", orderController.confirmOrReject);
+router.patch("/orderdone/:id", orderController.OrderDone);
 
 router.post(
   "/addorder",

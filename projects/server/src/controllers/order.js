@@ -253,6 +253,39 @@ const orderController = {
       res.status(500).send(error.message);
     }
   },
+  // -----report-----
+  OrderDone: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const findOrder = await db.OrderModel.findOne({
+        where: { id },
+      });
+      if (!findOrder) {
+        throw new Error("Order not found");
+      } else if (
+        findOrder?.dataValues?.status == "CANCELED" ||
+        findOrder?.dataValues?.status == "PAYMENT"
+      ) {
+        throw new Error(
+          "Can't complete the order if the payment status is canceled or payment."
+        );
+      }
+      await db.OrderModel.update(
+        {
+          status: "DONE",
+        },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+      return res.status(200).send(findOrder);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  },
 };
 
 module.exports = orderController;

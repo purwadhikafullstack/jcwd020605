@@ -8,6 +8,7 @@ import RoomPropertyPages from "../pages/room";
 import RoomDetailPage from "../pages/roomDetail";
 import ProtectedPage from "./protectedPage";
 import TransactionPages from "../pages/transaction";
+import ReportPages from "../pages/report";
 const routes = [
   <Route
     path="/registertenant"
@@ -78,6 +79,15 @@ const routes = [
     element={
       <ProtectedPage needLogin={true}>
         <TransactionPages />
+      </ProtectedPage>
+    }
+  />,
+  <Route
+    path="/report/"
+    key={"report"}
+    element={
+      <ProtectedPage needLogin={true}>
+        <ReportPages />
       </ProtectedPage>
     }
   />,

@@ -176,7 +176,9 @@ export default function TransactionDekstop() {
 
               <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
                 <Icon as={TbReportAnalytics} />
-                <Link _hover={{ color: "#ab854f" }}>Report</Link>
+                <Link _hover={{ color: "#ab854f" }} href="/report">
+                  Report
+                </Link>
               </Flex>
             </Flex>
 
@@ -272,7 +274,7 @@ export default function TransactionDekstop() {
         </Box>
 
         {/* orderList */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -302,10 +304,10 @@ export default function TransactionDekstop() {
               Order List
             </Text>
           </Box>
-        </motion.div>
+        </motion.div> */}
 
         {/* filter */}
-        <Flex justifyContent={"center"} align={"center"} mt={"1em"}>
+        <Flex justifyContent={"center"} align={"center"} py={"2em"}>
           <Select
             w={"50%"}
             bgColor={"white"}
@@ -329,13 +331,8 @@ export default function TransactionDekstop() {
 
         {/* card */}
 
-        <Flex
-          justify={"center"}
-          my={"3em"}
-          transition="transform 0.5s ease"
-          _hover={{ transform: "translateY(-10px)" }}
-        >
-          <Table variant="simple" w={"90%"} boxShadow={"md"}>
+        <Flex justify={"center"} bgColor={"#edf2f9"}>
+          <Table variant="simple" w={"90%"} boxShadow={"md"} bgColor={"white"}>
             <Thead>
               <Tr bgColor={"white"} textTransform={"uppercase"}>
                 <Th textAlign={"center"} borderRight={"1px solid #dbdbdb"}>
