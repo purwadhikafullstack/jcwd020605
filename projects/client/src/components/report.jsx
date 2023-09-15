@@ -27,6 +27,8 @@ import {
   MenuList,
   MenuItem,
   Select,
+  InputGroup,
+  Input,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
@@ -39,6 +41,7 @@ import {
   BiLogOutCircle,
   BiDotsHorizontalRounded,
   BiSolidUser,
+  BiMoney,
 } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
@@ -47,6 +50,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
 import { BsFillCalendar2DateFill } from "react-icons/bs";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
+import { FcMoneyTransfer } from "react-icons/fc";
+import { GiMoneyStack } from "react-icons/gi";
+
 import { GrStatusInfo } from "react-icons/gr";
 import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
 import OrderDetail from "./orderDetail";
@@ -67,34 +73,53 @@ import "../styles/sliderCard.css";
 import { motion } from "framer-motion";
 import { api } from "../api/api";
 import moment from "moment";
+import { RangeDatepicker } from "chakra-dayzed-datepicker";
 
 export default function Report() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const orderDetails = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
-  const [orderData, setOrderData] = useState();
-  const [filter, setFilter] = useState({
-    status: "",
-  });
-  const [orderId, setOrderId] = useState();
-
+  const [orderData, setOrderData] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
+  const [datesRange, setDatesRange] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
+  const [filter, setFilter] = useState({
+    sort: "",
+    order: "",
+  });
+  const [search, setSearch] = useState();
   useEffect(() => {
-    fetchOrderData(filter);
-  }, [filter]);
+    fetchOrderData();
+  }, [filter, datesRange, search, page]);
 
-  const fetchOrderData = async (filter) => {
+  const fetchOrderData = async () => {
     try {
-      const res = await api.get(`/order?page=${page}`, {
-        params: filter,
+      let startDate = datesRange[0]
+        ? new Date(
+            datesRange[0].getTime() - datesRange[0].getTimezoneOffset() * 60000
+          ).toISOString()
+        : null;
+      let endDate = datesRange[1]
+        ? new Date(
+            datesRange[1].getTime() - datesRange[1].getTimezoneOffset() * 60000
+          ).toISOString()
+        : null;
+      const status = "DONE";
+      const res = await api.get(`/order/done?page=${page}`, {
+        params: {
+          status,
+          filter,
+          startDate,
+          endDate,
+          search,
+        },
       });
-      setOrderData(res.data.userOrders);
+      setOrderData(res.data.orders);
       setTotalPage(res.data.totalPage);
+      setTotalAmount(res.data.totalAmount);
     } catch (error) {
       console.log(error);
     }
@@ -274,7 +299,6 @@ export default function Report() {
             </DrawerContent>
           </Drawer>
         </Box>
-
         {/* bg */}
         <Box py={"5%"}>
           <Flex
@@ -333,7 +357,6 @@ export default function Report() {
             </Text>
           </Flex>
         </Box>
-
         {/* orderList */}
         <motion.div
           initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
@@ -368,33 +391,123 @@ export default function Report() {
         </motion.div>
 
         {/* filter */}
-        <Flex justifyContent={"center"} align={"center"} mt={"1em"}>
+        <Flex
+          justifyContent={"center"}
+          align={"center"}
+          mt={"1em"}
+          flexDir={"column"}
+          gap={"1em"}
+        >
+          {/* order date */}
           <Select
             w={"90%"}
             bgColor={"white"}
+            onClick={() => {
+              setDatesRange("");
+            }}
             onChange={(e) => {
-              const selectedStatus = e.target.value;
+              const selectedSort = e.target.value;
+              const [sort, order] = selectedSort.split(",");
+
               setFilter((prevFilter) => ({
                 ...prevFilter,
-                status: selectedStatus,
+                sort: sort,
+                order: order,
               }));
             }}
-            value={filter?.status}
           >
-            <option value="">Order status</option>
-            <option value="PAYMENT">PAYMENT</option>
-            <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
-            <option value="PROCESSING">PROCESSING</option>
-            <option value="CANCELED">CANCELED</option>
-            <option value="DONE">DONE</option>
+            <option value="">Sort by order date</option>
+            <option value="desc,createdAt">Order date up</option>
+            <option value="asc,createdAt">Order date down</option>
           </Select>
+          {/* revenue */}
+          <Select
+            w={"90%"}
+            bgColor={"white"}
+            onClick={() => {
+              setDatesRange("");
+            }}
+            onChange={(e) => {
+              const selectedSortBy = e.target.value;
+              const [sort, order] = selectedSortBy.split(",");
+              setFilter((prevFilter) => ({
+                ...prevFilter,
+                sort: sort,
+                order: order,
+              }));
+            }}
+          >
+            <option value="">Sort by Revenue</option>
+            <option value="desc,mainPrice">Revenue up</option>
+            <option value="asc,mainPrice">Revenue down</option>
+          </Select>
+
+          {/* date range */}
+          <Box
+            cursor={"pointer"}
+            w={"90%"}
+            bgColor={"white"}
+            borderRadius={"10%"}
+            onClick={() => {
+              setFilter("");
+            }}
+          >
+            <RangeDatepicker
+              selectedDates={datesRange}
+              onDateChange={setDatesRange}
+              closeOnSelect={true}
+              propsConfigs={{
+                inputProps: {
+                  placeholder: "Date Range",
+                },
+              }}
+              configs={{
+                dateFormat: "dd/MM/yyyy",
+              }}
+            />
+          </Box>
+
+          {/* search */}
+          <InputGroup w={"90%"}>
+            <Input
+              bgColor={"white"}
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+              placeholder="Search..."
+              color={"gray"}
+              onClick={() => {
+                setFilter("");
+                setDatesRange("");
+              }}
+            />
+          </InputGroup>
+        </Flex>
+
+        <Flex justify={"center"}>
+          <Flex align={"center"} mt={"1.5em"} w={"90%"} gap={"0.5em"}>
+            <Icon as={FcMoneyTransfer} display={"flex"} fontSize={"1.5em"} />
+            <Box
+              w={"100%"}
+              fontSize={"30px"}
+              fontFamily={`'Barlow Condensed', sans-serif`}
+              textTransform={"uppercase"}
+            >
+              Total Revenue
+              <Box fontStyle={"italic"} fontSize={"20px"} color={"green.700"}>
+                {totalAmount?.toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                })}
+              </Box>
+            </Box>
+          </Flex>
         </Flex>
 
         {/* card */}
         <Grid
           templateColumns="repeat(1, 1fr)"
           gap={10}
-          mt={"1em"}
+          mt={"2em"}
           pb={"2em"}
           bgColor={"#edf2f9"}
         >
@@ -410,116 +523,161 @@ export default function Report() {
                 transition="transform 0.5s ease"
                 _hover={{ transform: "translateY(-10px)" }}
               >
-                <Box
-                  pr={1}
-                  display={"flex"}
-                  w={"100%"}
-                  justifyContent={"right"}
-                >
-                  <Menu>
-                    <MenuButton>
-                      <Image as={BiDotsHorizontalRounded} boxSize={7} />
-                    </MenuButton>
-                    <MenuList minW={"100px"}>
-                      <MenuItem
-                        onClick={() => {
-                          orderDetails.onOpen();
-                          setOrderId(val?.id);
-                        }}
-                        display={"flex"}
-                        gap={"10px"}
-                      >
-                        <Icon as={CgDetailsMore} />
-                        Details
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Box>
-
                 <Box>
                   <Box display={"flex"} w={"90%"}>
                     <Flex
                       flex={1}
-                      flexDir={"column"}
                       textAlign={"left"}
                       gap={"1em"}
+                      py={"0.5em"}
                       textTransform={"uppercase"}
                     >
-                      <Text
-                        display={"flex"}
-                        flexDir={"column"}
-                        fontSize={"1.2em"}
-                        justifyContent={"center"}
-                      >
-                        <Flex align={"center"} gap={"0.5em"}>
+                      <Flex flexDir={"column"} flex={1} gap={"1em"}>
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
                           <Icon as={FaFileInvoiceDollar} />
-                          No.Invoice
-                        </Flex>
-                        <Box fontSize={"0.6em"} pl={"2.5em"}>
-                          {val?.no_invoice}
-                        </Box>
-                      </Text>
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            No.Invoice
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {val?.no_invoice}
+                            </Box>
+                          </Box>
+                        </Text>
 
-                      <Text
-                        display={"flex"}
-                        flexDir={"column"}
-                        fontSize={"1.2em"}
-                        justifyContent={"center"}
-                      >
-                        <Flex align={"center"} gap={"0.5em"}>
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
                           <Icon as={HiHomeModern} />
-                          Property
-                        </Flex>
-                        <Box fontSize={"0.6em"} pl={"2.5em"}>
-                          {val?.Property?.property_name}
-                        </Box>
-                      </Text>
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            Property
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {val?.Property?.property_name}
+                            </Box>
+                          </Box>
+                        </Text>
 
-                      <Text
-                        display={"flex"}
-                        flexDir={"column"}
-                        fontSize={"1.2em"}
-                        justifyContent={"center"}
-                      >
-                        <Flex align={"center"} gap={"0.5em"}>
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
                           <Icon as={BiSolidUser} />
-                          Username
-                        </Flex>
-                        <Box fontSize={"0.6em"} pl={"2.5em"}>
-                          {val?.User?.first_name}
-                        </Box>
-                      </Text>
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            Username
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {val?.User?.first_name}
+                            </Box>
+                          </Box>
+                        </Text>
+                      </Flex>
 
-                      <Text
-                        display={"flex"}
-                        flexDir={"column"}
-                        fontSize={"1.2em"}
-                        justifyContent={"center"}
-                      >
-                        <Flex align={"center"} gap={"0.5em"}>
+                      <Flex flexDir={"column"} flex={1} gap={"1em"}>
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
                           <Icon as={GrStatusInfo} />
-                          Status
-                        </Flex>
-                        <Box fontSize={"0.6em"} pl={"2.5em"}>
-                          {val?.status}
-                        </Box>
-                      </Text>
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            Status
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {val?.status}
+                            </Box>
+                          </Box>
+                        </Text>
 
-                      <Text
-                        display={"flex"}
-                        flexDir={"column"}
-                        fontSize={"1.2em"}
-                        justifyContent={"center"}
-                        mb={"0.5em"}
-                      >
-                        <Flex align={"center"} gap={"0.5em"}>
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
                           <Icon as={BsFillCalendar2DateFill} />
-                          Order Date
-                        </Flex>
-                        <Box fontSize={"0.6em"} pl={"2.5em"}>
-                          {moment(val?.createdAt).format("DD MMM YYYY, HH:MM")}
-                        </Box>
-                      </Text>
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            Order Date
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {moment(val?.createdAt).format(
+                                "DD MMM YYYY, HH:MM"
+                              )}
+                            </Box>
+                          </Box>
+                        </Text>
+
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
+                          <Icon as={GiMoneyStack} />
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            Revenue
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {val?.Room?.main_price.toLocaleString("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                              })}
+                            </Box>
+                          </Box>
+                        </Text>
+                      </Flex>
                     </Flex>
                   </Box>
                 </Box>
@@ -527,16 +685,8 @@ export default function Report() {
             </Box>
           ))}
         </Grid>
-        <OrderDetail
-          isOpen={orderDetails.isOpen}
-          onClose={() => {
-            orderDetails.onClose();
-            setOrderId("");
-          }}
-          id={orderId}
-        />
-        <Pagination data={{ totalPage, handlePageClick }} />
 
+        <Pagination data={{ totalPage, handlePageClick }} />
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>

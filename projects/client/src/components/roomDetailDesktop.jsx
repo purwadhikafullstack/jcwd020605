@@ -113,9 +113,6 @@ export default function RoomDetailDesktop(props) {
 
   const SpecialPrices = async () => {
     try {
-      //getTime untuk ambil data dari 1970(timestamp Unix)
-      //getTimezoneOffset mengambil perbedaan menit antara zona waktu lokal dan UTC,
-      //selisih getTime dgn getTimezoneOffset di convert menggunakan toISOString
       let start_date = new Date(
         priceDates[0].getTime() - priceDates[0].getTimezoneOffset() * 60000
       ).toISOString();

@@ -30,15 +30,14 @@ export default function OrderDetail(props) {
   const [update, setUpdate] = useState();
   const toast = useToast();
   const imageUrl = orderData?.payment_proof
-    ? `${process.env.REACT_APP_API_BASE_URL}${orderData?.payment_proof}`
+    ? `${process?.env?.REACT_APP_API_BASE_URL}${orderData?.payment_proof}`
     : paymentproof;
 
   const orderDataByID = async () => {
     try {
-      const res = await api.get("/order/" + props.id);
+      const res = await api.get("/orderbyid/" + props.id);
       setOrderData(res.data);
     } catch (error) {
-      console.log("masuk");
       console.log(error);
     }
   };

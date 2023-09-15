@@ -8,6 +8,8 @@ export const useFetchProperty = (filter) => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
+
+  console.log(properties);
   const fetch = async () => {
     try {
       const res = await api.get(`/properties/propertieslist?page=${page}`, {
@@ -15,7 +17,6 @@ export const useFetchProperty = (filter) => {
       });
       setProperties(res.data.property);
       setTotalPage(res.data.totalPage);
-      console.log(res.data.property);
     } catch (err) {
       console.log(err);
     }

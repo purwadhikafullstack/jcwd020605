@@ -167,14 +167,6 @@ db.RoomModel.hasMany(db.ReviewModel, {
 
 // -------------------  ProductCategoriesMaster  ---------------------
 
-// db.ProductCategoriesMaster.belongsTo(db.CitiesModel, {
-//   foreignKey: "city_id",
-// });
-
-// db.CitiesModel.hasMany(db.ProductCategoriesMaster, {
-//   foreignKey: "city_id",
-// });
-
 db.PropertyModel.belongsTo(db.ProductCategoriesMaster, {
   foreignKey: "pcm_id",
 });

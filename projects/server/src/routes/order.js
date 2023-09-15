@@ -3,9 +3,12 @@ const router = express.Router();
 const { fileUploader } = require("../middlewares/multer");
 const orderController = require("../controllers").orderController;
 
+// router.get("/searching", orderController.getAllOrderBySearch);
+router.get("/done", orderController.getAllOrderDone);
 router.get("/orderbystatus", orderController.getAllOrderByStatus);
-router.get("/:id", orderController.getOrderById);
+router.get("/orderbyid/:id", orderController.getOrderById);
 router.get("/", orderController.getAllOrder);
+
 router.post("/confirmorreject", orderController.confirmOrReject);
 router.patch("/orderdone/:id", orderController.OrderDone);
 

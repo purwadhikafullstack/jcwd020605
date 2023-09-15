@@ -85,7 +85,6 @@ export default function PropertiesDekstopComp() {
   const [propertyId, setPropertyID] = useState();
   const [keyword, setKeyword] = useState();
   const [selectedProperty, setSelectedProperty] = useState();
-  const [page, setPage] = useState(0);
 
   const [filter, setFilter] = useState({
     pcm: "",

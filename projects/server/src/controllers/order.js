@@ -5,6 +5,7 @@ const { where, Op } = require("sequelize");
 const mailer = require("../lib/mailer");
 const fs = require("fs");
 const path = require("path");
+const moment = require("moment");
 
 const API_key = process.env.API_key;
 dotenv.config();
@@ -281,6 +282,159 @@ const orderController = {
         }
       );
       return res.status(200).send(findOrder);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  },
+  getAllOrderDone: async (req, res) => {
+    try {
+      const { status, startDate, endDate } = req?.query || "";
+      const { sort, order } = req?.query?.filter || "";
+      let search = req?.query?.search || "";
+      const page = parseInt(req?.query?.page) || 0;
+      const limit = 5;
+      const offset = page * limit;
+      console.log(req.query);
+      let where = { status };
+      // default
+      let orderDirection = "asc";
+      if (sort === "desc") {
+        orderDirection = "desc";
+      }
+      let orderAttribute = ["createdAt", orderDirection];
+      if (order === "mainPrice") {
+        orderAttribute = [db.RoomModel, "main_price", orderDirection];
+      }
+      let orders;
+      if (sort && order) {
+        orders = await db.OrderModel.findAndCountAll({
+          include: [
+            {
+              model: db.PropertyModel,
+            },
+            {
+              model: db.UserModel,
+            },
+            {
+              model: db.RoomModel,
+            },
+          ],
+          where: {
+            status,
+          },
+          order: [orderAttribute],
+        });
+      } else if (startDate && endDate) {
+        const formattedStartDate = moment(startDate)
+          .startOf("day")
+          .format("YYYY-MM-DDTHH:mm:ss");
+        const formattedEndDate = moment(endDate)
+          .endOf("day")
+          .format("YYYY-MM-DDTHH:mm:ss");
+
+        orders = await db.OrderModel.findAndCountAll({
+          include: [
+            {
+              model: db.PropertyModel,
+            },
+            {
+              model: db.UserModel,
+            },
+            {
+              model: db.RoomModel,
+            },
+          ],
+          where: {
+            status,
+            createdAt: {
+              [Op.between]: [formattedStartDate, formattedEndDate],
+            },
+          },
+        });
+      } else if (search) {
+        where = {
+          ...where,
+          [Op.or]: [
+            {
+              no_invoice: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              "$Property.property_name$": {
+                [Op.like]: `%${search}%`,
+              },
+            },
+
+            {
+              "$User.first_name$": {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              status: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              createdAt: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              "$Room.main_price$": {
+                [Op.like]: `%${search}%`,
+              },
+            },
+          ],
+        };
+
+        orders = await db.OrderModel.findAndCountAll({
+          include: [
+            {
+              model: db.PropertyModel,
+            },
+
+            {
+              model: db.RoomModel,
+            },
+            {
+              model: db.UserModel,
+            },
+          ],
+          where,
+        });
+      } else {
+        orders = await db.OrderModel.findAndCountAll({
+          include: [
+            {
+              model: db.PropertyModel,
+            },
+            {
+              model: db.UserModel,
+            },
+            {
+              model: db.RoomModel,
+            },
+          ],
+          where: {
+            status,
+          },
+          order: [orderAttribute],
+        });
+      }
+
+      const ordersAndPages = orders.rows.slice(offset, limit * (page + 1));
+      const totalAmount = orders.rows.reduce((prev, curr) => {
+        prev += curr?.Room?.main_price;
+        return prev;
+      }, 0);
+      res.status(200).send({
+        orders: ordersAndPages,
+        totalAmount,
+        totalPage: Math.ceil(orders.count / limit),
+      });
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
