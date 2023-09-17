@@ -1,9 +1,9 @@
 const db = require("../models");
 const bcrypt = require("bcrypt");
-const nanoid = require("nanoid");
-const IDCard_url = process.env.IDCard_url;
 const jwt = require("jsonwebtoken");
 const secretKey = "kaminari";
+const mailer = require("../lib/mailer");
+const moment = require("moment");
 
 const tenantController = {
   registerTenant: async (req, res) => {
@@ -48,7 +48,7 @@ const tenantController = {
           password: hashPassword,
           phone_number,
           id_Number,
-          id_image: IDCard_url + filename,
+          id_image: "/id_card/" + filename,
         });
         res.status(200).send({
           message: "Succesfully create account",
@@ -84,8 +84,7 @@ const tenantController = {
             // id: payload,
             data: findTenant.dataValues,
           },
-          secretKey,
-          { expiresIn: "1h" }
+          secretKey
         );
 
         return res.status(200).send({
@@ -101,18 +100,57 @@ const tenantController = {
       return res.status(500).send({ message: err.message });
     }
   },
+  forgetPassword: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const tenant = await db.TenantModel.findOne({
+        where: {
+          email,
+        },
+      });
+      if (!tenant) {
+        throw new Error("Cannot find email");
+      }
+      const payload = tenant.dataValues.id;
+      const tokenJwt = jwt.sign(
+        {
+          data1: tenant.dataValues.id,
+          data2: tenant.dataValues.email,
+        },
+        secretKey,
+        { expiresIn: "5m" }
+      );
+      const token = await db.TokenModel.create({
+        expired: moment().add(5, "day").format(),
+        token: tokenJwt,
+        payload: JSON.stringify({ id: payload }),
+        action: "FORGET PASSWORD",
+      });
+      console.log(token);
+      mailer({
+        subject: "Reset Password (5 min expired)",
+        to: tenant.dataValues.email,
+        text: "http://localhost:3000/resetPassword/" + token.dataValues.token,
+      });
+      return res.status(200).send({ message: "We've send an email to you" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
+
   getToken: async (req, res, next) => {
     try {
-      const authHeader = req.headers["authorization"];
-      const token = authHeader && authHeader.split(" ")[0];
-      // console.log(token);
+      const token = req.query.token;
+      console.log(req.query.token);
+      console.log(req.query);
 
       if (token == null) {
         throw new Error("token not found");
       }
       jwt.verify(token, secretKey, (err, tenant) => {
         if (err) {
-          return res.status(400);
+          throw new Error("Token expired");
         }
         req.tenant = tenant;
         next();
@@ -121,6 +159,55 @@ const tenantController = {
       console.log(err.message);
       return res.status(500).send({
         message: err.message,
+      });
+    }
+  },
+  resetPassword: async (req, res) => {
+    try {
+      let token = req.query.token;
+      const { password, confirm } = req.body;
+      const id = req.tenant.data1;
+      const hashPassword = await bcrypt.hashSync(password, 10);
+      console.log(token);
+      console.log(req.body);
+      if (password !== confirm) {
+        throw new Error("Password doesn't match");
+      }
+      await db.TenantModel.update(
+        {
+          password: hashPassword,
+        },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+      const check = await db.TokenModel.findOne({
+        where: {
+          token,
+          valid: true,
+        },
+      });
+
+      if (!check) {
+        throw new Error("Token has been used before");
+      }
+      await db.TokenModel.update(
+        {
+          valid: false,
+        },
+        {
+          where: {
+            token,
+          },
+        }
+      );
+      return res.send({ message: "Reset password succesfully, arigatou!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: error.message,
       });
     }
   },

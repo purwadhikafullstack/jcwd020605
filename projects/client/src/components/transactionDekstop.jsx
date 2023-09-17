@@ -72,6 +72,7 @@ import "../styles/sliderCard.css";
 import { motion } from "framer-motion";
 import { api } from "../api/api";
 import moment from "moment";
+import NavbarDesktop from "./navbarDesktop";
 
 export default function TransactionDekstop() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -112,107 +113,7 @@ export default function TransactionDekstop() {
         h={"100vh"}
       >
         {/* navbar + sidebar + profile */}
-        <Box
-          display={{ base: "none", lg: "flex" }}
-          alignItems={"center"}
-          justifyContent={"space-between"}
-          px={"0.5em"}
-          w={"100%"}
-          p={"0.5em"}
-          bgColor={"#edf2f9"}
-          pos={"fixed"}
-          zIndex={3}
-        >
-          <Box
-            display={"block"}
-            textAlign={"center"}
-            textTransform={"uppercase"}
-            fontFamily={`'Gilda Display', sans-serif`}
-          >
-            <Text fontSize={"20px"} letterSpacing={"1px"} color={"#ab854f"}>
-              The Cappa
-            </Text>
-            <Text fontSize={"10px"} letterSpacing={"3px"} color={"black"}>
-              Luxury Hotel
-            </Text>
-          </Box>
-
-          <Flex gap={"1.5em"}>
-            {/* navigation */}
-            <Flex
-              textTransform={"uppercase"}
-              fontFamily={`'Barlow Condensed', sans-serif`}
-              letterSpacing={"2px"}
-              fontSize={"15px"}
-              gap={"3em"}
-              color={"#5e6e82"}
-            >
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={LuLayoutDashboard} />
-                <Link _hover={{ color: "#ab854f" }}>Dashboard</Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={HiHomeModern} />
-                <Link _hover={{ color: "#ab854f" }} href="/propertiestenant">
-                  Property
-                </Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={MdOutlineBedroomChild} />
-                <Link
-                  _hover={{ color: "#ab854f" }}
-                  href="/roompropertiestenant"
-                >
-                  Room
-                </Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={AiOutlineDollarCircle} />
-                <Link _hover={{ color: "#ab854f" }}>Transaction</Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={TbReportAnalytics} />
-                <Link _hover={{ color: "#ab854f" }} href="/report">
-                  Report
-                </Link>
-              </Flex>
-            </Flex>
-
-            {/* avatar profile */}
-            <Popover>
-              <PopoverTrigger>
-                <Avatar size={"sm"}></Avatar>
-              </PopoverTrigger>
-              <PopoverContent
-                w={"100%"}
-                textAlign={"center"}
-                mt={"1em"}
-                border={"1px solid #dbdbdb"}
-              >
-                <PopoverArrow />
-                <PopoverHeader>{userSelector?.first_name}</PopoverHeader>
-                <PopoverBody
-                  display={"flex"}
-                  alignItems={"center"}
-                  gap={"0.8em"}
-                >
-                  <Icon as={CgProfile} /> Profile
-                </PopoverBody>
-                <PopoverFooter
-                  display={"flex"}
-                  alignItems={"center"}
-                  gap={"0.8em"}
-                >
-                  <Icon as={BiLogOutCircle} /> LogOut
-                </PopoverFooter>
-              </PopoverContent>
-            </Popover>
-          </Flex>
-        </Box>
+        <NavbarDesktop></NavbarDesktop>
 
         {/* bg */}
         <Box py={"5%"}>

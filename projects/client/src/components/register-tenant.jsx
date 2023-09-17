@@ -12,6 +12,7 @@ import {
   InputRightElement,
   useToast,
   Center,
+  Link,
 } from "@chakra-ui/react";
 import "@fontsource/barlow";
 import React from "react";
@@ -121,6 +122,7 @@ export default function RegisterComp() {
         <Flex
           className="form-wrap"
           w={{ lg: "70%", base: "85%" }}
+          pt={"2em"}
           h={"100vh"}
           alignItems={"center"}
         >
@@ -172,7 +174,7 @@ export default function RegisterComp() {
                 <Box>
                   <Button
                     bgColor={"transparent"}
-                    boxShadow={"1px 1px 20px #635b4c"}
+                    boxShadow={"dark-lg"}
                     color={"#ffffff"}
                     display={{ base: "none", lg: "flex" }}
                     letterSpacing={"3px"}
@@ -180,7 +182,11 @@ export default function RegisterComp() {
                     h={"3em"}
                     fontSize={"18px"}
                     borderRadius={"7px"}
-                    _hover={{ color: "#a07d4a" }}
+                    _hover={{
+                      color: "#a07d4a",
+                      bgColor: "transparent",
+                      transform: "translateY(-5px)",
+                    }}
                     textTransform={"uppercase"}
                     isLoading={isLoading}
                     onClick={() => {
@@ -194,16 +200,18 @@ export default function RegisterComp() {
                     Sign Up
                   </Button>
                 </Box>
-
-                <Flex
-                  className="go-login text-2"
-                  justifyContent={"center"}
-                  display={{ base: "none", lg: "flex" }}
-                  fontSize={{ lg: "15px" }}
-                >
-                  <PiArrowLeftLight color="white" />
-                  or continue login
-                </Flex>
+                <Link href={"/logintenant"} pt={"1em"}>
+                  <Flex
+                    className="go-login text-2"
+                    alignItems={"center"}
+                    justifyContent={{ base: "center" }}
+                    display={{ base: "none", lg: "flex" }}
+                    fontSize={{ base: "15px" }}
+                  >
+                    <PiArrowLeftLight color="white" />
+                    or continue login
+                  </Flex>
+                </Link>
               </Flex>
             </Flex>
 
@@ -337,10 +345,8 @@ export default function RegisterComp() {
                       </FormControl>
 
                       <Box
-                        // mt={"1em"}
                         h={{ lg: "16em", base: "10em" }}
                         w={"100%"}
-                        // border={"1px solid #dbdbdb"}
                         display={"flex"}
                         alignItems={"center"}
                         justifyContent={"center"}
@@ -385,17 +391,28 @@ export default function RegisterComp() {
                       </Box>
 
                       {/* sign up mobile */}
-                      <Box w={"100%"} my={{ lg: "1em" }} mt={{ base: "0.5em" }}>
+                      <Box
+                        w={"100%"}
+                        my={{ lg: "1em" }}
+                        mt={{ base: "0.5em" }}
+                        display={"flex"}
+                        gap={"1em"}
+                        flexDir={"column"}
+                      >
                         <Button
                           bgColor={"transparent"}
-                          boxShadow={"2px 2px 50px gray"}
+                          boxShadow={"dark-lg"}
                           color={"#ffffff"}
                           letterSpacing={"3px"}
                           h={"3em"}
                           w={"100%"}
                           fontSize={"14px"}
                           borderRadius={"7px"}
-                          _hover={{ color: "#a07d4a" }}
+                          _hover={{
+                            color: "#a07d4a",
+                            bgColor: "transparent",
+                            transform: "translateY(-5px)",
+                          }}
                           textTransform={"uppercase"}
                           display={{ lg: "none", base: "flex" }}
                           justifyContent={"center"}
@@ -410,6 +427,18 @@ export default function RegisterComp() {
                         >
                           Sign Up
                         </Button>
+                        <Link href={"/logintenant"}>
+                          <Flex
+                            className="go-login text-2"
+                            alignItems={"center"}
+                            justifyContent={{ base: "center" }}
+                            display={{ base: "flex", lg: "none" }}
+                            fontSize={{ base: "15px" }}
+                          >
+                            <PiArrowLeftLight color="white" />
+                            or continue login
+                          </Flex>
+                        </Link>
                       </Box>
                     </Stack>
                   </form>

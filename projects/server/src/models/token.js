@@ -1,10 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
   const TokenModel = sequelize.define("Tokens", {
-    user_id: Sequelize.INTEGER,
-    otp: Sequelize.INTEGER,
-    action: Sequelize.ENUM("Verification", "Change Password"),
-    is_used: Sequelize.BOOLEAN,
+    token: Sequelize.STRING,
+    action: Sequelize.ENUM("VERIFICATION", "FORGET PASSWORD"),
     payload: Sequelize.STRING,
+    expired: Sequelize.DATE,
+    valid: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true,
+    },
   });
   return TokenModel;
 };

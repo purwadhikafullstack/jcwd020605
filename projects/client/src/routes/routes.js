@@ -9,6 +9,8 @@ import RoomDetailPage from "../pages/roomDetail";
 import ProtectedPage from "./protectedPage";
 import TransactionPages from "../pages/transaction";
 import ReportPages from "../pages/report";
+import ResetPassword from "../components/resetPassword";
+import ForgetPassword from "../components/forgetPassword";
 const routes = [
   <Route
     path="/registertenant"
@@ -28,6 +30,25 @@ const routes = [
       </ProtectedPage>
     }
   />,
+  <Route
+    path="/forgetpassword"
+    key={"forgetpassword"}
+    element={
+      <ProtectedPage guestOnly={true}>
+        <ForgetPassword />
+      </ProtectedPage>
+    }
+  />,
+  <Route
+    path="/resetpassword/:token"
+    key={"resetpassword"}
+    element={
+      <ProtectedPage guestOnly={true}>
+        <ResetPassword />
+      </ProtectedPage>
+    }
+  />,
+
   <Route
     path="/landingpage"
     key={"landingpage"}

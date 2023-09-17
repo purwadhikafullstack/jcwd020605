@@ -12,10 +12,17 @@ router.post(
 );
 
 router.post("/login", tenantController.loginTenant);
+router.post("/forgetpassword", tenantController.forgetPassword);
 router.get(
   "/token",
   tenantController.getToken,
   tenantController.getTenantByToken
+);
+
+router.patch(
+  "/resetpassword",
+  tenantController.getToken,
+  tenantController.resetPassword
 );
 
 module.exports = router;

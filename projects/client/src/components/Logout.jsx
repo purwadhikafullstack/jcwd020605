@@ -1,45 +1,89 @@
-import { Center, Button, useToast, Icon } from "@chakra-ui/react";
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useToast,
+  Icon,
+  Box,
+  Text,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { api } from "../api/api";
 
 import { BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
-export default function LogOut() {
+export default function LogOut(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  const logOut = async () => {
+  const LogOut = async () => {
     localStorage.removeItem("tenant");
     return nav("/logintenant");
   };
 
   return (
     <>
-      <Center
-        display={"grid"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        h={"150px"}
-      >
-        <Button
-          variant={"link"}
-          display={"flex"}
-          gap={"10px"}
-          fontSize={"50px"}
-          w={"100%"}
-          isLoading={isLoading}
-          onClick={() => {
-            setIsLoading(true);
-            setTimeout(() => {
-              setIsLoading(false);
-              logOut();
-            }, 2000);
-          }}
-        >
-          <Icon as={BiLogOut} onClick={logOut} />
-          Log Out
-        </Button>
-      </Center>
+      <Modal size={"xs"} isOpen={props.isOpen}>
+        <ModalOverlay />
+        <ModalContent borderRadius={"40px"}>
+          <ModalHeader
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            fontWeight={"bold"}
+          >
+            Log out
+          </ModalHeader>
+          <ModalBody
+            textAlign={"center"}
+            fontSize={"13px"}
+            display={"flex"}
+            flexDir={"column"}
+            gap={"40px"}
+          >
+            <Text>Are you sure want to Log out?</Text>
+            <Box display={"flex"} flexDir={"column"} gap={"5px"}>
+              <Box borderY={"1px solid #dbdbdb"}>
+                <Button
+                  color={"red"}
+                  py={"10px"}
+                  w={"60px"}
+                  isLoading={isLoading}
+                  variant={"ghost"}
+                  onClick={() => {
+                    setIsLoading(true);
+                    setTimeout(() => {
+                      setIsLoading(false);
+                      LogOut();
+                      nav("/logintenant");
+                    }, 2000);
+                  }}
+                >
+                  Log out
+                </Button>
+              </Box>
+              <Box>
+                <Button
+                  fontSize={"15px"}
+                  fontWeight={"semibold"}
+                  cursor={"pointer"}
+                  bgColor={"white"}
+                  w={"60px"}
+                  onClick={props.onClose}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

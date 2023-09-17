@@ -73,6 +73,7 @@ import "../styles/sliderLocation.css";
 import "../styles/sliderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
+import NavbarMobile from "./navbarMobile";
 
 export default function PropertiesComp() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -121,165 +122,11 @@ export default function PropertiesComp() {
       zIndex={"1"}
     >
       {/* navbar + sidebar + profile */}
-      <Box
-        display={{ base: "flex", lg: "none" }}
-        alignItems={"center"}
-        justifyContent={"space-between"}
-        px={"0.5em"}
-        w={"100%"}
-        p={"0.5em"}
-        bgColor={"#edf2f9"}
-        pos={"fixed"}
-        zIndex={3}
-      >
-        <IconButton
-          aria-label="Open Menu"
-          icon={<BsList />}
-          size="md"
-          fontSize={"25px"}
-          color={"black"}
-          variant="none"
-          display={{ base: "flex", lg: "none" }}
-          onClick={onOpen}
-        />
-
-        <Box
-          display={"block"}
-          textAlign={"center"}
-          textTransform={"uppercase"}
-          fontFamily={`'Gilda Display', sans-serif`}
-        >
-          <Text fontSize={"20px"} letterSpacing={"1px"} color={"#ab854f"}>
-            The Cappa
-          </Text>
-          <Text fontSize={"10px"} letterSpacing={"3px"} color={"black"}>
-            Luxury Hotel
-          </Text>
-        </Box>
-
-        <Box pr={"0.5em"}>
-          <Popover>
-            <PopoverTrigger>
-              <Avatar size={"sm"}></Avatar>
-            </PopoverTrigger>
-            <PopoverContent
-              w={"100%"}
-              textAlign={"center"}
-              mt={"1em"}
-              border={"1px solid #dbdbdb"}
-            >
-              <PopoverArrow />
-              <PopoverHeader>{userSelector?.first_name}</PopoverHeader>
-              <PopoverBody display={"flex"} alignItems={"center"} gap={"0.8em"}>
-                <Icon as={CgProfile} /> Profile
-              </PopoverBody>
-              <PopoverFooter
-                display={"flex"}
-                alignItems={"center"}
-                gap={"0.8em"}
-              >
-                <Icon as={BiLogOutCircle} /> LogOut
-              </PopoverFooter>
-            </PopoverContent>
-          </Popover>
-        </Box>
-
-        <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-          <DrawerContent bgColor={"white"}>
-            <DrawerCloseButton />
-            <DrawerHeader>
-              <Box
-                display={"block"}
-                textAlign={"left"}
-                textTransform={"uppercase"}
-                fontFamily={`'Gilda Display', sans-serif`}
-              >
-                <Text fontSize={"25px"} letterSpacing={"1px"} color={"#ab854f"}>
-                  The Cappa
-                </Text>
-                <Text fontSize={"11px"} letterSpacing={"3px"} color={"black"}>
-                  Luxury Hotel
-                </Text>
-              </Box>
-            </DrawerHeader>
-            <DrawerBody>
-              <Flex
-                direction="column"
-                textTransform={"uppercase"}
-                fontFamily={`'Barlow Condensed', sans-serif`}
-                letterSpacing={"2px"}
-                fontSize={"15px"}
-                gap={"3em"}
-                mt={"2em"}
-                color={"#5e6e82"}
-              >
-                <Flex
-                  align={"center"}
-                  gap={"1em"}
-                  _hover={{ color: "#ab854f" }}
-                >
-                  <Icon as={LuLayoutDashboard} />
-                  <Link _hover={{ color: "#ab854f" }}>Dashboard</Link>
-                </Flex>
-
-                <Flex
-                  align={"center"}
-                  gap={"1em"}
-                  _hover={{ color: "#ab854f" }}
-                >
-                  <Icon as={HiHomeModern} />
-                  <Link _hover={{ color: "#ab854f" }} href="/propertiestenant">
-                    Property
-                  </Link>
-                </Flex>
-
-                <Flex
-                  align={"center"}
-                  gap={"1em"}
-                  _hover={{ color: "#ab854f" }}
-                >
-                  <Icon as={MdOutlineBedroomChild} />
-                  <Link
-                    _hover={{ color: "#ab854f" }}
-                    href="/roompropertiestenant"
-                  >
-                    Room
-                  </Link>
-                </Flex>
-
-                <Flex
-                  align={"center"}
-                  gap={"1em"}
-                  _hover={{ color: "#ab854f" }}
-                >
-                  <Icon as={AiOutlineDollarCircle} />
-                  <Link _hover={{ color: "#ab854f" }}>Transaction</Link>
-                </Flex>
-
-                <Flex
-                  align={"center"}
-                  gap={"1em"}
-                  _hover={{ color: "#ab854f" }}
-                >
-                  <Icon as={TbReportAnalytics} />
-                  <Link _hover={{ color: "#ab854f" }}>Report</Link>
-                </Flex>
-              </Flex>
-            </DrawerBody>
-            <DrawerFooter justifyContent={"left"}>
-              <Flex align={"center"} gap={"1em"}>
-                <Icon as={BiLogOutCircle} />
-                <Link>Logout</Link>
-              </Flex>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-      </Box>
+      <NavbarMobile></NavbarMobile>
 
       {/* bg */}
       <Box py={"5%"}>
         <Flex
-          pt={"4em"}
           flexDir={"column"}
           pos={"relative"}
           h={"30vh"}
@@ -342,7 +189,7 @@ export default function PropertiesComp() {
         <Box
           display={"flex"}
           flexDir={"column"}
-          mt={"4em"}
+          mt={"2em"}
           w={"90%"}
           bgColor={"white"}
           border={"1px solid #dbdbdb"}

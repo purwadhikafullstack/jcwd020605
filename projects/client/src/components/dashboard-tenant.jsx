@@ -1,44 +1,16 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
   Link,
   Text,
   Flex,
-  IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
-  Grid,
   Image,
-  Menu,
-  MenuButton,
-  Divider,
-  MenuList,
-  MenuItem,
 } from "@chakra-ui/react";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle, AiOutlineLeft } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
+
 import { useSelector } from "react-redux";
-import { CgProfile } from "react-icons/cg";
-import { BiLogOutCircle, BiDotsHorizontalRounded } from "react-icons/bi";
 import { useState } from "react";
-import { BsList, BsCheckCircleFill } from "react-icons/bs";
+import { BsCheckCircleFill } from "react-icons/bs";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { GoBookmarkSlash } from "react-icons/go";
 import { IoReorderThree } from "react-icons/io5";
@@ -50,28 +22,18 @@ import { api } from "../api/api";
 import bgContent from "../assets/bgcontent.jpg";
 import { motion } from "framer-motion";
 import FooterLandingPage from "./footerLandingPage";
-
+import NavbarDesktop from "./navbarDesktop";
 export default function DashboardTenant() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [date1, setDate1] = useState(new Date());
-  const calendar1 = useDisclosure();
-  const onChangeDate1 = (date) => {
-    setDate1(date);
-  };
-
   const [orderData, setOrderData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [roomLength, setRoomLength] = useState([]);
   const [properties, setProperties] = useState([]);
-
   useEffect(() => {
     fetchOrderData();
     fetchProperyData();
     fetchRoomData();
   }, []);
-
   const fetchOrderData = async () => {
     try {
       const status = "DONE";
@@ -114,106 +76,7 @@ export default function DashboardTenant() {
         flexDir={"column"}
       >
         {/* Navbar + sidebar */}
-        <Box
-          display={{ base: "none", lg: "flex" }}
-          alignItems={"center"}
-          justifyContent={"space-between"}
-          px={"0.5em"}
-          w={"100%"}
-          p={"0.5em"}
-          bgColor={"#edf2f9"}
-          pos={"fixed"}
-          zIndex={3}
-        >
-          {/* navbar */}
-          <Box
-            display={"block"}
-            textAlign={"center"}
-            textTransform={"uppercase"}
-            fontFamily={`'Gilda Display', sans-serif`}
-          >
-            <Text fontSize={"20px"} letterSpacing={"1px"} color={"#ab854f"}>
-              The Cappa
-            </Text>
-            <Text fontSize={"10px"} letterSpacing={"3px"} color={"black"}>
-              Luxury Hotel
-            </Text>
-          </Box>
-
-          <Flex gap={"1.5em"}>
-            {/* navigation */}
-            <Flex
-              textTransform={"uppercase"}
-              fontFamily={`'Barlow Condensed', sans-serif`}
-              letterSpacing={"2px"}
-              fontSize={"15px"}
-              gap={"3em"}
-              color={"#5e6e82"}
-            >
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={LuLayoutDashboard} />
-                <Link _hover={{ color: "#ab854f" }}>Dashboard</Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={HiHomeModern} />
-                <Link _hover={{ color: "#ab854f" }} href="/propertiestenant">
-                  Property
-                </Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={MdOutlineBedroomChild} />
-                <Link
-                  _hover={{ color: "#ab854f" }}
-                  href="/roompropertiestenant"
-                >
-                  Room
-                </Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={AiOutlineDollarCircle} />
-                <Link _hover={{ color: "#ab854f" }}>Transaction</Link>
-              </Flex>
-
-              <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
-                <Icon as={TbReportAnalytics} />
-                <Link _hover={{ color: "#ab854f" }}>Report</Link>
-              </Flex>
-            </Flex>
-
-            {/* avatar profile */}
-            <Popover>
-              <PopoverTrigger>
-                <Avatar size={"sm"}></Avatar>
-              </PopoverTrigger>
-              <PopoverContent
-                w={"100%"}
-                textAlign={"center"}
-                mt={"1em"}
-                border={"1px solid #dbdbdb"}
-              >
-                <PopoverArrow />
-                <PopoverHeader>{userSelector?.first_name}</PopoverHeader>
-                <PopoverBody
-                  display={"flex"}
-                  alignItems={"center"}
-                  gap={"0.8em"}
-                >
-                  <Icon as={CgProfile} /> Profile
-                </PopoverBody>
-                <PopoverFooter
-                  display={"flex"}
-                  alignItems={"center"}
-                  gap={"0.8em"}
-                >
-                  <Icon as={BiLogOutCircle} /> LogOut
-                </PopoverFooter>
-              </PopoverContent>
-            </Popover>
-          </Flex>
-        </Box>
+        <NavbarDesktop></NavbarDesktop>
 
         {/* title */}
         <Box py={"5%"}>
