@@ -467,6 +467,7 @@ export default function PropertiesComp() {
           isOpen={addProperty.isOpen}
           onClose={addProperty.onClose}
           fetch={fetch}
+          id={userSelector.id}
         />
         <EditProperty
           isOpen={Edit.isOpen}

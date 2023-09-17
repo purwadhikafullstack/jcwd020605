@@ -1,25 +1,9 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
   Text,
-  Link,
   Flex,
-  IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Grid,
   Image,
   Menu,
@@ -80,6 +64,7 @@ export default function Transaction() {
   const [orderId, setOrderId] = useState();
 
   const [totalPage, setTotalPage] = useState(0);
+  const [id, setId] = useState(userSelector.id);
   const [page, setPage] = useState(0);
   const handlePageClick = (data) => {
     setPage(data.selected);
@@ -92,7 +77,7 @@ export default function Transaction() {
   const fetchOrderData = async (filter) => {
     try {
       const res = await api.get(`/order?page=${page}`, {
-        params: filter,
+        params: { filter: filter, id: id },
       });
       setOrderData(res.data.userOrders);
       setTotalPage(res.data.totalPage);
@@ -113,7 +98,7 @@ export default function Transaction() {
         <NavbarMobile></NavbarMobile>
 
         {/* bg */}
-        <Box py={"5%"}>
+        <Box py={"5%"} pt={"4em"}>
           <Flex flexDir={"column"} pos={"relative"} h={"30vh"} align={"center"}>
             <Image
               src={bgContent}
@@ -365,6 +350,7 @@ export default function Transaction() {
             setOrderId("");
           }}
           id={orderId}
+          fetch={fetchOrderData}
         />
         <Pagination data={{ totalPage, handlePageClick }} />
 

@@ -107,6 +107,7 @@ export default function LoginTenant() {
             >
               <Flex
                 flexDir={"column"}
+                w={"50%"}
                 alignItems={"center"}
                 gap={{ base: "0.5em", lg: "1.5em" }}
               >

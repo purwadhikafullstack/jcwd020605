@@ -21,7 +21,7 @@ router.get(
 
 router.patch(
   "/resetpassword",
-  tenantController.getToken,
+  tenantController.getTokenReset,
   tenantController.resetPassword
 );
 

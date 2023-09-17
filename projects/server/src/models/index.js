@@ -78,6 +78,9 @@ db.PropertyModel.belongsTo(db.CitiesModel, {
   foreignKey: "city_id",
   targetKey: "city_id",
 });
+db.PropertyModel.belongsTo(db.TenantModel, {
+  foreignKey: "tenant_id",
+});
 
 // -------------------  room  ---------------------
 
@@ -91,6 +94,10 @@ db.PropertyModel.hasMany(db.RoomModel, {
 
 db.ProvinceModel.hasMany(db.CitiesModel, {
   foreignKey: "province_id",
+});
+
+db.RoomModel.belongsTo(db.TenantModel, {
+  foreignKey: "tenant_id",
 });
 
 // -------------------  Special price  ---------------------
@@ -135,6 +142,10 @@ db.OrderModel.belongsTo(db.PropertyModel, {
 
 db.PropertyModel.hasMany(db.OrderModel, {
   foreignKey: "property_id",
+});
+
+db.OrderModel.belongsTo(db.TenantModel, {
+  foreignKey: "tenant_id",
 });
 
 // -------------------  token  ---------------------

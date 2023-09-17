@@ -86,12 +86,10 @@ export default function PropertiesDekstopComp() {
   const [propertyId, setPropertyID] = useState();
   const [keyword, setKeyword] = useState();
   const [selectedProperty, setSelectedProperty] = useState();
-
   const [filter, setFilter] = useState({
     pcm: "",
     search: "",
   });
-  console.log(filter);
   useEffect(() => {
     fetch();
   }, [filter]);
@@ -484,6 +482,7 @@ export default function PropertiesDekstopComp() {
             isOpen={addProperty.isOpen}
             onClose={addProperty.onClose}
             fetch={fetch}
+            id={userSelector.id}
           />
           <EditProperty
             isOpen={Edit.isOpen}

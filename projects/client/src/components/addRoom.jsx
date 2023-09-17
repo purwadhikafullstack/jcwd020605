@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
+import { useSelector } from "react-redux";
 
 export default function AddRooms(props) {
   YupPassword(Yup);
@@ -28,6 +29,7 @@ export default function AddRooms(props) {
   const [image, setImage] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
   const inputFileRef = useRef(null);
+  const userSelector = useSelector((state) => state.auth);
 
   const imageHandler = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -45,6 +47,7 @@ export default function AddRooms(props) {
       details: "",
       main_price: "",
       max_guest: "",
+      tenant_id: "",
     },
 
     onSubmit: async () => {
@@ -54,6 +57,7 @@ export default function AddRooms(props) {
       formData.append("room_name", formik.values.room_name);
       formData.append("main_price", formik.values.main_price);
       formData.append("max_guest", formik.values.max_guest);
+      formData.append("tenant_id", userSelector.id);
 
       try {
         await api
@@ -95,7 +99,6 @@ export default function AddRooms(props) {
         <ModalContent>
           <ModalHeader display={"flex"} justifyContent={"space-between"}>
             <Button onClick={props.onClose}>Cancel</Button>
-
             <Box
               display={"flex"}
               justifyContent={"center"}

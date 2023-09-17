@@ -25,6 +25,7 @@ import FooterLandingPage from "./footerLandingPage";
 import NavbarDesktop from "./navbarDesktop";
 export default function DashboardTenant() {
   const userSelector = useSelector((state) => state.auth);
+  console.log(userSelector);
   const [orderData, setOrderData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [roomLength, setRoomLength] = useState([]);

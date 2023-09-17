@@ -77,15 +77,16 @@ const tenantController = {
       }
       const passwordCompare = bcrypt.compareSync(password, findTenant.password);
       if (passwordCompare) {
-        // const payload = findTenant.dataValues.id;
-
+        const payload = findTenant.dataValues.id;
+        console.log(payload);
         const tokenJwt = jwt.sign(
           {
-            // id: payload,
+            id: payload,
             data: findTenant.dataValues,
           },
           secretKey
         );
+        console.log(tokenJwt);
 
         return res.status(200).send({
           data: findTenant,
@@ -98,6 +99,38 @@ const tenantController = {
     } catch (err) {
       console.log(err.message);
       return res.status(500).send({ message: err.message });
+    }
+  },
+  getToken: async (req, res, next) => {
+    try {
+      let token = req.headers.authorization;
+      if (token == null) {
+        throw new Error("token not found");
+      }
+      jwt.verify(token, secretKey, (err, tenant) => {
+        if (err) {
+          throw new Error("Token not found");
+        }
+        req.tenant = tenant;
+      });
+      next();
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send(err.message);
+    }
+  },
+  getTenantByToken: async (req, res) => {
+    try {
+      delete req.tenant.data.password;
+      res.status(200).send({
+        tenant: req.tenant,
+        message: "Succesfully Login!",
+      });
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).send({
+        message: err.message,
+      });
     }
   },
   forgetPassword: async (req, res) => {
@@ -138,8 +171,7 @@ const tenantController = {
       return res.status(500).send(error);
     }
   },
-
-  getToken: async (req, res, next) => {
+  getTokenReset: async (req, res, next) => {
     try {
       const token = req.query.token;
       console.log(req.query.token);
@@ -208,20 +240,6 @@ const tenantController = {
       console.log(error);
       res.status(500).send({
         message: error.message,
-      });
-    }
-  },
-  getTenantByToken: async (req, res) => {
-    try {
-      delete req.tenant.data.password;
-      res.send({
-        tenant: req.tenant,
-        message: "Succesfully Login!",
-      });
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).send({
-        message: err.message,
       });
     }
   },

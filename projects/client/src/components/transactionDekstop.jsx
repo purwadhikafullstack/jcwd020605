@@ -83,8 +83,10 @@ export default function TransactionDekstop() {
     status: "",
   });
   const [orderId, setOrderId] = useState();
+  const [id, setId] = useState(userSelector.id);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
+
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
@@ -96,7 +98,7 @@ export default function TransactionDekstop() {
   const fetchOrderData = async (filter) => {
     try {
       const res = await api.get(`/order?page=${page}`, {
-        params: filter,
+        params: { filter: filter, id: id },
       });
       setOrderData(res.data.userOrders);
       setTotalPage(res.data.totalPage);
@@ -173,39 +175,6 @@ export default function TransactionDekstop() {
             </Text>
           </Flex>
         </Box>
-
-        {/* orderList */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Box
-            display={"flex"}
-            justifyContent={"center"}
-            bgColor={"#edf2f9"}
-            w={"100%"}
-            pt={"4em"}
-          >
-            <Text
-              fontSize={"20px"}
-              display={"flex"}
-              w={"50%"}
-              justifyContent={"center"}
-              fontFamily={`'Barlow', sans-serif`}
-              py={"1em"}
-              bgColor={"white"}
-              borderRadius={"5px"}
-              fontWeight={"bold"}
-              border={"1px solid #dbdbdb"}
-              boxShadow={"md"}
-              transition="transform 0.5s ease"
-              _hover={{ transform: "translateY(-10px)" }}
-            >
-              Order List
-            </Text>
-          </Box>
-        </motion.div> */}
 
         {/* filter */}
         <Flex justifyContent={"center"} align={"center"} py={"2em"}>

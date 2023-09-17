@@ -4,6 +4,8 @@ const db = require("../models");
 const roomController = {
   getAllRoom: async (req, res) => {
     try {
+      const tenant_id = req?.query?.id;
+      console.log(tenant_id);
       let page = req.query.page || 0;
       const limit = 5;
       const offset = limit * page;
@@ -15,6 +17,9 @@ const roomController = {
             attributes: ["property_name"],
           },
         ],
+        where: {
+          tenant_id,
+        },
         limit,
         offset,
       });
@@ -47,7 +52,7 @@ const roomController = {
 
   addRoom: async (req, res) => {
     try {
-      const { room_name, details, main_price, max_guest } = req.body;
+      const { room_name, details, main_price, max_guest, tenant_id } = req.body;
       const { filename } = req.file;
       const imageUrl = "/room_img/" + filename;
       console.log(req.body);
@@ -59,6 +64,7 @@ const roomController = {
         room_picture: imageUrl,
         room_status: "available",
         property_id: req.params.id,
+        tenant_id,
       });
 
       return res.status(200).send({ message: "success add room" });

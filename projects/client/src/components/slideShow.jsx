@@ -21,7 +21,9 @@ export default function Slideshow() {
   return (
     <>
       <div class="slide-container fade">
-        <video src={videosArr[currentSlide]} loop muted autoPlay></video>
+        <Box className="video overlay">
+          <video src={videosArr[currentSlide]} loop muted autoPlay></video>
+        </Box>
         <Box
           position="absolute"
           zIndex={"3"}

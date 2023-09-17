@@ -4,8 +4,10 @@ const db = require("../models");
 const propertyController = {
   getAllProperties: async (req, res) => {
     try {
-      const pcm = req?.query?.pcm || "";
-      const search = req?.query?.search || "";
+      const pcm = req?.query?.filter?.pcm || "";
+      const search = req?.query?.filter?.search || "";
+      const tenant_id = req?.query?.id;
+      console.log(tenant_id);
       const whereClause = { [Op.and]: [] };
       const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
@@ -47,7 +49,9 @@ const propertyController = {
             model: db.CitiesModel,
           },
         ],
-        where: whereClause,
+        where: {
+          [Op.and]: [whereClause, { tenant_id }],
+        },
         distinct: true,
       });
 
@@ -62,7 +66,6 @@ const propertyController = {
       });
     }
   },
-
   getPropertiesDetailById: async (req, res) => {
     try {
       const detail = await db.PropertyModel.findOne({
@@ -93,9 +96,9 @@ const propertyController = {
       return res.status(500).send(error);
     }
   },
-
   addProperties: async (req, res) => {
-    const { property_name, details_text, city_id, province } = req.body;
+    const { property_name, details_text, city_id, province, tenant_id } =
+      req.body;
     console.log(req.body);
     try {
       let pcm = await db.ProductCategoriesMaster.findOne({
@@ -115,6 +118,7 @@ const propertyController = {
         details_text,
         city_id: Number(city_id),
         pcm_id: pcm.id,
+        tenant_id,
       });
 
       await propertyData.save();
@@ -134,7 +138,6 @@ const propertyController = {
       console.log(error);
     }
   },
-
   editProperties: async (req, res) => {
     // const t = await db.sequelize.transaction();
     try {
@@ -190,7 +193,6 @@ const propertyController = {
       return res.status(500).send(err.message);
     }
   },
-
   deleteProperties: async (req, res) => {
     try {
       await db.PropertyModel.destroy({

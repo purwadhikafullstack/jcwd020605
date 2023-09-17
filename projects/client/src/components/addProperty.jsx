@@ -49,13 +49,13 @@ export default function AddPropertyModal(props) {
     }
     setSelectedImages(images);
   };
-
   const formik = useFormik({
     initialValues: {
       property_name: "",
       details_text: "",
       province: "",
       city_id: "",
+      tenant_id: "",
     },
 
     onSubmit: async () => {
@@ -64,6 +64,7 @@ export default function AddPropertyModal(props) {
       formData.append("details_text", formik.values.details_text);
       formData.append("province", formik.values.province);
       formData.append("city_id", formik.values.city_id);
+      formData.append("tenant_id", props.id);
 
       for (const files of selectedFiles) {
         formData.append("property_img", files);

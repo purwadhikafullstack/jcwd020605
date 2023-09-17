@@ -13,7 +13,7 @@ router.post(
   "/:id",
   fileUploader({
     destinationFolder: "room_img",
-  }).single("room_img"),
+  }).single("room_picture"),
   roomController.addRoom
 );
 module.exports = router;

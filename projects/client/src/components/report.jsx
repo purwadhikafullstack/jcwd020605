@@ -137,7 +137,7 @@ export default function Report() {
         {/* navbar + sidebar + profile */}
         <NavbarMobile></NavbarMobile>
         {/* bg */}
-        <Box py={"5%"}>
+        <Box py={"5%"} pt={"4em"}>
           <Flex flexDir={"column"} pos={"relative"} h={"30vh"} align={"center"}>
             <Image
               src={bgContent}

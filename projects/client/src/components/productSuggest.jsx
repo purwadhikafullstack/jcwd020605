@@ -40,19 +40,13 @@ export default function ProductSuggest() {
           <Box
             display={"flex"}
             flexDir={"column"}
-            gap={"10px"}
-            letterSpacing={"3px"}
+            letterSpacing={"1px"}
             px={"10px"}
           >
-            <Box
-              textTransform={"uppercase"}
-              color={"#666666"}
-              h={"52px"}
-              w={"256px"}
-            >
+            <Box textTransform={"uppercase"} color={"#666666"} fontSize={"2em"}>
               The Cappa Luxury Hotel
             </Box>
-            <Box fontSize={"46px"} fontFamily={`'Gilda Display', sans-serif`}>
+            <Box fontSize={"4em"} fontFamily={`'Gilda Display', sans-serif`}>
               Rooms & Suites
             </Box>
           </Box>
@@ -61,7 +55,7 @@ export default function ProductSuggest() {
           <Box
             display={"flex"}
             flexDir={{ base: "column", lg: "row" }}
-            gap={"2em"}
+            gap={"3em"}
             flexWrap={"wrap"}
             justifyContent={"center"}
             py={"4em"}
@@ -70,15 +64,16 @@ export default function ProductSuggest() {
               <Box px={"0.5em"} h={"50vh"} pos={"relative"}>
                 <Image
                   src={a}
-                  // h={"100%"}
                   objectFit={"cover"}
-                  zIndex={"1"}
                   maxW={{ lg: "400px" }}
                   mb={"2em"}
                   h={"50vh"}
                   key={product.id}
+                  borderRadius={"3%"}
                 />
                 <Flex
+                  boxShadow={"lg"}
+                  borderRadius={"3%"}
                   position={"absolute"}
                   color={"white"}
                   fontFamily={`'Gilda Display', sans-serif`}
@@ -129,12 +124,12 @@ export default function ProductSuggest() {
             ))}
           </Box>
 
-          <Box
+          {/* <Box
             mt={"1.5em"}
             display={"flex"}
             flexWrap={"wrap"}
             justifyContent={"center"}
-          ></Box>
+          ></Box> */}
         </Box>
       </Box>
     </>

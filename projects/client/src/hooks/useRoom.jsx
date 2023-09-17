@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
+import { useSelector } from "react-redux";
 
 export const useFetchRoom = () => {
   const [rooms, setRooms] = useState();
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
+  const userSelector = useSelector((state) => state.auth);
+  const [id, setId] = useState(userSelector.id);
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
   const fetch = async () => {
     try {
-      const res = await api.get(`/room?page=${page}`);
+      const res = await api.get(`/room?page=${page}`, {
+        params: { id: id },
+      });
       setRooms(res.data.roomData);
       setTotalPage(res.data.totalPage);
     } catch (err) {

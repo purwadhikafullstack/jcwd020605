@@ -11,6 +11,9 @@
   --letter-spacing: 3px;
 }
 
+* {
+  scroll-behavior: smooth;
+}
 .text-1 {
   font-family: var(--font-gilda);
   font-weight: 400;

@@ -1,5 +1,4 @@
 import { Box, Image, Button, Icon } from "@chakra-ui/react";
-
 import a from "../assets/1 (2).jpg";
 import b from "../assets/3 (2).jpg";
 import c from "../assets/4(1).jpg";
@@ -8,6 +7,17 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 import React, { useState } from "react";
 import "@fontsource/gilda-display";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+
+import "../styles/promoSlider.css";
+
+// import required modules
+import { Navigation } from "swiper/modules";
 
 export default function BannerPromo() {
   const images = [a, b, c, d];
@@ -44,51 +54,33 @@ export default function BannerPromo() {
           class="banner-container"
           justifyContent={"center"}
           my={{ lg: "8em" }}
-          w={"100%"}
-          h={"100%"}
           position={"relative"}
         >
           <Box
             display={"flex"}
+            flexDir={"column"}
+            className="swiper"
+            w={"650px"}
+            h={"400px"}
             alignItems={"center"}
             justifyContent={"center"}
-            w={"100%"}
-            h={"100%"}
+            borderRadius={"5%"}
+            boxShadow={"dark-lg"}
           >
-            <Image
-              src={images[currentSlide]}
-              w={{ base: "100%", lg: "50%" }}
-              borderRadius={"5px"}
-              objectFit={"cover"}
-              position={"relative"}
-              zIndex={"2"}
-            />
-            <Box
-              position="absolute"
-              zIndex={"3"}
-              top={{ lg: "120" }}
-              fontFamily={`'Gilda Display', sans-serif`}
-              display={"flex"}
-              justifyContent={"space-between"}
-              w={{ base: "100%", lg: "50%" }}
-            >
-              <Button
-                variant={"ghost"}
-                _hover={{ bgColor: "transparent" }}
-                color="white"
-                onClick={prevSlide}
-              >
-                <Icon as={AiOutlineLeft} fontSize={"1em"} />
-              </Button>
-              <Button
-                variant={"ghost"}
-                _hover={{ bgColor: "transparent" }}
-                color="white"
-                onClick={nextSlide}
-              >
-                <Icon as={AiOutlineRight} fontSize={"1em"} />
-              </Button>
-            </Box>
+            <Swiper navigation={true} modules={[Navigation]}>
+              <SwiperSlide>
+                <Image src={a} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image src={b} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image src={c} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image src={d} />
+              </SwiperSlide>
+            </Swiper>
           </Box>
         </Box>
       </Box>

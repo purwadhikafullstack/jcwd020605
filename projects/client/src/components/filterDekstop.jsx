@@ -3,28 +3,21 @@ import {
   Center,
   Flex,
   Button,
-  Icon,
   Select,
   DrawerContent,
   DrawerCloseButton,
-  DrawerHeader,
   DrawerBody,
   Drawer,
   useDisclosure,
   IconButton,
-  Text,
   Link,
 } from "@chakra-ui/react";
 import "@fontsource/barlow";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { CiCalendarDate } from "react-icons/ci";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { api } from "../api/api";
 import React, { useState, useEffect } from "react";
-import { BsList } from "react-icons/bs";
 import { useFetchCity, useFetchProv } from "../hooks/useProvAndCity";
-
 export default function FilterDekstop() {
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
@@ -36,37 +29,27 @@ export default function FilterDekstop() {
   };
   const calendar1 = useDisclosure();
   const calendar2 = useDisclosure();
-
-  //location
-
   const { provinces } = useFetchProv();
   const [provinceId, setProvinceId] = useState("");
   const { cities } = useFetchCity(provinceId);
-
-  console.log(provinces);
-  console.log(cities);
-
   return (
     <>
       <Box
         w={"100%"}
         position="absolute"
         zIndex={"3"}
-        display={{ base: "none", xl: "flex" }}
+        display={{ base: "none", lg: "flex" }}
         justifyContent={"center"}
         h={"60px"}
         transform="translate(0%, -220%)"
       >
         <Box
-          // position={"absolute"}
           h={"100%"}
           w={"95%"}
           bgColor={"#f8f5f0"}
           top="0"
           left="0"
-          // justifyContent={"center"}
           display={{ base: "none", xl: "flex" }}
-          // alignItems={"center"}
           gap={"2px"}
           fontFamily={`'Barlow', sans-serif`}
           fontSize={"0.9em"}
@@ -95,7 +78,6 @@ export default function FilterDekstop() {
                   icon={<CiCalendarDate />}
                   size="md"
                   fontSize={"25px"}
-                  // color={"white"}
                   variant="none"
                   display={{ base: "none", lg: "flex" }}
                   onClick={calendar1.onOpen}

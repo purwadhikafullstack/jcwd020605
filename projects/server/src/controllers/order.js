@@ -13,7 +13,8 @@ dotenv.config();
 const orderController = {
   getAllOrder: async (req, res) => {
     try {
-      const status = req?.query?.status || "";
+      const status = req?.query?.filter?.status || "";
+      const tenant_id = req?.query?.id;
       const whereClause = { [Op.and]: [] };
       const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
@@ -33,7 +34,9 @@ const orderController = {
             model: db.UserModel,
           },
         ],
-        where: whereClause,
+        where: {
+          [Op.and]: [whereClause, { tenant_id }],
+        },
         distinct: true,
       });
       const userOrders = content.rows.slice(offset, limit * (page + 1));
@@ -108,6 +111,7 @@ const orderController = {
         checkout_date,
         no_invoice,
         status,
+        tenant_id,
       } = req.body;
       let imageUrl = null;
 
@@ -124,6 +128,7 @@ const orderController = {
         no_invoice,
         payment_proof: imageUrl,
         status,
+        tenant_id,
       });
       return res.status(200).send(order);
     } catch (error) {
