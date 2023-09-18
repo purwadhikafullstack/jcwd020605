@@ -21,6 +21,7 @@ import {
   PopoverFooter,
   Avatar,
   Icon,
+  DrawerFooter,
 } from "@chakra-ui/react";
 import "@fontsource/gilda-display";
 import "@fontsource/barlow";
@@ -42,7 +43,7 @@ export default function NavbarHome() {
           <Box
             h={"90px"}
             w={"100%"}
-            pl={"2em"}
+            pl={{ lg: "2em", base: "0.5em" }}
             justifyContent={"space-between"}
             gap={"40px"}
             display={"flex"}
@@ -57,8 +58,6 @@ export default function NavbarHome() {
             bgSize={"cover"}
             bg={`rgba(0, 0, 0, 0.15)`}
           >
-            {/* Navbar dekstop */}
-
             <Box
               display={"flex"}
               justifyContent={{ base: "none", lg: "space-between" }}
@@ -72,6 +71,8 @@ export default function NavbarHome() {
                   Luxury Hotel
                 </Text>
               </Box>
+
+              {/* Navbar dekstop */}
 
               <Box
                 display={{ base: "none", lg: "flex" }}
@@ -156,7 +157,7 @@ export default function NavbarHome() {
                 fontSize={"25px"}
                 color={"white"}
                 variant="none"
-                display={{ base: "flex", md: "none" }}
+                display={{ base: "flex", lg: "none" }}
                 onClick={onOpen}
               />
 
@@ -193,33 +194,38 @@ export default function NavbarHome() {
                       fontFamily={`'Barlow', sans-serif`}
                       letterSpacing={"3px"}
                       fontSize={"15px"}
+                      gap={"2em"}
                     >
-                      <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        HOME
+                      <Link
+                        href="/dashboardtenant"
+                        py={2}
+                        _hover={{ color: "#ab854f" }}
+                      >
+                        Tenant Page
                       </Link>
                       <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        ABOUT
+                        Home
                       </Link>
                       <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        ROOMS & SUITES
+                        Content
                       </Link>
                       <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        RESTAURANT
-                      </Link>
-                      <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        SPA
-                      </Link>
-                      <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        PAGES
-                      </Link>
-                      <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        NEWS
-                      </Link>
-                      <Link href="#" py={2} _hover={{ color: "#ab854f" }}>
-                        CONTACT
+                        Contact
                       </Link>
                     </Flex>
                   </DrawerBody>
+                  <DrawerFooter justifyContent={"left"}>
+                    <Flex
+                      align={"center"}
+                      gap={"1em"}
+                      onClick={() => {
+                        logOutModal.onOpen();
+                      }}
+                    >
+                      <Icon as={BiLogOutCircle} />
+                      <Link>Logout</Link>
+                    </Flex>
+                  </DrawerFooter>
                 </DrawerContent>
               </Drawer>
             </Box>

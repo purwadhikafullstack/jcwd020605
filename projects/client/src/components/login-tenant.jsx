@@ -128,7 +128,7 @@ export default function LoginTenant() {
                   Login to get luxury experiences!
                 </Flex>
 
-                <Flex className="text-3" py={0}>
+                <Flex className="text-3" py={0} justify={"center"}>
                   By continuing, you hereby acknowledge and agree our terms and
                   conditions.
                 </Flex>

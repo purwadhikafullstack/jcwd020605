@@ -162,7 +162,7 @@ export default function Report() {
               textAlign={"center"}
               fontWeight={"bold"}
               transition="transform 0.5s ease"
-              _hover={{ transform: "translateX(20px)" }}
+              _hover={{ transform: "translateY(20px)" }}
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

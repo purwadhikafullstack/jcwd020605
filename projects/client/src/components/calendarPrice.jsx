@@ -8,14 +8,12 @@ const CalendarPrice = (props) => {
 
   const dateFormat = [];
   const event = [];
-  // Loop untuk menambahkan tanggal dari sekarang hingga 2025-12-31
   const currentDate = new Date();
   while (currentDate <= new Date("2025-12-31")) {
     dateFormat.push(currentDate.toISOString().split("T")[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  // Membuat event untuk tanggal yang unavailable
   const unavailabilityData = props.data.unavailability;
   unavailabilityData.forEach((val) => {
     const end = new Date(val.end);
@@ -29,9 +27,8 @@ const CalendarPrice = (props) => {
     });
   });
 
-  // Membuat event untuk special price
   const specialPriceData = props.data.specialPrice;
-  console.log(specialPriceData);
+
   specialPriceData.forEach((val) => {
     const end = new Date(val.end);
     end.setDate(end.getDate() + 1);

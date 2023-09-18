@@ -16,7 +16,6 @@ import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 export default function DeleteProduct(props) {
-  // console.log(props);
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();

@@ -85,24 +85,18 @@ export default function NavbarDesktop() {
               </Link>
             </Flex>
 
-            <Flex
-              align={"center"}
-              gap={"1em"}
-              _hover={{ color: "#ab854f" }}
-              href="/transaction"
-            >
+            <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
               <Icon as={AiOutlineDollarCircle} />
-              <Link _hover={{ color: "#ab854f" }}>Transaction</Link>
+              <Link href="/transaction" _hover={{ color: "#ab854f" }}>
+                Transaction
+              </Link>
             </Flex>
 
-            <Flex
-              align={"center"}
-              gap={"1em"}
-              _hover={{ color: "#ab854f" }}
-              href="/report"
-            >
+            <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
               <Icon as={TbReportAnalytics} />
-              <Link _hover={{ color: "#ab854f" }}>Report</Link>
+              <Link href="/report" _hover={{ color: "#ab854f" }}>
+                Report
+              </Link>
             </Flex>
           </Flex>
 

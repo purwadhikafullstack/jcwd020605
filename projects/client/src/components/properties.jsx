@@ -1,13 +1,6 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
-  Link,
   Text,
   Flex,
   IconButton,
@@ -97,10 +90,11 @@ export default function PropertiesComp() {
 
   useEffect(() => {
     provinces();
-  }, []);
+  }, [filter]);
 
   const { properties, totalPage, handlePageClick, fetch } =
     useFetchProperty(filter);
+
   const provinces = () => {
     api
       .get("/properties")
@@ -115,7 +109,6 @@ export default function PropertiesComp() {
     <Box
       display={{ base: "flex", lg: "none" }}
       flexDir={"column"}
-      // gap={"2.1em"}
       bgColor={"#edf2f9"}
       h={"100vh"}
       pos={"relative"}
@@ -125,7 +118,7 @@ export default function PropertiesComp() {
       <NavbarMobile></NavbarMobile>
 
       {/* bg */}
-      <Box py={"5%"}>
+      <Box py={"5%"} pt={"4em"}>
         <Flex
           flexDir={"column"}
           pos={"relative"}
@@ -157,7 +150,7 @@ export default function PropertiesComp() {
             textAlign={"center"}
             fontWeight={"bold"}
             transition="transform 0.5s ease"
-            _hover={{ transform: "translateX(20px)" }}
+            _hover={{ transform: "translateY(20px)" }}
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -445,7 +438,7 @@ export default function PropertiesComp() {
                         alignItems={"center"}
                       >
                         <Icon as={ImLocation} />
-                        {val?.city?.city_name}
+                        {val?.city?.city_name}, {val?.city?.province},
                       </Text>
 
                       <Text
@@ -476,14 +469,14 @@ export default function PropertiesComp() {
             setSelectedProperty(null);
           }}
           data={selectedProperty}
+          fetch={fetch}
         />
-
         <DeleteProduct
           isOpen={DeleteModal.isOpen}
           onClose={DeleteModal.onClose}
           id={propertyId}
+          fetch={fetch}
         />
-
         <AddRooms
           isOpen={addRoom.isOpen}
           onClose={addRoom.onClose}

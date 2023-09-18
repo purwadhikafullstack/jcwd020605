@@ -62,7 +62,6 @@ export default function Transaction() {
     status: "",
   });
   const [orderId, setOrderId] = useState();
-
   const [totalPage, setTotalPage] = useState(0);
   const [id, setId] = useState(userSelector.id);
   const [page, setPage] = useState(0);
@@ -347,7 +346,6 @@ export default function Transaction() {
           isOpen={orderDetails.isOpen}
           onClose={() => {
             orderDetails.onClose();
-            setOrderId("");
           }}
           id={orderId}
           fetch={fetchOrderData}

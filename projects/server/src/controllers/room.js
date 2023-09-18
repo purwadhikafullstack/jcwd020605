@@ -4,7 +4,7 @@ const db = require("../models");
 const roomController = {
   getAllRoom: async (req, res) => {
     try {
-      const tenant_id = req?.query?.id;
+      const tenant_id = req?.query?.id || "";
       console.log(tenant_id);
       let page = req.query.page || 0;
       const limit = 5;

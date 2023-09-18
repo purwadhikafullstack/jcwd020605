@@ -25,11 +25,12 @@ import FooterLandingPage from "./footerLandingPage";
 import NavbarDesktop from "./navbarDesktop";
 export default function DashboardTenant() {
   const userSelector = useSelector((state) => state.auth);
-  console.log(userSelector);
   const [orderData, setOrderData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [roomLength, setRoomLength] = useState([]);
   const [properties, setProperties] = useState([]);
+  const [id, setId] = useState(userSelector.id);
+
   useEffect(() => {
     fetchOrderData();
     fetchProperyData();
@@ -52,7 +53,9 @@ export default function DashboardTenant() {
 
   const fetchRoomData = async () => {
     try {
-      const res = await api.get("/room");
+      const res = await api.get("/room", {
+        params: { id: id },
+      });
       setRoomLength(res.data.roomData);
     } catch (error) {
       console.log(error);
@@ -61,13 +64,15 @@ export default function DashboardTenant() {
 
   const fetchProperyData = async () => {
     try {
-      const res = await api.get(`/properties/propertieslist`);
+      const res = await api.get(`/properties/propertieslist`, {
+        params: { id: id },
+      });
       setProperties(res.data.property);
     } catch (err) {
       console.log(err);
     }
   };
-
+  console.log(orderData);
   return (
     <>
       <Box
@@ -207,13 +212,7 @@ export default function DashboardTenant() {
                   View Detail <Icon as={AiOutlineRight} fontSize={"15px"} />
                 </Link>
               </Box>
-            </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 5 }}
-            >
               <Flex justifyContent={"right"}>
                 <Box
                   transition="transform 0.5s ease"
@@ -264,13 +263,7 @@ export default function DashboardTenant() {
                   </Link>
                 </Box>
               </Flex>
-            </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 6 }}
-            >
               <Box
                 transition="transform 0.5s ease"
                 _hover={{ transform: "translateX(-20px)" }}
@@ -308,13 +301,7 @@ export default function DashboardTenant() {
                   View Detail <Icon as={AiOutlineRight} fontSize={"15px"} />
                 </Link>
               </Box>
-            </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 7 }}
-            >
               <Flex justifyContent={"right"}>
                 <Box
                   transition="transform 0.5s ease"
@@ -349,7 +336,7 @@ export default function DashboardTenant() {
                     fontSize={"2.7em"}
                     textAlign={"right"}
                   >
-                    {orderData.length} Rooms
+                    {roomLength.length} Rooms
                   </Text>
                   <Link
                     href="/roompropertiestenant"
@@ -361,13 +348,7 @@ export default function DashboardTenant() {
                   </Link>
                 </Box>
               </Flex>
-            </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 8 }}
-            >
               <Box
                 transition="transform 0.5s ease"
                 _hover={{ transform: "translateX(-20px)" }}
@@ -405,13 +386,7 @@ export default function DashboardTenant() {
                   View Detail <Icon as={AiOutlineRight} fontSize={"15px"} />
                 </Link>
               </Box>
-            </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 9 }}
-            >
               <Flex justifyContent={"right"} mb={"3em"}>
                 <Box
                   transition="transform 0.5s ease"

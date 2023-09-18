@@ -182,13 +182,7 @@ export default function DashboardTenantMobile() {
                 </Flex>
               </Link>
             </Flex>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            animate={{ opacity: 1, y: 10 }}
-            transition={{ duration: 0.5, delay: 4 }}
-          >
             <Flex
               p={"0.5em"}
               borderRadius={"0.5em"}
@@ -225,13 +219,7 @@ export default function DashboardTenantMobile() {
                 </Flex>
               </Link>
             </Flex>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            animate={{ opacity: 1, y: 10 }}
-            transition={{ duration: 0.5, delay: 5 }}
-          >
             <Flex
               p={"0.5em"}
               borderRadius={"0.5em"}
@@ -268,13 +256,7 @@ export default function DashboardTenantMobile() {
                 </Flex>
               </Link>
             </Flex>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            animate={{ opacity: 1, y: 10 }}
-            transition={{ duration: 0.5, delay: 6 }}
-          >
             <Flex
               p={"0.5em"}
               borderRadius={"0.5em"}
@@ -311,13 +293,7 @@ export default function DashboardTenantMobile() {
                 </Flex>
               </Link>
             </Flex>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            animate={{ opacity: 1, y: 10 }}
-            transition={{ duration: 0.5, delay: 7 }}
-          >
             <Flex
               p={"0.5em"}
               borderRadius={"0.5em"}
@@ -339,7 +315,7 @@ export default function DashboardTenantMobile() {
                   fontSize={"18px"}
                 />
                 <Text fontWeight={"bold"} color={"black"} fontSize={"15px"}>
-                  {roomLength.length - orderData.length} Rooms
+                  {roomLength.length - orderData.length} Available
                 </Text>
                 Available Room
               </Flex>
@@ -354,13 +330,7 @@ export default function DashboardTenantMobile() {
                 </Flex>
               </Link>
             </Flex>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 0 }}
-            animate={{ opacity: 1, y: 10 }}
-            transition={{ duration: 0.5, delay: 8 }}
-          >
             <Flex
               p={"0.5em"}
               borderRadius={"0.5em"}

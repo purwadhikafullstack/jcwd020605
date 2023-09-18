@@ -26,27 +26,22 @@ import paymentproof from "../assets/payment.png";
 export default function OrderDetail(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [orderData, setOrderData] = useState();
+  const [orderData, setOrderData] = useState([]);
   const [update, setUpdate] = useState();
   const toast = useToast();
-  const imageUrl = orderData?.payment_proof
-    ? `${process?.env?.REACT_APP_API_BASE_URL}${orderData?.payment_proof}`
-    : paymentproof;
 
   const orderDataByID = async () => {
     try {
-      const res = await api.get("/orderbyid/" + props.id);
+      const res = await api.get("order/orderbyid/" + props.id);
       setOrderData(res.data);
     } catch (error) {
       console.log(error);
     }
   };
-
   const confirmOrReject = async (status) => {
     try {
       const res = await api.post("/order/confirmorreject", status);
       setUpdate(res.data);
-      console.log(res?.data);
       if (res.data === "Rejected success") {
         toast({
           title: res.data,
@@ -89,7 +84,7 @@ export default function OrderDetail(props) {
 
   useEffect(() => {
     orderDataByID();
-  }, [props.id]);
+  }, [props.id, update]);
 
   return (
     <>
@@ -108,7 +103,13 @@ export default function OrderDetail(props) {
             fontWeight={"bold"}
           >
             <Box>
-              <Image src={imageUrl}></Image>
+              <Image
+                src={
+                  orderData?.payment_proof
+                    ? `${process.env.REACT_APP_API_BASE_URL}${orderData?.payment_proof}`
+                    : paymentproof
+                }
+              ></Image>
             </Box>
 
             <Box>

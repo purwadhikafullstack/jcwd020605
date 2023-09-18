@@ -108,7 +108,7 @@ export default function RoomProperty() {
         <NavbarMobile></NavbarMobile>
 
         {/* bg */}
-        <Box py={"5%"}>
+        <Box py={"5%"} pt={"4em"}>
           <Flex flexDir={"column"} pos={"relative"} h={"30vh"} align={"center"}>
             <Image
               src={bgContent}
@@ -133,7 +133,7 @@ export default function RoomProperty() {
               textAlign={"center"}
               fontWeight={"bold"}
               transition="transform 0.5s ease"
-              _hover={{ transform: "translateX(20px)" }}
+              _hover={{ transform: "translateY(20px)" }}
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -162,7 +162,7 @@ export default function RoomProperty() {
 
         {/* room */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -321,16 +321,6 @@ export default function RoomProperty() {
                         gap={"0.5em"}
                         alignItems={"center"}
                       >
-                        <Icon as={BsFillPersonFill} />{" "}
-                        {val?.Property?.property_name}
-                      </Text>
-
-                      <Text
-                        display={"flex"}
-                        fontSize={"0.8em"}
-                        gap={"0.5em"}
-                        alignItems={"center"}
-                      >
                         <Icon as={BsFillPersonFill} /> {val?.max_guest} Guests
                       </Text>
 
@@ -349,10 +339,14 @@ export default function RoomProperty() {
                         display={"flex"}
                         gap={"0.2em"}
                       >
-                        Rp
                         <Text display={"flex"}>
-                          {val.main_price ? val.main_price : "0"}
-                          ,00 / day
+                          {val.main_price
+                            ? val.main_price.toLocaleString("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                              })
+                            : "0"}{" "}
+                          / day
                         </Text>
                       </Text>
                     </Flex>
@@ -379,12 +373,14 @@ export default function RoomProperty() {
             isOpen={EditRoom.isOpen}
             onClose={EditRoom.onClose}
             id={roomId}
+            fetch={fetch}
           />
 
           <DeleteRooms
             isOpen={DeleteRoom.isOpen}
             onClose={DeleteRoom.onClose}
             id={roomId}
+            fetch={fetch}
           />
         </Grid>
         <FooterLandingPage></FooterLandingPage>

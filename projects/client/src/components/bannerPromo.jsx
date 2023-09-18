@@ -60,8 +60,8 @@ export default function BannerPromo() {
             display={"flex"}
             flexDir={"column"}
             className="swiper"
-            w={"650px"}
-            h={"400px"}
+            w={{ base: "350px", lg: "650px" }}
+            h={{ base: "300px", lg: "400px" }}
             alignItems={"center"}
             justifyContent={"center"}
             borderRadius={"5%"}

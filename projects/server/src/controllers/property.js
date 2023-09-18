@@ -6,8 +6,7 @@ const propertyController = {
     try {
       const pcm = req?.query?.filter?.pcm || "";
       const search = req?.query?.filter?.search || "";
-      const tenant_id = req?.query?.id;
-      console.log(tenant_id);
+      const tenant_id = req?.query?.id || "";
       const whereClause = { [Op.and]: [] };
       const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
@@ -99,7 +98,6 @@ const propertyController = {
   addProperties: async (req, res) => {
     const { property_name, details_text, city_id, province, tenant_id } =
       req.body;
-    console.log(req.body);
     try {
       let pcm = await db.ProductCategoriesMaster.findOne({
         where: {
@@ -132,7 +130,7 @@ const propertyController = {
 
       await db.PropertyImages.bulkCreate(imageArr);
 
-      return res.send({ message: "success add property" });
+      return res.send({ message: "Success add property" });
     } catch (error) {
       res.status(500).send(error);
       console.log(error);
@@ -156,7 +154,6 @@ const propertyController = {
 
         await pcm.save();
       }
-      console.log(req.body);
       //update
 
       await db.PropertyModel.update(

@@ -114,9 +114,6 @@ export default function RoomDetail(props) {
 
   const SpecialPrices = async () => {
     try {
-      //getTime untuk ambil data dari 1970(timestamp Unix)
-      //getTimezoneOffset mengambil perbedaan menit antara zona waktu lokal dan UTC,
-      //selisih getTime dgn getTimezoneOffset di convert menggunakan toISOString
       let start_date = new Date(
         priceDates[0].getTime() - priceDates[0].getTimezoneOffset() * 60000
       ).toISOString();
@@ -138,8 +135,7 @@ export default function RoomDetail(props) {
           duration: 3000,
           isClosable: true,
         });
-        fetchSpecialPriceRooms();
-        nav("/roompropertiestenant");
+        window.location.reload();
       } else {
         toast({
           title: `${res.data.message}`,
@@ -177,7 +173,7 @@ export default function RoomDetail(props) {
           duration: 3000,
           isClosable: true,
         });
-        fetchUnavailableRooms();
+        window.location.reload();
       } else {
         toast({
           title: `${res.data.message}`,
@@ -204,7 +200,7 @@ export default function RoomDetail(props) {
         <NavbarMobile></NavbarMobile>
 
         {/* bg */}
-        <Box py={"5%"}>
+        <Box py={"5%"} pt={"4em"}>
           <Flex flexDir={"column"} pos={"relative"} h={"30vh"} align={"center"}>
             <Image
               src={bgContent}
@@ -229,7 +225,7 @@ export default function RoomDetail(props) {
               textAlign={"center"}
               fontWeight={"bold"}
               transition="transform 0.5s ease"
-              _hover={{ transform: "translateX(20px)" }}
+              _hover={{ transform: "translateY(20px)" }}
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -334,7 +330,6 @@ export default function RoomDetail(props) {
                     <MenuItem
                       onClick={() => {
                         SpecialPriceModal.onOpen();
-                        fetchSpecialPriceRooms();
                       }}
                       display={"flex"}
                       gap={"10px"}
@@ -347,7 +342,6 @@ export default function RoomDetail(props) {
                     <MenuItem
                       onClick={() => {
                         UnavailableRoomModal.onOpen();
-                        fetchUnavailableRooms();
                       }}
                       display={"flex"}
                       gap={"10px"}
@@ -412,9 +406,14 @@ export default function RoomDetail(props) {
                       display={"flex"}
                       gap={"0.2em"}
                     >
-                      Rp
                       <Text>
-                        {rooms?.main_price ? rooms?.main_price : "0"},00 / day
+                        {rooms?.main_price
+                          ? rooms?.main_price.toLocaleString("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                            })
+                          : "0"}
+                        / day
                       </Text>
                     </Text>
                   </Flex>

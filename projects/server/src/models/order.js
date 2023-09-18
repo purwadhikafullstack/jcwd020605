@@ -8,13 +8,16 @@ module.exports = (sequelize, Sequelize) => {
       checkin_date: Sequelize.DATE,
       checkout_date: Sequelize.DATE,
       no_invoice: Sequelize.STRING,
-      status: Sequelize.ENUM(
-        "PAYMENT",
-        "CONFIRM_PAYMENT",
-        "PROCESSING",
-        "CANCELED",
-        "DONE"
-      ),
+      status: {
+        type: Sequelize.ENUM(
+          "PAYMENT",
+          "CONFIRM_PAYMENT",
+          "PROCESSING",
+          "CANCELED",
+          "DONE"
+        ),
+        defaultValue: "CONFIRM_PAYMENT",
+      },
       payment_proof: Sequelize.STRING,
     },
     {

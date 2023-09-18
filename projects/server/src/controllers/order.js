@@ -14,12 +14,11 @@ const orderController = {
   getAllOrder: async (req, res) => {
     try {
       const status = req?.query?.filter?.status || "";
-      const tenant_id = req?.query?.id;
+      const tenant_id = req?.query?.id || "";
       const whereClause = { [Op.and]: [] };
       const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
       const offset = page * limit;
-
       if (status) {
         whereClause[Op.and].push({
           status,
@@ -40,7 +39,6 @@ const orderController = {
         distinct: true,
       });
       const userOrders = content.rows.slice(offset, limit * (page + 1));
-
       return res.status(200).send({
         userOrders: userOrders,
         totalPage: Math.ceil(content.count / limit),
@@ -53,6 +51,7 @@ const orderController = {
   getOrderById: async (req, res) => {
     try {
       const { id } = req.params;
+      console.log(id);
       const orderById = await db.OrderModel.findOne({
         include: [
           {
@@ -69,6 +68,7 @@ const orderController = {
           id,
         },
       });
+      console.log(orderById);
       return res.status(200).send(orderById);
     } catch (error) {
       console.log(error);
@@ -110,7 +110,6 @@ const orderController = {
         checkin_date,
         checkout_date,
         no_invoice,
-        status,
         tenant_id,
       } = req.body;
       let imageUrl = null;
@@ -127,7 +126,7 @@ const orderController = {
         checkout_date,
         no_invoice,
         payment_proof: imageUrl,
-        status,
+        status: "CONFIRM_PAYMENT",
         tenant_id,
       });
       return res.status(200).send(order);
@@ -157,7 +156,7 @@ const orderController = {
 
         await db.OrderModel.update(
           {
-            status,
+            status: "DONE",
           },
           {
             where: {

@@ -86,6 +86,8 @@ export default function TransactionDekstop() {
   const [id, setId] = useState(userSelector.id);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
+  console.log(orderData);
+  console.log(orderId);
 
   const handlePageClick = (data) => {
     setPage(data.selected);
@@ -278,7 +280,6 @@ export default function TransactionDekstop() {
           isOpen={orderDetails.isOpen}
           onClose={() => {
             orderDetails.onClose();
-            setOrderId("");
           }}
           id={orderId}
           fetch={fetchOrderData}
