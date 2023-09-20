@@ -1,18 +1,18 @@
-require("dotenv/config");
+// require("dotenv/config");
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+const db = require("./models");
+const routes = require("./routes");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
-app.use(
-  cors({
-    origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
-    ],
-  })
-);
+
+// db.sequelize.sync({ alter: true });
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -31,6 +31,26 @@ app.get("/api/greetings", (req, res, next) => {
   });
 });
 
+app.use("/api/properties", routes.propertyRoutes);
+app.use("/api/provincelist", routes.provinceRoutes);
+app.use("/api/tenant", routes.tenantRoutes);
+app.use("/api/room", routes.roomRoutes);
+app.use("/api/specialprice", routes.specialPriceRoutes);
+app.use("/api/unavailableroom", routes.unavailableRoomsRoutes);
+app.use("/api/order", routes.orderRoutes);
+
+// app.use("/api/post", express.static(`${__dirname}/public/id_card`));
+app.use("/api/id_card", express.static(`${__dirname}/public/id_card`));
+
+app.use(
+  "/api/property_img",
+  express.static(`${__dirname}/public/property_img`)
+);
+app.use("/api/room_img", express.static(`${__dirname}/public/room_img`));
+app.use(
+  "/api/payment_proof",
+  express.static(`${__dirname}/public/payment_proof`)
+);
 // ===========================
 
 // not found
