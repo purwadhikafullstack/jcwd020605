@@ -10,26 +10,20 @@ import {
   useToast,
   Box,
   Text,
-  Input,
   Flex,
-  // Image,
-  Icon,
-  Select,
 } from "@chakra-ui/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { Image } from "react-bootstrap";
 import paymentproof from "../assets/payment.png";
-
 export default function OrderDetail(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [orderData, setOrderData] = useState([]);
   const [update, setUpdate] = useState();
   const toast = useToast();
-
   const orderDataByID = async () => {
     try {
       const res = await api.get("order/orderbyid/" + props.id);
@@ -124,17 +118,20 @@ export default function OrderDetail(props) {
 
             <Box>
               <Text fontSize={"12px"}>Room price :</Text>
-              {orderData?.Room?.main_price}
+              {orderData?.Room?.main_price.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              })}
             </Box>
 
             <Box>
               <Text fontSize={"12px"}>Username :</Text>
-              {orderData?.User?.first_name}
+              {orderData?.username}
             </Box>
 
             <Box>
               <Text fontSize={"12px"}>Email :</Text>
-              {orderData?.User?.email}
+              {orderData?.email}
             </Box>
 
             <Box>

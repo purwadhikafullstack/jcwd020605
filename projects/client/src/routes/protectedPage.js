@@ -13,9 +13,9 @@ export default function ProtectedPage({
 
   useEffect(() => {
     if (guestOnly && userSelector?.email && token) {
-      return nav("/landingpage");
+      return nav("/dashboardtenant");
     } else if (needLogin && !userSelector.email && !token) {
-      return nav("/logintenant");
+      return nav("/");
     }
   }, [userSelector, needLogin]);
 

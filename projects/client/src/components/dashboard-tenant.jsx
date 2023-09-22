@@ -1,13 +1,4 @@
-import {
-  Box,
-  useDisclosure,
-  Link,
-  Text,
-  Flex,
-  Icon,
-  Image,
-} from "@chakra-ui/react";
-
+import { Box, Link, Text, Flex, Icon, Image } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
@@ -36,12 +27,14 @@ export default function DashboardTenant() {
     fetchProperyData();
     fetchRoomData();
   }, []);
+
   const fetchOrderData = async () => {
     try {
       const status = "DONE";
       const res = await api.get(`/order/done`, {
         params: {
           status,
+          id,
         },
       });
       setOrderData(res.data.orders);
@@ -72,7 +65,6 @@ export default function DashboardTenant() {
       console.log(err);
     }
   };
-  console.log(orderData);
   return (
     <>
       <Box
@@ -87,7 +79,6 @@ export default function DashboardTenant() {
         {/* title */}
         <Box py={"5%"}>
           <Flex
-            // pt={"4em"}
             flexDir={"column"}
             pos={"relative"}
             h={"20vh"}
@@ -440,7 +431,6 @@ export default function DashboardTenant() {
             </motion.div>
           </Flex>
         </Flex>
-
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>

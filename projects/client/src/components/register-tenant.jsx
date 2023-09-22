@@ -18,15 +18,12 @@ import "@fontsource/barlow";
 import React from "react";
 import { PiArrowLeftLight } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import bg from "../assets/2.jpg";
-import BeatLoader from "react-spinners/BeatLoader";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { useState, useRef } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-
 export default function RegisterComp() {
   YupPassword(Yup);
   const [seePassword, setSeePassword] = useState(false);
@@ -36,17 +33,14 @@ export default function RegisterComp() {
   const nav = useNavigate();
   const toast = useToast();
   const inputFileRef = useRef(null);
-
   const inputHandler = (e) => {
     const { target } = e;
     formik.setFieldValue(target.id, target.value);
   };
-
   const imageHandler = (e) => {
     setSelectedFile(e.target.files[0]);
     setImage(URL.createObjectURL(e.target.files[0]));
   };
-
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -56,7 +50,6 @@ export default function RegisterComp() {
       phone_number: "",
       id_Number: "",
     },
-
     onSubmit: async () => {
       const formData = new FormData();
       formData.append("first_name", formik.values.first_name);

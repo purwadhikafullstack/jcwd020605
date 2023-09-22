@@ -4,7 +4,8 @@ module.exports = (sequelize, Sequelize) => {
     {
       room_id: Sequelize.INTEGER,
       property_id: Sequelize.INTEGER,
-      user_id: Sequelize.INTEGER,
+      email: Sequelize.STRING,
+      username: Sequelize.STRING,
       checkin_date: Sequelize.DATE,
       checkout_date: Sequelize.DATE,
       no_invoice: Sequelize.STRING,

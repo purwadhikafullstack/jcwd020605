@@ -103,13 +103,20 @@ const orderController = {
   },
   addOrder: async (req, res) => {
     try {
+      const { customAlphabet } = require("nanoid");
+      const invoicePrefix = "2023";
+      const generateInvoiceNumber = customAlphabet(
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+        6
+      );
+      const nextInvoice = `${invoicePrefix}-${generateInvoiceNumber()}`;
       const {
-        room_id,
         property_id,
-        user_id,
-        checkin_date,
-        checkout_date,
-        no_invoice,
+        room_id,
+        email,
+        username,
+        // checkin_date,
+        // checkout_date,
         tenant_id,
       } = req.body;
       let imageUrl = null;
@@ -117,14 +124,22 @@ const orderController = {
       if (req.file && req.file.filename) {
         imageUrl = "/payment_proof/" + req.file.filename;
       }
-
+      if (
+        property_id === "" ||
+        room_id === "" ||
+        email === "" ||
+        username === ""
+      ) {
+        throw new Error("Please fill all data field");
+      }
       const order = await db.OrderModel.create({
-        room_id,
         property_id,
-        user_id,
-        checkin_date,
-        checkout_date,
-        no_invoice,
+        room_id,
+        email,
+        username,
+        // checkin_date,
+        // checkout_date,
+        no_invoice: nextInvoice,
         payment_proof: imageUrl,
         status: "CONFIRM_PAYMENT",
         tenant_id,
@@ -132,7 +147,7 @@ const orderController = {
       return res.status(200).send(order);
     } catch (error) {
       console.log(error);
-      res.status(500).send(error);
+      res.status(500).send(error.message);
     }
   },
   confirmOrReject: async (req, res) => {
@@ -167,15 +182,14 @@ const orderController = {
         );
 
         const email = await db.OrderModel.findOne({
-          include: [{ model: db.UserModel }],
           where: { id },
         });
 
         await mailer({
           subject: "Hotel Rules",
-          to: email?.User?.dataValues?.email,
+          to: email?.email,
           text: `
-          Dear ${email?.User?.dataValues?.first_name},
+          Dear ${email?.username},
 
 
           To ensure a pleasant and comfortable stay for everyone, we kindly ask you to abide by the following rules:
@@ -296,11 +310,12 @@ const orderController = {
       const { status, startDate, endDate } = req?.query || "";
       const { sort, order } = req?.query?.filter || "";
       let search = req?.query?.search || "";
+      let tenant_id = req?.query?.id || "";
       const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
       const offset = page * limit;
-      console.log(req.query);
       let where = { status };
+
       // default
       let orderDirection = "asc";
       if (sort === "desc") {
@@ -326,6 +341,7 @@ const orderController = {
           ],
           where: {
             status,
+            tenant_id,
           },
           order: [orderAttribute],
         });
@@ -351,6 +367,7 @@ const orderController = {
           ],
           where: {
             status,
+            tenant_id,
             createdAt: {
               [Op.between]: [formattedStartDate, formattedEndDate],
             },
@@ -372,7 +389,7 @@ const orderController = {
             },
 
             {
-              "$User.first_name$": {
+              $username$: {
                 [Op.like]: `%${search}%`,
               },
             },
@@ -392,6 +409,7 @@ const orderController = {
               },
             },
           ],
+          tenant_id,
         };
 
         orders = await db.OrderModel.findAndCountAll({
@@ -424,6 +442,7 @@ const orderController = {
           ],
           where: {
             status,
+            tenant_id,
           },
           order: [orderAttribute],
         });

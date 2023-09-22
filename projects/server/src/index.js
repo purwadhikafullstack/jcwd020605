@@ -38,8 +38,7 @@ app.use("/api/room", routes.roomRoutes);
 app.use("/api/specialprice", routes.specialPriceRoutes);
 app.use("/api/unavailableroom", routes.unavailableRoomsRoutes);
 app.use("/api/order", routes.orderRoutes);
-
-// app.use("/api/post", express.static(`${__dirname}/public/id_card`));
+app.use("/api/review", routes.reviewRoutes);
 app.use("/api/id_card", express.static(`${__dirname}/public/id_card`));
 
 app.use(

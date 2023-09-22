@@ -12,14 +12,13 @@ import {
   Image,
   Select,
 } from "@chakra-ui/react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { useFetchCity, useFetchProv } from "../hooks/useProvAndCity";
-
 export default function AddPropertyModal(props) {
   YupPassword(Yup);
   const nav = useNavigate();
@@ -57,7 +56,6 @@ export default function AddPropertyModal(props) {
       city_id: "",
       tenant_id: "",
     },
-
     onSubmit: async () => {
       const formData = new FormData();
       formData.append("property_name", formik.values.property_name);
@@ -99,8 +97,6 @@ export default function AddPropertyModal(props) {
         console.log(error);
       }
     },
-
-    // validationSchema: Yup.object().shape({}),
   });
 
   return (

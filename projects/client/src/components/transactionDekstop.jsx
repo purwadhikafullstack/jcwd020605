@@ -1,26 +1,9 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
   Text,
-  Link,
   Flex,
-  IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
-  Grid,
   Image,
   Menu,
   MenuButton,
@@ -33,34 +16,19 @@ import {
   Tr,
   Th,
   Td,
-  Center,
 } from "@chakra-ui/react";
-
 import { useState, useEffect } from "react";
-import { BsList, BsFillPersonFill } from "react-icons/bs";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
-import {
-  BiLogOutCircle,
-  BiDotsHorizontalRounded,
-  BiSolidUser,
-} from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { CgDetailsMore } from "react-icons/cg";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
-import { BsFillCalendar2DateFill } from "react-icons/bs";
-import { FaFileInvoiceDollar } from "react-icons/fa6";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
+
 import OrderDetail from "./orderDetail";
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
 import Pagination from "./Pagination";
 import bgContent from "../assets/bgcontent.jpg";
-import PropertyDetail from "./propertyDetail";
 import "@fontsource/barlow";
 import "@fontsource/gilda-display";
 import "swiper/css";
@@ -73,9 +41,9 @@ import { motion } from "framer-motion";
 import { api } from "../api/api";
 import moment from "moment";
 import NavbarDesktop from "./navbarDesktop";
+import AddOrders from "./addOrder";
 
 export default function TransactionDekstop() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const orderDetails = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
   const [orderData, setOrderData] = useState();
@@ -86,17 +54,13 @@ export default function TransactionDekstop() {
   const [id, setId] = useState(userSelector.id);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
-  console.log(orderData);
-  console.log(orderId);
-
+  const addOrder = useDisclosure();
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
   useEffect(() => {
     fetchOrderData(filter);
   }, [filter, page]);
-
   const fetchOrderData = async (filter) => {
     try {
       const res = await api.get(`/order?page=${page}`, {
@@ -179,26 +143,51 @@ export default function TransactionDekstop() {
         </Box>
 
         {/* filter */}
-        <Flex justifyContent={"center"} align={"center"} py={"2em"}>
-          <Select
-            w={"50%"}
-            bgColor={"white"}
-            onChange={(e) => {
-              const selectedStatus = e.target.value;
-              setFilter((prevFilter) => ({
-                ...prevFilter,
-                status: selectedStatus,
-              }));
-            }}
-            value={filter?.status}
-          >
-            <option value="">Order status</option>
-            <option value="PAYMENT">PAYMENT</option>
-            <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
-            <option value="PROCESSING">PROCESSING</option>
-            <option value="CANCELED">CANCELED</option>
-            <option value="DONE">DONE</option>
-          </Select>
+        <Flex justifyContent={"center"}>
+          <Flex align={"center"} py={"2em"} w={"90%"} gap={"1em"}>
+            <Select
+              flex={4}
+              bgColor={"white"}
+              onChange={(e) => {
+                const selectedStatus = e.target.value;
+                setFilter((prevFilter) => ({
+                  ...prevFilter,
+                  status: selectedStatus,
+                }));
+              }}
+              value={filter?.status}
+            >
+              <option value="">Order status</option>
+              <option value="PAYMENT">PAYMENT</option>
+              <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
+              <option value="PROCESSING">PROCESSING</option>
+              <option value="CANCELED">CANCELED</option>
+              <option value="DONE">DONE</option>
+            </Select>
+
+            <Flex
+              flex={1}
+              bgColor={"white"}
+              borderRadius={"md"}
+              h={{ lg: "40px" }}
+              alignItems={"center"}
+              justifyContent={"center"}
+              cursor={"pointer"}
+              fontWeight={"bold"}
+              onClick={() => {
+                addOrder.onOpen();
+              }}
+            >
+              Add order
+              <motion.div
+                initial={{ rotate: 0 }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                (Beta)
+              </motion.div>
+            </Flex>
+          </Flex>
         </Flex>
 
         {/* card */}
@@ -235,7 +224,7 @@ export default function TransactionDekstop() {
                     {val?.Property?.property_name}
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
-                    {val?.User?.first_name}
+                    {val?.username}
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
                     {val?.status}
@@ -275,7 +264,6 @@ export default function TransactionDekstop() {
             </Tbody>
           </Table>
         </Flex>
-
         <OrderDetail
           isOpen={orderDetails.isOpen}
           onClose={() => {
@@ -284,9 +272,14 @@ export default function TransactionDekstop() {
           id={orderId}
           fetch={fetchOrderData}
         />
-
+        <AddOrders
+          isOpen={addOrder.isOpen}
+          onClose={() => {
+            addOrder.onClose();
+            fetchOrderData();
+          }}
+        />
         <Pagination data={{ totalPage, handlePageClick }} />
-
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>

@@ -3,7 +3,6 @@ import { api } from "../api/api";
 
 export const useFetchProv = () => {
   const [provinces, setProvinces] = useState();
-
   const fetch = async () => {
     try {
       const res = await api.get("/provincelist/province");
@@ -12,17 +11,13 @@ export const useFetchProv = () => {
       console.log(err);
     }
   };
-
   useEffect(() => {
     fetch();
   }, []);
-
   return { provinces, fetch };
 };
-
 export const useFetchCity = (province_id) => {
   const [cities, setCities] = useState();
-
   const fetch = async () => {
     try {
       if (province_id) {

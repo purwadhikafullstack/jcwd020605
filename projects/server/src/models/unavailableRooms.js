@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const UnavailableRoomsModel = sequelize.define("unavailables", {
+  const UnavailableRoomsModel = sequelize.define("Unavailables", {
     room_id: {
       type: Sequelize.INTEGER,
     },

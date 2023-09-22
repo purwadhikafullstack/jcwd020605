@@ -1,25 +1,9 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
-  Link,
   Text,
   Flex,
-  IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Grid,
   Image,
   Menu,
@@ -40,6 +24,8 @@ import AddRooms from "./addRoom";
 import PropertyDetail from "./propertyDetail";
 import AddPropertyModal from "./addProperty";
 import FooterLandingPage from "./footerLandingPage";
+import NavbarDesktop from "./navbarDesktop";
+import AddReview from "./addReview";
 import Pagination from "./Pagination";
 import { api } from "../api/api";
 import { useEffect } from "react";
@@ -48,18 +34,12 @@ import { EffectCards } from "swiper/modules";
 import { motion } from "framer-motion";
 import { useFetchProperty } from "../hooks/useProperty";
 import { useSelector } from "react-redux";
-import { BsList } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
 import { ImLocation } from "react-icons/im";
-import { MdOutlineBedroomChild } from "react-icons/md";
 import { FcRating } from "react-icons/fc";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
-import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle, BiDotsHorizontalRounded } from "react-icons/bi";
-import { CgProfile, CgDetailsMore } from "react-icons/cg";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { CgDetailsMore } from "react-icons/cg";
 import { BsPatchPlusFill } from "react-icons/bs";
 import { BiPlus, BiPencil } from "react-icons/bi";
 import "@fontsource/barlow";
@@ -72,10 +52,7 @@ import "../styles/sliderLocation.css";
 import "../styles/sliderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
-import NavbarDesktop from "./navbarDesktop";
-
 export default function PropertiesDekstopComp() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const Edit = useDisclosure();
   const DeleteModal = useDisclosure();
   const addProperty = useDisclosure();
@@ -84,12 +61,17 @@ export default function PropertiesDekstopComp() {
   const userSelector = useSelector((state) => state.auth);
   const [pcm, setPcm] = useState([]);
   const [propertyId, setPropertyID] = useState();
+  const [property_id, setProperty_id] = useState();
   const [keyword, setKeyword] = useState();
   const [selectedProperty, setSelectedProperty] = useState();
+  const addReview = useDisclosure();
   const [filter, setFilter] = useState({
     pcm: "",
     search: "",
   });
+  const { properties, totalPage, handlePageClick, fetch } =
+    useFetchProperty(filter);
+
   useEffect(() => {
     fetch();
   }, [filter]);
@@ -98,16 +80,24 @@ export default function PropertiesDekstopComp() {
     provinces();
   }, []);
 
-  const { properties, totalPage, handlePageClick, fetch } =
-    useFetchProperty(filter);
-
-  const provinces = () => {
-    api
+  const provinces = async () => {
+    await api
       .get("/properties")
       .then((res) => {
         setPcm(res.data);
       })
       .catch((err) => console.log(err.response.data));
+  };
+
+  const review = async () => {
+    await api;
+    try {
+      const res = await api.get("/review/reviewdata", {
+        params: { propertyId },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -239,7 +229,7 @@ export default function PropertiesDekstopComp() {
 
         {/* list based on location */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -341,10 +331,10 @@ export default function PropertiesDekstopComp() {
                     className="swipercard"
                     flex={1}
                   >
-                    {val?.propertyImages?.map((pict) => (
+                    {val?.PropertyImages?.map((pict) => (
                       <SwiperSlide className="swipercard-slide ">
                         <Image
-                          src={`${process.env.REACT_APP_API_BASE_URL}${pict.picture}`}
+                          src={`${process.env.REACT_APP_API_BASE_URL}${pict?.picture}`}
                           h={"250px"}
                           objectFit={"cover"}
                           borderRadius={"md"}
@@ -400,7 +390,32 @@ export default function PropertiesDekstopComp() {
                             gap={"10px"}
                           >
                             <Icon as={BiPlus} />
-                            add Room
+                            Add Room
+                          </MenuItem>
+
+                          <Divider />
+
+                          <MenuItem
+                            onClick={() => {
+                              addReview.onOpen();
+                              setPropertyID(val?.id);
+                            }}
+                            display={"flex"}
+                            gap={"10px"}
+                          >
+                            <Icon as={BiPlus} />
+                            Add Review
+                            <motion.div
+                              initial={{ rotate: 0 }}
+                              animate={{ rotate: 360 }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "linear",
+                              }}
+                            >
+                              (Beta)
+                            </motion.div>
                           </MenuItem>
 
                           <Divider />
@@ -459,7 +474,7 @@ export default function PropertiesDekstopComp() {
                             alignItems={"center"}
                           >
                             <Icon as={ImLocation} />
-                            {val?.city?.city_name}
+                            {val?.City?.city_name}, {val?.City?.province}
                           </Text>
 
                           <Text
@@ -512,6 +527,12 @@ export default function PropertiesDekstopComp() {
             onClose={propertyDetail.onClose}
             id={propertyId}
             properties={properties}
+          />
+
+          <AddReview
+            isOpen={addReview.isOpen}
+            onClose={addReview.onClose}
+            id={propertyId}
           />
         </Grid>
 

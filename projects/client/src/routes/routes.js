@@ -49,15 +49,7 @@ const routes = [
     }
   />,
 
-  <Route
-    path="/landingpage"
-    key={"landingpage"}
-    element={
-      <ProtectedPage needLogin={true}>
-        <LandingPages />
-      </ProtectedPage>
-    }
-  />,
+  <Route path="/" key={"landingpage"} element={<LandingPages />} />,
   <Route
     path="/dashboardtenant"
     key={"dashboardtenant"}

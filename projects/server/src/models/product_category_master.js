@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const ProductCategoriesMaster = sequelize.define(
-    "productCategoryMaster",
+    "ProductCategoryMaster",
     {
       province: Sequelize.STRING,
     },

@@ -14,11 +14,7 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react";
-import {
-  AiFillFacebook,
-  AiOutlineEyeInvisible,
-  AiOutlineEye,
-} from "react-icons/ai";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { BsChevronDown } from "react-icons/bs";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -26,7 +22,6 @@ import YupPassword from "yup-password";
 import { useState, useRef } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-
 export default function Registercomp() {
   const [isLoading, setIsLoading] = useState(false);
   const nav = useNavigate();
@@ -34,25 +29,16 @@ export default function Registercomp() {
   const [seePassword, setSeePassword] = useState(false);
   const [image, setImage] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
-
   const toast = useToast();
   const inputFileRef = useRef(null);
-  const handleSubmit = async () => {
-    alert(formik.values);
-  };
-
   const inputHandler = (e) => {
     const { target } = e;
     formik.setFieldValue(target.id, target.value);
   };
-
   const imageHandler = (e) => {
     setSelectedFile(e.target.files[0]);
-    console.log(e.target.files);
     setImage(URL.createObjectURL(e.target.files[0]));
   };
-  console.log(selectedFile);
-
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -62,7 +48,6 @@ export default function Registercomp() {
       phone_number: "",
       id_Number: "",
     },
-
     onSubmit: async () => {
       const formData = new FormData();
       formData.append("id_card", selectedFile);
@@ -84,9 +69,6 @@ export default function Registercomp() {
         .minSymbols(1),
     }),
   });
-
-  console.log(formik);
-
   const register = async () => {
     if (!formik.values.email || !formik.values.password) {
       toast({
@@ -137,9 +119,7 @@ export default function Registercomp() {
                 w={"45%"}
                 pt={"5%"}
               >
-                <Image
-                // src={igtitle}
-                />
+                <Image />
               </Box>
             </Box>
 

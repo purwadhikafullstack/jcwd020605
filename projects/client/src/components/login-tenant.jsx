@@ -7,7 +7,6 @@ import {
   FormErrorMessage,
   Icon,
   Input,
-  Image,
   InputGroup,
   InputRightElement,
   useToast,
@@ -15,10 +14,8 @@ import {
   Link,
 } from "@chakra-ui/react";
 import "@fontsource/barlow";
-import React, { useEffect } from "react";
 import { PiArrowLeftLight } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import BeatLoader from "react-spinners/BeatLoader";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
@@ -26,7 +23,6 @@ import { useState } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
 export default function LoginTenant() {
   YupPassword(Yup);
   const [seePassword, setSeePassword] = useState(false);
@@ -40,7 +36,6 @@ export default function LoginTenant() {
       email: "",
       password: "",
     },
-
     onSubmit: async () => {
       try {
         setIsLoading(true);
@@ -61,7 +56,6 @@ export default function LoginTenant() {
           isClosable: true,
         });
         nav("/landingpage");
-        console.log(res);
       } catch (error) {
         toast({
           description: error.response.data.message,
@@ -203,7 +197,7 @@ export default function LoginTenant() {
                       w={"100%"}
                       fontSize={"18px"}
                       borderRadius={"7px"}
-                      transition="transform 1s ease"
+                      transition="transform 0.5s ease"
                       _hover={{
                         bgColor: "transparent",
                         transform: "translateY(-5px)",
@@ -246,6 +240,19 @@ export default function LoginTenant() {
                       justifyContent={"center"}
                     >
                       Forget password?
+                    </Flex>
+                  </Link>
+
+                  <Link href={"/"}>
+                    <Flex
+                      className="go-login text-2"
+                      alignItems={"center"}
+                      display={"flex"}
+                      fontSize={"15px"}
+                      mt={"1em"}
+                      justifyContent={"center"}
+                    >
+                      Landing Page
                     </Flex>
                   </Link>
                 </Flex>

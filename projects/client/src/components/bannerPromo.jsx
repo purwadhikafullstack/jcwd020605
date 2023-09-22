@@ -1,36 +1,15 @@
-import { Box, Image, Button, Icon } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import a from "../assets/1 (2).jpg";
 import b from "../assets/3 (2).jpg";
 import c from "../assets/4(1).jpg";
 import d from "../assets/wallpaperflare.com_wallpaper.jpg";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-
-import React, { useState } from "react";
 import "@fontsource/gilda-display";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-
 import "../styles/promoSlider.css";
-
-// import required modules
 import { Navigation } from "swiper/modules";
-
 export default function BannerPromo() {
-  const images = [a, b, c, d];
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const nextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
-  };
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prevSlide) => (prevSlide - 1 + images.length) % images.length
-    );
-  };
   return (
     <>
       <Box

@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Box, IconButton, Video, Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import "../styles/Slideshow1.css";
 import "@fontsource/gilda-display";
 import videos1 from "../assets/1.mp4";
 import videos2 from "../assets/2.mp4";
-import FilterDekstop from "./filterDekstop";
-
 export default function Slideshow() {
   const videosArr = [videos1, videos2];
   const [currentSlide, setCurrentSlide] = useState(0);
-
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevIndex) => (prevIndex + 1) % videosArr.length);
     }, 10000);
-
     return () => clearInterval(interval);
   }, [videosArr.length]);
-
   return (
     <>
       <div class="slide-container fade">
@@ -27,8 +22,6 @@ export default function Slideshow() {
         <Box
           position="absolute"
           zIndex={"3"}
-          // top="0"
-          // left="0"
           w={"100%"}
           h={"100%"}
           fontFamily={`'Gilda Display', sans-serif`}

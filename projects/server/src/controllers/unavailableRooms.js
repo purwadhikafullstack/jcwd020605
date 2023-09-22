@@ -91,7 +91,7 @@ const unavailableRoomsController = {
       } else if (SP_Check.length > 0 || SP_DataCompare) {
         return res.status(200).send({
           success: false,
-          message: "The dates has been assigned with special price",
+          message: "The dates already set by special prices",
         });
       }
 
@@ -112,7 +112,6 @@ const unavailableRoomsController = {
   getUnavailability: async (req, res) => {
     try {
       let room_id = req.params.id;
-
       let data = await db.UnavailableRoomsModel.findAll({
         attributes: [
           ["room_id", "id"],

@@ -12,19 +12,9 @@ import {
   MenuItem,
   Select,
 } from "@chakra-ui/react";
-
 import { useState, useEffect } from "react";
-import { BsList, BsFillPersonFill } from "react-icons/bs";
-import { LuLayoutDashboard } from "react-icons/lu";
 import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
-import {
-  BiLogOutCircle,
-  BiDotsHorizontalRounded,
-  BiSolidUser,
-} from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
+import { BiDotsHorizontalRounded, BiSolidUser } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { CgDetailsMore } from "react-icons/cg";
 import "react-datepicker/dist/react-datepicker.css";
@@ -32,14 +22,11 @@ import "react-calendar/dist/Calendar.css";
 import { BsFillCalendar2DateFill } from "react-icons/bs";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { GrStatusInfo } from "react-icons/gr";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
 import OrderDetail from "./orderDetail";
 import Pagination from "./Pagination";
-
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
 import bgContent from "../assets/bgcontent.jpg";
-import PropertyDetail from "./propertyDetail";
 import "@fontsource/barlow";
 import "@fontsource/gilda-display";
 import "swiper/css";
@@ -52,9 +39,8 @@ import { motion } from "framer-motion";
 import { api } from "../api/api";
 import moment from "moment";
 import NavbarMobile from "./navbarMobile";
-
+import AddOrders from "./addOrder";
 export default function Transaction() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const orderDetails = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
   const [orderData, setOrderData] = useState();
@@ -65,14 +51,13 @@ export default function Transaction() {
   const [totalPage, setTotalPage] = useState(0);
   const [id, setId] = useState(userSelector.id);
   const [page, setPage] = useState(0);
+  const addOrder = useDisclosure();
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
   useEffect(() => {
     fetchOrderData(filter);
   }, [filter]);
-
   const fetchOrderData = async (filter) => {
     try {
       const res = await api.get(`/order?page=${page}`, {
@@ -84,7 +69,6 @@ export default function Transaction() {
       console.log(error);
     }
   };
-
   return (
     <>
       <Box
@@ -151,7 +135,7 @@ export default function Transaction() {
 
         {/* orderList */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -183,26 +167,57 @@ export default function Transaction() {
         </motion.div>
 
         {/* filter */}
-        <Flex justifyContent={"center"} align={"center"} mt={"1em"}>
-          <Select
+        <Flex justifyContent={"center"}>
+          <Flex
+            flexDir={"column"}
+            justifyContent={"center"}
+            align={"center"}
+            mt={"1em"}
             w={"90%"}
-            bgColor={"white"}
-            onChange={(e) => {
-              const selectedStatus = e.target.value;
-              setFilter((prevFilter) => ({
-                ...prevFilter,
-                status: selectedStatus,
-              }));
-            }}
-            value={filter?.status}
+            gap={"1em"}
           >
-            <option value="">Order status</option>
-            <option value="PAYMENT">PAYMENT</option>
-            <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
-            <option value="PROCESSING">PROCESSING</option>
-            <option value="CANCELED">CANCELED</option>
-            <option value="DONE">DONE</option>
-          </Select>
+            <Select
+              bgColor={"white"}
+              onChange={(e) => {
+                const selectedStatus = e.target.value;
+                setFilter((prevFilter) => ({
+                  ...prevFilter,
+                  status: selectedStatus,
+                }));
+              }}
+              value={filter?.status}
+            >
+              <option value="">Order status</option>
+              <option value="PAYMENT">PAYMENT</option>
+              <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
+              <option value="PROCESSING">PROCESSING</option>
+              <option value="CANCELED">CANCELED</option>
+              <option value="DONE">DONE</option>
+            </Select>
+
+            <Flex
+              w={"100%"}
+              bgColor={"white"}
+              borderRadius={"md"}
+              h={{ base: "40px" }}
+              alignItems={"center"}
+              justifyContent={"center"}
+              cursor={"pointer"}
+              fontWeight={"bold"}
+              onClick={() => {
+                addOrder.onOpen();
+              }}
+            >
+              Add order
+              <motion.div
+                initial={{ rotate: 0 }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                (Beta)
+              </motion.div>
+            </Flex>
+          </Flex>
         </Flex>
 
         {/* card */}
@@ -349,6 +364,14 @@ export default function Transaction() {
           }}
           id={orderId}
           fetch={fetchOrderData}
+        />
+
+        <AddOrders
+          isOpen={addOrder.isOpen}
+          onClose={() => {
+            addOrder.onClose();
+            fetchOrderData();
+          }}
         />
         <Pagination data={{ totalPage, handlePageClick }} />
 

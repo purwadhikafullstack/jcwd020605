@@ -8,7 +8,6 @@ import {
   useToast,
   Box,
   Input,
-  Flex,
   Image,
 } from "@chakra-ui/react";
 import { useState, useRef } from "react";
@@ -24,16 +23,12 @@ export default function AddRooms(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const [image, setImage] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
   const inputFileRef = useRef(null);
   const userSelector = useSelector((state) => state.auth);
-
   const imageHandler = (e) => {
     setSelectedFile(e.target.files[0]);
-    console.log(e.target.files);
     setImage(URL.createObjectURL(e.target.files[0]));
   };
   const inputHandler = (e) => {

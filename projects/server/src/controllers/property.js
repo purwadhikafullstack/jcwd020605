@@ -11,21 +11,22 @@ const propertyController = {
       const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
       const offset = page * limit;
+
       if (pcm) {
         whereClause[Op.and].push({
-          "$city.province$": { [Op.like]: `%${pcm}%` },
+          "$City.province$": { [Op.like]: `%${pcm}%` },
         });
       } else if (search) {
         whereClause[Op.and].push({
           [Op.or]: [
             { property_name: { [Op.like]: `%${search}%` } },
             {
-              "$city.city_name$": {
+              "$City.city_name$": {
                 [Op.like]: `%${search}%`,
               },
             },
             {
-              "$city.province$": {
+              "$City.province$": {
                 [Op.like]: `%${search}%`,
               },
             },
@@ -53,7 +54,6 @@ const propertyController = {
         },
         distinct: true,
       });
-
       const property = content.rows.slice(offset, limit * (page + 1));
       return res.status(200).send({
         property: property,

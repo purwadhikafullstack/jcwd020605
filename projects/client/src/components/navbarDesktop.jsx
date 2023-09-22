@@ -12,20 +12,20 @@ import {
   PopoverBody,
   PopoverFooter,
   Avatar,
+  useDisclosure,
 } from "@chakra-ui/react";
-
 import { LuLayoutDashboard } from "react-icons/lu";
 import { HiHomeModern } from "react-icons/hi2";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle } from "react-icons/bi";
+import { BiLogOutCircle, BiSolidHomeSmile } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlineBedroomChild } from "react-icons/md";
 import { useSelector } from "react-redux";
-
+import LogOut from "./Logout";
 export default function NavbarDesktop() {
   const userSelector = useSelector((state) => state.auth);
-
+  const logOutModal = useDisclosure();
   return (
     <>
       <Box
@@ -98,6 +98,13 @@ export default function NavbarDesktop() {
                 Report
               </Link>
             </Flex>
+
+            <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
+              <Icon as={BiSolidHomeSmile} />
+              <Link href="/" _hover={{ color: "#ab854f" }}>
+                Landing page
+              </Link>
+            </Flex>
           </Flex>
 
           {/* avatar profile */}
@@ -120,6 +127,10 @@ export default function NavbarDesktop() {
                 display={"flex"}
                 alignItems={"center"}
                 gap={"0.8em"}
+                cursor={"pointer"}
+                onClick={() => {
+                  logOutModal.onOpen();
+                }}
               >
                 <Icon as={BiLogOutCircle} /> LogOut
               </PopoverFooter>
@@ -127,6 +138,7 @@ export default function NavbarDesktop() {
           </Popover>
         </Flex>
       </Box>
+      <LogOut isOpen={logOutModal.isOpen} onClose={logOutModal.onClose} />
     </>
   );
 }

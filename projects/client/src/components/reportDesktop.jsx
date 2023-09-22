@@ -1,18 +1,7 @@
 import {
   Box,
-  useDisclosure,
   Text,
-  Link,
   Flex,
-  Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Image,
   Select,
   Table,
@@ -22,25 +11,13 @@ import {
   Th,
   Td,
   Tfoot,
-  Button,
   InputGroup,
   Input,
-  InputRightAddon,
 } from "@chakra-ui/react";
-
 import { useState, useEffect } from "react";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
-import { BsArrowDown, BsArrowUp } from "react-icons/bs";
-import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
-import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
 import Pagination from "./Pagination";
@@ -62,10 +39,12 @@ import NavbarDesktop from "./navbarDesktop";
 export default function ReportDesktop() {
   const userSelector = useSelector((state) => state.auth);
   const [orderData, setOrderData] = useState([]);
+  console.log(orderData);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
   const [datesRange, setDatesRange] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [id, setId] = useState(userSelector.id);
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
@@ -98,6 +77,7 @@ export default function ReportDesktop() {
           startDate,
           endDate,
           search,
+          id,
         },
       });
       setOrderData(res.data.orders);
@@ -300,7 +280,7 @@ export default function ReportDesktop() {
                     {val?.Property?.property_name}
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
-                    {val?.User?.first_name}
+                    {val?.username}
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
                     {val?.status}

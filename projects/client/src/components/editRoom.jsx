@@ -4,38 +4,24 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   Input,
   useToast,
-  Image,
   Box,
-  Icon,
 } from "@chakra-ui/react";
-import { BiPencil } from "react-icons/bi";
-import { BsArrowRight } from "react-icons/bs";
-import { RxCross2 } from "react-icons/rx";
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import YupPassword from "yup-password";
 import { useState } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-
 export default function EditRooms(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-  const [selectedFile, setSelectedFile] = useState(null);
-
   const inputHandler = (e) => {
     const { target } = e;
     formik.setFieldValue(target.id, target.value);
   };
-
   const formik = useFormik({
     initialValues: {
       room_name: "",
@@ -43,7 +29,6 @@ export default function EditRooms(props) {
       main_price: "",
       max_guest: "",
     },
-
     onSubmit: async () => {
       try {
         await api
@@ -66,7 +51,6 @@ export default function EditRooms(props) {
               duration: 1000,
               position: "top",
             });
-            console.log(err.response.data);
           })
           .finally(() => {
             setIsLoading(false);
@@ -75,8 +59,6 @@ export default function EditRooms(props) {
         console.log(error);
       }
     },
-
-    validationSchema: Yup.object().shape({}),
   });
   return (
     <>
@@ -104,8 +86,6 @@ export default function EditRooms(props) {
                 setTimeout(() => {
                   setIsLoading(false);
                   formik.handleSubmit();
-                  // editContent();
-                  // nav("/profile");
                 }, 2000);
               }}
             >

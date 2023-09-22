@@ -24,6 +24,7 @@ export default function FooterLandingPage() {
         flexDir={"column"}
         pos={"relative"}
         zIndex={"3"}
+        pl={{ base: "0.5em" }}
       >
         <Box
           py={"5em"}

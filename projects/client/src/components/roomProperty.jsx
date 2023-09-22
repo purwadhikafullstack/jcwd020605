@@ -1,26 +1,10 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
   Text,
   Link,
   Flex,
-  IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Grid,
   Image,
   Menu,
@@ -29,73 +13,35 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-
 import { useState } from "react";
 import { BsList, BsFillPersonFill } from "react-icons/bs";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle, BiDotsHorizontalRounded } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
-import { useSelector } from "react-redux";
-
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BiPencil } from "react-icons/bi";
 import { CgDetailsMore } from "react-icons/cg";
-// import { Link } from "react-router-dom";
-
 import "react-datepicker/dist/react-datepicker.css";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { SlTrash } from "react-icons/sl";
-import { ImLocation } from "react-icons/im";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
-
+import { MdApartment } from "react-icons/md";
 import "@fontsource/barlow";
-
 import EditRooms from "./editRoom";
 import DeleteRooms from "./deleteRoom";
 import FooterLandingPage from "./footerLandingPage";
-import RoomDetail from "./roomDetail";
-import { api } from "../api/api";
 import bgContent from "../assets/bgcontent.jpg";
-
 import { useEffect } from "react";
 import "@fontsource/barlow";
 import "@fontsource/gilda-display";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCards } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/pagination";
-import "swiper/css/effect-cards";
-
-import "../styles/sliderLocation.css";
-import "../styles/sliderCard.css";
-
-import { FreeMode, Pagination } from "swiper/modules";
 import { useFetchRoom } from "../hooks/useRoom";
 import { motion } from "framer-motion";
 import NavbarMobile from "./navbarMobile";
-
+import PaginationRoom from "./Pagination_room";
 export default function RoomProperty() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const EditRoom = useDisclosure();
-
   const DeleteRoom = useDisclosure();
-
-  const userSelector = useSelector((state) => state.auth);
-
-  const [roomData, setRoomData] = useState([]);
   const [roomId, setRoomId] = useState();
-  const { rooms, fetch } = useFetchRoom();
-
+  const { rooms, fetch, totalPage, handlePageClick } = useFetchRoom();
   useEffect(() => {
     fetch();
   }, []);
-
   return (
     <>
       <Box
@@ -345,7 +291,7 @@ export default function RoomProperty() {
                                 style: "currency",
                                 currency: "IDR",
                               })
-                            : "0"}{" "}
+                            : "0"}
                           / day
                         </Text>
                       </Text>
@@ -383,6 +329,7 @@ export default function RoomProperty() {
             fetch={fetch}
           />
         </Grid>
+        <PaginationRoom data={{ totalPage, handlePageClick }} />
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>

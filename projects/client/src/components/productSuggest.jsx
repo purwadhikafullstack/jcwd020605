@@ -8,19 +8,21 @@ import { BiShower } from "react-icons/bi";
 import { BsArrowRightShort } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { api } from "../api/api";
-
+import { useSelector } from "react-redux";
 export default function ProductSuggest() {
   const [productData, setProductData] = useState([]);
-  console.log(productData);
-
+  const userSelector = useSelector((state) => state.auth);
+  const [id, setId] = useState(userSelector.id);
   useEffect(() => {
     fetchProduct();
   }, []);
 
   const fetchProduct = async () => {
     try {
-      const productData = await api.get("/properties/");
-      setProductData(productData.data);
+      const productData = await api.get("/properties/propertieslist", {
+        params: { id: id },
+      });
+      setProductData(productData.data.property);
     } catch (error) {
       console.log(error);
     }
@@ -123,13 +125,6 @@ export default function ProductSuggest() {
               </Box>
             ))}
           </Box>
-
-          {/* <Box
-            mt={"1.5em"}
-            display={"flex"}
-            flexWrap={"wrap"}
-            justifyContent={"center"}
-          ></Box> */}
         </Box>
       </Box>
     </>

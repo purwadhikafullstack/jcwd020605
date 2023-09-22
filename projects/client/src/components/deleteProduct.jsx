@@ -4,9 +4,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useToast,
   Box,
   Text,
@@ -25,7 +23,6 @@ export default function DeleteProduct(props) {
       await api
         .delete("/properties/" + props.id)
         .then((res) => {
-          console.log(res.data);
           toast({
             title: res.data.message,
             status: "success",

@@ -21,23 +21,20 @@ import {
   PopoverFooter,
   Avatar,
 } from "@chakra-ui/react";
-
 import { BsList } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { HiHomeModern } from "react-icons/hi2";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle } from "react-icons/bi";
+import { BiLogOutCircle, BiSolidHomeSmile } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import { MdOutlineBedroomChild } from "react-icons/md";
 import LogOut from "./Logout";
-
 export default function NavbarMobile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const logOutModal = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
-
   return (
     <>
       <Box
@@ -138,7 +135,9 @@ export default function NavbarMobile() {
                   _hover={{ color: "#ab854f" }}
                 >
                   <Icon as={LuLayoutDashboard} />
-                  <Link _hover={{ color: "#ab854f" }}>Dashboard</Link>
+                  <Link href="/dashboardtenant" _hover={{ color: "#ab854f" }}>
+                    Dashboard
+                  </Link>
                 </Flex>
 
                 <Flex
@@ -185,6 +184,17 @@ export default function NavbarMobile() {
                   <Icon as={TbReportAnalytics} />
                   <Link href="/report" _hover={{ color: "#ab854f" }}>
                     Report
+                  </Link>
+                </Flex>
+
+                <Flex
+                  align={"center"}
+                  gap={"1em"}
+                  _hover={{ color: "#ab854f" }}
+                >
+                  <Icon as={BiSolidHomeSmile} />
+                  <Link href="/" _hover={{ color: "#ab854f" }}>
+                    Landing page
                   </Link>
                 </Flex>
               </Flex>

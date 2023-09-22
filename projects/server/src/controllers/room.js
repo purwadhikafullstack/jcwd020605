@@ -14,7 +14,7 @@ const roomController = {
         include: [
           {
             model: db.PropertyModel,
-            attributes: ["property_name"],
+            // attributes: ["property_name"],
           },
         ],
         where: {

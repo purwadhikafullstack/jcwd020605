@@ -1,26 +1,9 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
-  Link,
   Text,
   Flex,
-  IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Grid,
   Image,
   Menu,
@@ -32,18 +15,17 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BsList, BsFillPersonFill } from "react-icons/bs";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
+
 import { MdDoNotDisturbOn } from "react-icons/md";
-import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle, BiDotsHorizontalRounded } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { BiPencil } from "react-icons/bi";
-import { GrStatusUnknown } from "react-icons/gr";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
+import { MdApartment } from "react-icons/md";
 import FooterLandingPage from "./footerLandingPage";
+import SpecialPrice from "./specialPrice";
+import UnavailableRooms from "./UnavailableRoom";
+import CalendarPrice from "./calendarPrice";
+import NavbarDesktop from "./navbarDesktop";
 import { api } from "../api/api";
 import bgContent from "../assets/bgcontent.jpg";
 import { useFetchRoomById } from "../hooks/useRoom";
@@ -60,21 +42,12 @@ import "../styles/sliderLocation.css";
 import "../styles/sliderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
-import SpecialPrice from "./specialPrice";
-import UnavailableRooms from "./UnavailableRoom";
-import CalendarPrice from "./calendarPrice";
-import NavbarDesktop from "./navbarDesktop";
-
 export default function RoomDetailDesktop(props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const SpecialPriceModal = useDisclosure();
   const UnavailableRoomModal = useDisclosure();
-
-  const userSelector = useSelector((state) => state.auth);
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const { rooms, price, fetch } = useFetchRoomById(id);
-
   const [priceDates, setPriceDates] = useState([]);
   const [nominal, setNominal] = useState("");
   const [percent, setPercent] = useState("");
@@ -83,17 +56,13 @@ export default function RoomDetailDesktop(props) {
   const [unavailable, setUnavailable] = useState([]);
   const [specialPrice, setSpecialPrice] = useState([]);
   const [unavailableDates, setUnavailableDates] = useState([]);
-  const nav = useNavigate();
-
   useEffect(() => {
     fetch(id);
   }, []);
-
   useEffect(() => {
     fetchUnavailableRooms();
     fetchSpecialPriceRooms();
   }, []);
-
   const fetchUnavailableRooms = async () => {
     try {
       let res = await api.get("/unavailableroom/" + id);
@@ -102,7 +71,6 @@ export default function RoomDetailDesktop(props) {
       console.log(error);
     }
   };
-
   const fetchSpecialPriceRooms = async () => {
     try {
       let res = await api.get("/specialprice/" + id);
@@ -111,7 +79,6 @@ export default function RoomDetailDesktop(props) {
       console.log(error);
     }
   };
-
   const SpecialPrices = async () => {
     try {
       let start_date = new Date(
@@ -135,8 +102,7 @@ export default function RoomDetailDesktop(props) {
           duration: 3000,
           isClosable: true,
         });
-        fetchSpecialPriceRooms();
-        nav("/roompropertiestenant");
+        window.location.reload();
       } else {
         toast({
           title: `${res.data.message}`,
@@ -150,7 +116,6 @@ export default function RoomDetailDesktop(props) {
       console.log(error);
     }
   };
-
   const unavailabilityRooms = async () => {
     try {
       let start_date = new Date(
@@ -174,8 +139,7 @@ export default function RoomDetailDesktop(props) {
           duration: 3000,
           isClosable: true,
         });
-        fetchUnavailableRooms();
-        nav("/roompropertiestenant");
+        window.location.reload();
       } else {
         toast({
           title: `${res.data.message}`,
