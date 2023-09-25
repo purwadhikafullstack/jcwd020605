@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/api";
 import { useSelector } from "react-redux";
 
-export const useFetchRoom = () => {
+export const useFetchRoom = (propertyId) => {
   const [rooms, setRooms] = useState();
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
@@ -14,12 +14,12 @@ export const useFetchRoom = () => {
   const fetch = async () => {
     try {
       const res = await api.get(`/room?page=${page}`, {
-        params: { id: id },
+        params: { id: id, propertyId: propertyId },
       });
       setRooms(res.data.roomData);
       setTotalPage(res.data.totalPage);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -36,8 +36,8 @@ export const useFetchRoomById = (id) => {
   const fetch = async () => {
     try {
       const res = await api.get("/room/" + id);
-      setRooms(res.data);
-      setPrice(res.data.main_price);
+      setRooms(res?.data);
+      setPrice(res?.data?.main_price);
     } catch (err) {
       console.log(err);
     }
@@ -48,4 +48,23 @@ export const useFetchRoomById = (id) => {
   }, []);
 
   return { rooms, price, fetch };
+};
+
+export const useFetchRoomByPropertyID = (property_id) => {
+  const [roomsByProperty, setRoomsByProperty] = useState();
+  console.log(roomsByProperty);
+  const fetchRoom = async () => {
+    try {
+      const res = await api.get("/room/getroombyproperty/" + property_id);
+      setRoomsByProperty(res?.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoom();
+  }, [property_id]);
+
+  return { roomsByProperty, fetchRoom };
 };

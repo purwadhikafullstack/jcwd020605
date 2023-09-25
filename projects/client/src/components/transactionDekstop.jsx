@@ -160,7 +160,6 @@ export default function TransactionDekstop() {
               <option value="">Order status</option>
               <option value="PAYMENT">PAYMENT</option>
               <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
-              <option value="PROCESSING">PROCESSING</option>
               <option value="CANCELED">CANCELED</option>
               <option value="DONE">DONE</option>
             </Select>
@@ -178,7 +177,7 @@ export default function TransactionDekstop() {
                 addOrder.onOpen();
               }}
             >
-              Add order
+              Add order simulator
               <motion.div
                 initial={{ rotate: 0 }}
                 animate={{ rotate: 360 }}

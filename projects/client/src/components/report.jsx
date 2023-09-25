@@ -393,7 +393,7 @@ export default function Report() {
                               pt={"0.5em"}
                               borderTop={"2px solid #dbdbdb"}
                             >
-                              {val?.User?.first_name}
+                              {val?.username}
                             </Box>
                           </Box>
                         </Text>

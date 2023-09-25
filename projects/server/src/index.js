@@ -50,6 +50,10 @@ app.use(
   "/api/payment_proof",
   express.static(`${__dirname}/public/payment_proof`)
 );
+app.use(
+  "/api/profile_picture",
+  express.static(`${__dirname}/public/profile_picture`)
+);
 // ===========================
 
 // not found

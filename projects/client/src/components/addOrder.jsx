@@ -10,6 +10,7 @@ import {
   Input,
   Image,
   Select,
+  Text,
 } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import { api } from "../api/api";
@@ -17,7 +18,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { useSelector } from "react-redux";
-import { useFetchRoom } from "../hooks/useRoom";
+import { useFetchRoom, useFetchRoomByPropertyID } from "../hooks/useRoom";
+import { useFetchProperty } from "../hooks/useProperty";
 export default function AddOrders(props) {
   YupPassword(Yup);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +28,9 @@ export default function AddOrders(props) {
   const [selectedFile, setSelectedFile] = useState(null);
   const inputFileRef = useRef(null);
   const userSelector = useSelector((state) => state.auth);
-  const { rooms, fetch } = useFetchRoom();
+  const [propertyId, setPropertyId] = useState();
+  const { roomsByProperty, fetchRoom } = useFetchRoomByPropertyID(propertyId);
+  const { properties, fetch } = useFetchProperty();
   useEffect(() => {
     fetch();
   }, []);
@@ -64,7 +68,7 @@ export default function AddOrders(props) {
               title: "Success add Order",
               status: "success",
               position: "top",
-              duration: 1000,
+              duration: 2000,
             });
             formik.resetForm();
             props.onClose();
@@ -74,7 +78,7 @@ export default function AddOrders(props) {
             toast({
               description: error.response.data,
               status: "error",
-              duration: 1000,
+              duration: 2000,
               position: "top",
             });
             console.log(error);
@@ -93,7 +97,14 @@ export default function AddOrders(props) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader display={"flex"} justifyContent={"space-between"}>
-            <Button onClick={props.onClose}>Cancel</Button>
+            <Button
+              onClick={() => {
+                props.onClose();
+                setImage("");
+              }}
+            >
+              Cancel
+            </Button>
             <Box
               display={"flex"}
               justifyContent={"center"}
@@ -109,10 +120,10 @@ export default function AddOrders(props) {
               variant={"ghost"}
               onClick={() => {
                 setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                  formik.handleSubmit();
-                }, 2000);
+                // setTimeout(() => {
+                formik.handleSubmit();
+                setImage("");
+                // }, 2000);
               }}
             >
               Save
@@ -121,27 +132,33 @@ export default function AddOrders(props) {
           <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>
             <form onSubmit={formik.handleSubmit}>
               <Box pb={"10px"}>
+                <Text color={"grey"}>Select Property :</Text>
                 <Select
+                  // placeholder="Select Property"
                   id="property_id"
-                  onChange={inputHandler}
+                  onChange={(e) => {
+                    setPropertyId(e?.target?.value);
+                    formik.setFieldValue("property_id", e.target.value);
+                  }}
                   variant="flushed"
-                  placeholder="Select Property"
                 >
-                  {rooms?.map((val) => (
-                    <option key={val?.Property?.id} value={val?.Property?.id}>
-                      {val?.Property?.property_name}
+                  {properties?.map((val) => (
+                    <option key={val?.id} value={val?.id}>
+                      {val?.property_name}
                     </option>
                   ))}
                 </Select>
               </Box>
               <Box pb={"10px"}>
+                <Text color={"grey"}>Select Room :</Text>
+
                 <Select
                   id="room_id"
                   onChange={inputHandler}
                   variant="flushed"
-                  placeholder="Select Room"
+                  placeholder="Select room"
                 >
-                  {rooms?.map((val) => (
+                  {roomsByProperty?.map((val) => (
                     <option key={val?.id} value={val?.id}>
                       {val?.room_name}
                     </option>

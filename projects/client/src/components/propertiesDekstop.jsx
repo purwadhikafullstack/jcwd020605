@@ -61,7 +61,6 @@ export default function PropertiesDekstopComp() {
   const userSelector = useSelector((state) => state.auth);
   const [pcm, setPcm] = useState([]);
   const [propertyId, setPropertyID] = useState();
-  const [property_id, setProperty_id] = useState();
   const [keyword, setKeyword] = useState();
   const [selectedProperty, setSelectedProperty] = useState();
   const addReview = useDisclosure();
@@ -71,7 +70,6 @@ export default function PropertiesDekstopComp() {
   });
   const { properties, totalPage, handlePageClick, fetch } =
     useFetchProperty(filter);
-
   useEffect(() => {
     fetch();
   }, [filter]);
@@ -82,23 +80,13 @@ export default function PropertiesDekstopComp() {
 
   const provinces = async () => {
     await api
-      .get("/properties")
+      .get("/properties/getprovincebytenantid/" + userSelector.id)
       .then((res) => {
         setPcm(res.data);
       })
       .catch((err) => console.log(err.response.data));
   };
 
-  const review = async () => {
-    await api;
-    try {
-      const res = await api.get("/review/reviewdata", {
-        params: { propertyId },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <>
       <Box
@@ -484,7 +472,7 @@ export default function PropertiesDekstopComp() {
                             alignItems={"center"}
                           >
                             <Icon as={FcRating} />
-                            Rating
+                            {val?.rating ? val?.rating : 0} / 10
                           </Text>
                         </Flex>
                       </Box>
@@ -497,6 +485,7 @@ export default function PropertiesDekstopComp() {
             isOpen={addProperty.isOpen}
             onClose={addProperty.onClose}
             fetch={fetch}
+            fetchProv={provinces}
             id={userSelector.id}
           />
           <EditProperty
@@ -507,6 +496,8 @@ export default function PropertiesDekstopComp() {
             }}
             data={selectedProperty}
             fetch={fetch}
+            id={userSelector.id}
+            fetchProv={provinces}
           />
 
           <DeleteProduct
@@ -514,6 +505,7 @@ export default function PropertiesDekstopComp() {
             onClose={DeleteModal.onClose}
             id={propertyId}
             fetch={fetch}
+            fetchProv={provinces}
           />
 
           <AddRooms
@@ -533,6 +525,7 @@ export default function PropertiesDekstopComp() {
             isOpen={addReview.isOpen}
             onClose={addReview.onClose}
             id={propertyId}
+            fetch={fetch}
           />
         </Grid>
 

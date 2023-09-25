@@ -51,7 +51,6 @@ const orderController = {
   getOrderById: async (req, res) => {
     try {
       const { id } = req.params;
-      console.log(id);
       const orderById = await db.OrderModel.findOne({
         include: [
           {
@@ -68,7 +67,6 @@ const orderController = {
           id,
         },
       });
-      console.log(orderById);
       return res.status(200).send(orderById);
     } catch (error) {
       console.log(error);
@@ -82,7 +80,6 @@ const orderController = {
       if (status) {
         whereCondition.status = status;
       }
-      console.log(whereCondition);
       const userOrders = await db.OrderModel.findAll(
         {
           include: [
@@ -132,6 +129,19 @@ const orderController = {
       ) {
         throw new Error("Please fill all data field");
       }
+
+      const roomStatus = await db.RoomModel.findOne({ where: { id: room_id } });
+
+      if (roomStatus.dataValues.room_status === "unavailable") {
+        throw new Error("Cannot booking room with unavailable status");
+      }
+      await db.RoomModel.update(
+        {
+          room_status: "unavailable",
+        },
+        { where: { id: room_id } }
+      );
+
       const order = await db.OrderModel.create({
         property_id,
         room_id,
@@ -152,7 +162,7 @@ const orderController = {
   },
   confirmOrReject: async (req, res) => {
     try {
-      const { status, id } = req.body;
+      const { status, id, room_id } = req.body;
       let message = "";
 
       if (status === "PROCESSING") {
@@ -193,6 +203,7 @@ const orderController = {
 
 
           To ensure a pleasant and comfortable stay for everyone, we kindly ask you to abide by the following rules:
+          
           1. Hotel rooms are rented for hotel days.
           2. A hotel day starts at 2:00 p.m. on the day of arrival and ends at 12:00 a.m. of the following day. Failure to check out by 12:00 p.m. will result in an additional fee for extending a hotel day. A charge for the extension until 4:00 
              p.m. amounts to PLN 80.00, after 4:00 p.m. the hotel will charge for an additional hotel day.
@@ -222,6 +233,7 @@ const orderController = {
         if (!order) {
           return res.status(404).send("Order not found");
         }
+
         const imagePath = path.join(
           __dirname,
           `../public/${order?.dataValues?.payment_proof}`
@@ -253,6 +265,13 @@ const orderController = {
         if (value !== null) {
           throw new Error("Can't cancel when order has payment proof");
         }
+
+        await db.RoomModel.update(
+          {
+            room_status: "available",
+          },
+          { where: { id: room_id } }
+        );
 
         await db.OrderModel.update(
           {

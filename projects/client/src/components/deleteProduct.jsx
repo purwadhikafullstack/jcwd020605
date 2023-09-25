@@ -17,7 +17,6 @@ export default function DeleteProduct(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-
   const DeleteProperty = async () => {
     try {
       await api
@@ -31,8 +30,8 @@ export default function DeleteProduct(props) {
             isClosable: true,
           });
           props.fetch();
+          props.fetchProv();
           props.onClose();
-          nav("/propertiestenant");
         })
         .catch((err) => {
           console.log(err);

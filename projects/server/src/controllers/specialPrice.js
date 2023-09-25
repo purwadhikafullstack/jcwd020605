@@ -157,6 +157,7 @@ const specialPriceController = {
   },
   deleteSprice: async (req, res) => {
     try {
+      console.log(req.params);
       await db.SpecialPriceModel.destroy({
         where: {
           id: req.params.id,
@@ -166,6 +167,17 @@ const specialPriceController = {
         success: true,
         message: "Success delete data",
       });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
+  getAllSpecialPrice: async (req, res) => {
+    try {
+      const data = await db.SpecialPriceModel.findAll({
+        where: { room_id: req.query.id },
+      });
+      return res.status(200).send(data);
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);

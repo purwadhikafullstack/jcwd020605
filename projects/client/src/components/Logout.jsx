@@ -17,7 +17,7 @@ export default function LogOut(props) {
   const [isLoading, setIsLoading] = useState(false);
   const LogOut = async () => {
     localStorage.removeItem("tenant");
-    return nav("/");
+    window.location.reload();
   };
 
   return (
@@ -54,7 +54,7 @@ export default function LogOut(props) {
                     setTimeout(() => {
                       setIsLoading(false);
                       LogOut();
-                      nav("/");
+                      // nav("/");
                     }, 2000);
                   }}
                 >

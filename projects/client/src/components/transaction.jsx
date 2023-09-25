@@ -106,7 +106,7 @@ export default function Transaction() {
               textAlign={"center"}
               fontWeight={"bold"}
               transition="transform 0.5s ease"
-              _hover={{ transform: "translateX(20px)" }}
+              _hover={{ transform: "translateY(20px)" }}
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -190,7 +190,6 @@ export default function Transaction() {
               <option value="">Order status</option>
               <option value="PAYMENT">PAYMENT</option>
               <option value="CONFIRM_PAYMENT">CONFIRM_PAYMENT</option>
-              <option value="PROCESSING">PROCESSING</option>
               <option value="CANCELED">CANCELED</option>
               <option value="DONE">DONE</option>
             </Select>
@@ -208,7 +207,7 @@ export default function Transaction() {
                 addOrder.onOpen();
               }}
             >
-              Add order
+              Add order simulator
               <motion.div
                 initial={{ rotate: 0 }}
                 animate={{ rotate: 360 }}
@@ -316,7 +315,7 @@ export default function Transaction() {
                           Username
                         </Flex>
                         <Box fontSize={"0.6em"} pl={"2.5em"}>
-                          {val?.User?.first_name}
+                          {val?.username}
                         </Box>
                       </Text>
 

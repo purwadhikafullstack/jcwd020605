@@ -129,6 +129,34 @@ const unavailableRoomsController = {
       return res.status(500).send(error);
     }
   },
+  deleteUnavailability: async (req, res) => {
+    try {
+      console.log(req.params);
+      await db.UnavailableRoomsModel.destroy({
+        where: {
+          id: req.params.id,
+        },
+      });
+      return res.status(200).send({
+        success: true,
+        message: "Success delete data",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
+  getAllUnavailable: async (req, res) => {
+    try {
+      const data = await db.UnavailableRoomsModel.findAll({
+        where: { room_id: req.query.id },
+      });
+      return res.status(200).send(data);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
 };
 
 module.exports = unavailableRoomsController;

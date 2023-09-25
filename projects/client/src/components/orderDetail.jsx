@@ -163,7 +163,10 @@ export default function OrderDetail(props) {
                     "Foto bukti pembayaran juga akan dihapus, yakin?"
                   );
                   if (shouldReject) {
-                    confirmOrReject({ status: "PAYMENT", id: props.id });
+                    confirmOrReject({
+                      status: "PAYMENT",
+                      id: props.id,
+                    });
                   }
                 }}
                 value="PAYMENT"
@@ -196,7 +199,11 @@ export default function OrderDetail(props) {
                     "Apakah Anda yakin ingin menolak pesanan ini?"
                   );
                   if (shouldReject) {
-                    confirmOrReject({ status: "CANCELED", id: props.id });
+                    confirmOrReject({
+                      status: "CANCELED",
+                      id: props.id,
+                      room_id: orderData?.Room?.id,
+                    });
                   }
                 }}
                 value="CANCELED"

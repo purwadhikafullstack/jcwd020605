@@ -59,7 +59,6 @@ export default function RegisterComp() {
       formData.append("phone_number", formik.values.phone_number);
       formData.append("id_Number", formik.values.id_Number);
       formData.append("id_card", selectedFile);
-
       try {
         await api
           .post("/tenant/register", formData)
@@ -90,13 +89,16 @@ export default function RegisterComp() {
     },
 
     validationSchema: Yup.object().shape({
-      first_name: Yup.string().required("First Name is required field"),
-      last_name: Yup.string().required("Last Name is required field"),
-      phone_number: Yup.string().required("Phone Number is required field"),
-      id_Number: Yup.string().required("ID Number is required field"),
+      first_name: Yup.string().required("First Name is required field").trim(),
+      last_name: Yup.string().required("Last Name is required field").trim(),
+      phone_number: Yup.string()
+        .required("Phone Number is required field")
+        .trim(),
+      id_Number: Yup.string().required("ID Number is required field").trim(),
       email: Yup.string()
         .required("Email is required field")
-        .email("Example : test@gmail.com"),
+        .email("Example : test@gmail.com")
+        .trim(),
       password: Yup.string()
         .required("Password is required field")
         .min(
@@ -105,7 +107,8 @@ export default function RegisterComp() {
         )
         .minUppercase(1)
         .minNumbers(1)
-        .minSymbols(1),
+        .minSymbols(1)
+        .trim(),
     }),
   });
 
@@ -123,7 +126,6 @@ export default function RegisterComp() {
             w={"100%"}
             h={{ base: "100%", lg: "80%" }}
             boxShadow={{ lg: "1px 1px 50px black" }}
-            // alignItems={"center"}
             justifyContent={"center"}
             flexDir={{ base: "column", lg: "row" }}
           >
@@ -225,6 +227,7 @@ export default function RegisterComp() {
                           bgColor={"transparent"}
                           color={"white"}
                           variant={"flushed"}
+                          autoComplete="off"
                           id="first_name"
                           onChange={inputHandler}
                         ></Input>
@@ -239,6 +242,7 @@ export default function RegisterComp() {
                         <Input
                           placeholder="LastName"
                           fontSize={"13px"}
+                          autoComplete="off"
                           bgColor={"transparent"}
                           variant={"flushed"}
                           color={"white"}
@@ -257,6 +261,7 @@ export default function RegisterComp() {
                           placeholder="Email"
                           fontSize={"13px"}
                           variant={"flushed"}
+                          autoComplete="off"
                           bgColor={"transparent"}
                           color={"white"}
                           id="email"
@@ -273,6 +278,7 @@ export default function RegisterComp() {
                         <InputGroup>
                           <Input
                             placeholder="Password"
+                            autoComplete="off"
                             fontSize={"13px"}
                             variant={"flushed"}
                             type={seePassword ? "text" : "password"}
@@ -307,6 +313,8 @@ export default function RegisterComp() {
                         <Input
                           placeholder="Phone Number"
                           fontSize={"13px"}
+                          type="number"
+                          autoComplete="off"
                           bgColor={"transparent"}
                           variant={"flushed"}
                           color={"white"}
@@ -324,6 +332,8 @@ export default function RegisterComp() {
                         <Input
                           placeholder="No KTP"
                           fontSize={"13px"}
+                          type="number"
+                          autoComplete="off"
                           bgColor={"transparent"}
                           color={"white"}
                           variant={"flushed"}

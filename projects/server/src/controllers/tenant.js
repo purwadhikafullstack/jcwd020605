@@ -78,7 +78,6 @@ const tenantController = {
       const passwordCompare = bcrypt.compareSync(password, findTenant.password);
       if (passwordCompare) {
         const payload = findTenant.dataValues.id;
-        console.log(payload);
         const tokenJwt = jwt.sign(
           {
             id: payload,
@@ -86,7 +85,6 @@ const tenantController = {
           },
           secretKey
         );
-        console.log(tokenJwt);
 
         return res.status(200).send({
           data: findTenant,
@@ -159,7 +157,6 @@ const tenantController = {
         payload: JSON.stringify({ id: payload }),
         action: "FORGET PASSWORD",
       });
-      console.log(token);
       mailer({
         subject: "Reset Password (5 min expired)",
         to: tenant.dataValues.email,
@@ -174,8 +171,6 @@ const tenantController = {
   getTokenReset: async (req, res, next) => {
     try {
       const token = req.query.token;
-      console.log(req.query.token);
-      console.log(req.query);
 
       if (token == null) {
         throw new Error("token not found");
@@ -200,8 +195,7 @@ const tenantController = {
       const { password, confirm } = req.body;
       const id = req.tenant.data1;
       const hashPassword = await bcrypt.hashSync(password, 10);
-      console.log(token);
-      console.log(req.body);
+
       if (password !== confirm) {
         throw new Error("Password doesn't match");
       }
@@ -241,6 +235,55 @@ const tenantController = {
       res.status(500).send({
         message: error.message,
       });
+    }
+  },
+  editProfile: async (req, res) => {
+    try {
+      const { first_name, last_name } = req.body;
+      const { filename } = req.file;
+      const imageUrl = "/profile_picture/" + filename;
+
+      await db.TenantModel.update(
+        {
+          first_name,
+          last_name,
+          profile_picture: imageUrl,
+        },
+        {
+          where: {
+            id: req.params.id,
+          },
+        }
+      );
+
+      const find = await db.TenantModel.findOne({
+        where: { id: req.params.id },
+      });
+      const tokenJwt = jwt.sign(
+        {
+          id: find.dataValues.id,
+          data: find.dataValues,
+        },
+        secretKey
+      );
+      return res.status(200).send({
+        message: "edit Success",
+        token: tokenJwt,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
+  getTenantById: async (req, res) => {
+    try {
+      const data = await db.TenantModel.findOne({
+        where: { id: req.params.id },
+      });
+      return res.status(200).send(data);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
     }
   },
 };

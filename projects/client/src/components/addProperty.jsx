@@ -78,8 +78,10 @@ export default function AddPropertyModal(props) {
               duration: 1000,
             });
             props.fetch();
+            formik.setFieldValue("");
+            setSelectedImages("");
+            props.fetchProv();
             props.onClose();
-            nav("/propertiestenant");
           })
           .catch((error) => {
             toast({
@@ -98,7 +100,6 @@ export default function AddPropertyModal(props) {
       }
     },
   });
-
   return (
     <>
       <Modal size={"sm"} isOpen={props.isOpen}>

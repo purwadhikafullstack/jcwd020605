@@ -12,6 +12,7 @@ import {
   Divider,
   MenuList,
   MenuItem,
+  Select,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BsList, BsFillPersonFill } from "react-icons/bs";
@@ -24,7 +25,7 @@ import { SlTrash } from "react-icons/sl";
 import { MdApartment } from "react-icons/md";
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
-import { useFetchRoom } from "../hooks/useRoom";
+import { useFetchRoom, useFetchRoomByPropertyID } from "../hooks/useRoom";
 import NavbarDesktop from "./navbarDesktop";
 import PaginationRoom from "./Pagination_room";
 import EditRooms from "./editRoom";
@@ -34,16 +35,27 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import "@fontsource/barlow";
 import "@fontsource/gilda-display";
+import { useFetchProperty } from "../hooks/useProperty";
+import { useSelector } from "react-redux";
+import { api } from "../api/api";
 
 export default function RoomPropertyDekstop() {
   const EditRoom = useDisclosure();
   const DeleteRoom = useDisclosure();
   const [roomId, setRoomId] = useState();
   const [selectedRoom, setSelectedRoom] = useState();
-  const { rooms, totalPage, handlePageClick, fetch } = useFetchRoom();
+  const userSelector = useSelector((state) => state.auth);
+  const [propertyId, setPropertyId] = useState();
+  const { rooms, totalPage, handlePageClick, fetch } = useFetchRoom(propertyId);
+  // const { roomsByProperty, fetchRoom } = useFetchRoomByPropertyID(propertyId);
+  const { properties } = useFetchProperty();
+  // console.log(roomsByProperty);
+  console.log(propertyId);
+  console.log(properties);
+
   useEffect(() => {
     fetch();
-  }, []);
+  }, [propertyId]);
   return (
     <>
       <Box
@@ -115,6 +127,27 @@ export default function RoomPropertyDekstop() {
             </Text>
           </Flex>
         </Box>
+
+        {/* filter */}
+        <Flex justify={"center"} mb={"2em"}>
+          <Box w={"90%"} bgColor={"white"} borderRadius={"1em"}>
+            <Select
+              px={"1em"}
+              placeholder="Select Property"
+              id="property_id"
+              onChange={(e) => {
+                setPropertyId(e?.target?.value);
+              }}
+              variant="flushed"
+            >
+              {properties?.map((val) => (
+                <option key={val?.id} value={val?.id}>
+                  {val?.property_name}
+                </option>
+              ))}
+            </Select>
+          </Box>
+        </Flex>
 
         {/* room */}
         <motion.div

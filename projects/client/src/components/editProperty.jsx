@@ -37,6 +37,7 @@ export default function AddPropertyModal(props) {
       details_text: "",
       province: "",
       city_id: "",
+      tenant_id: "",
     },
 
     onSubmit: async () => {
@@ -45,6 +46,7 @@ export default function AddPropertyModal(props) {
       formData.append("details_text", formik.values.details_text);
       formData.append("city_id", formik.values.city_id);
       formData.append("province", formik.values.province);
+      formData.append("tenant_id", props.id);
 
       for (const files of selectedFiles) {
         formData.append("property_img", files);
@@ -60,14 +62,15 @@ export default function AddPropertyModal(props) {
               duration: 1000,
             });
             props.fetch();
+            props.fetchProv();
             props.onClose();
-            nav("/propertiestenant");
           })
           .catch((error) => {
+            console.log(error);
             toast({
-              description: error.response.data.message,
+              description: error.response.data,
               status: "error",
-              duration: 1000,
+              duration: 2000,
               position: "top",
             });
           })

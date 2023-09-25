@@ -88,7 +88,9 @@ const propertyController = {
   },
   getPropertyProv: async (req, res) => {
     try {
-      const prov = await db.ProductCategoriesMaster.findAll();
+      const prov = await db.ProductCategoriesMaster.findAll({
+        where: { tenant_id: req.params.id },
+      });
       return res.status(200).send(prov);
     } catch (error) {
       console.log(error);
@@ -101,13 +103,14 @@ const propertyController = {
     try {
       let pcm = await db.ProductCategoriesMaster.findOne({
         where: {
-          province,
+          [Op.and]: [{ province }, { tenant_id }],
         },
       });
 
       if (!pcm) {
         pcm = await db.ProductCategoriesMaster.create({
           province,
+          tenant_id,
         });
       }
 
@@ -120,6 +123,17 @@ const propertyController = {
       });
 
       await propertyData.save();
+
+      pcm = await db.ProductCategoriesMaster.update(
+        {
+          property_id: propertyData?.dataValues?.id,
+        },
+        {
+          where: {
+            id: propertyData?.dataValues?.pcm_id,
+          },
+        }
+      );
 
       const imageArr = [];
       for (const file of req.files) {
@@ -137,19 +151,37 @@ const propertyController = {
     }
   },
   editProperties: async (req, res) => {
-    // const t = await db.sequelize.transaction();
     try {
-      const { property_name, details_text, city_id, province } = req.body;
+      const { property_name, details_text, city_id, province, tenant_id } =
+        req.body;
+
+      console.log(req.body.province);
+
+      if (req.body.province === "undefined") {
+        throw new Error("Please select your property province and city");
+      }
+      const property_id = req?.params?.id;
+      const prevPcm = await db.ProductCategoriesMaster.findOne({
+        where: { property_id },
+      });
+
+      if (prevPcm) {
+        await db.ProductCategoriesMaster.destroy({
+          where: { property_id },
+        });
+      }
 
       let pcm = await db.ProductCategoriesMaster.findOne({
         where: {
-          province,
+          [Op.and]: [{ province }, { tenant_id }],
         },
       });
 
       if (!pcm) {
         pcm = await db.ProductCategoriesMaster.create({
           province,
+          tenant_id,
+          property_id,
         });
 
         await pcm.save();
@@ -202,6 +234,17 @@ const propertyController = {
           property_id: req.params.id,
         },
       });
+      await db.ProductCategoriesMaster.destroy({
+        where: {
+          property_id: req.params.id,
+        },
+      });
+      await db.RoomModel.destroy({
+        where: {
+          property_id: req.params.id,
+        },
+      });
+
       return res.status(200).send({
         message: "Delete Property",
       });

@@ -186,6 +186,14 @@ db.ProductCategoriesMaster.hasMany(db.PropertyModel, {
   foreignKey: "pcm_id",
 });
 
+db.ProductCategoriesMaster.belongsTo(db.TenantModel, {
+  foreignKey: "tenant_id",
+});
+
+db.ProductCategoriesMaster.belongsTo(db.PropertyModel, {
+  foreignKey: "property_id",
+});
+
 // -------------------  review  ---------------------
 
 db.ReviewModel.belongsTo(db.PropertyModel, {

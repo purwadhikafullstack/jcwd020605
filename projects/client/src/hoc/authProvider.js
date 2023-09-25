@@ -4,6 +4,7 @@ import { api } from "../api/api";
 
 export default function AuthProvider({ children }) {
   const dispatch = useDispatch();
+
   useEffect(() => {
     fetch();
   }, []);
@@ -18,7 +19,6 @@ export default function AuthProvider({ children }) {
           },
         })
         .then((res) => res.data.tenant);
-
       if (tenant) {
         dispatch({
           type: "login",

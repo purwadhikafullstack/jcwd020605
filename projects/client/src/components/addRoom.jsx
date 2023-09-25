@@ -93,7 +93,14 @@ export default function AddRooms(props) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader display={"flex"} justifyContent={"space-between"}>
-            <Button onClick={props.onClose}>Cancel</Button>
+            <Button
+              onClick={() => {
+                props.onClose();
+                setImage("");
+              }}
+            >
+              Cancel
+            </Button>
             <Box
               display={"flex"}
               justifyContent={"center"}
@@ -111,6 +118,7 @@ export default function AddRooms(props) {
                 setIsLoading(true);
                 setTimeout(() => {
                   setIsLoading(false);
+                  setImage("");
                   formik.handleSubmit();
                 }, 2000);
               }}

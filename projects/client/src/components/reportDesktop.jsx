@@ -289,7 +289,7 @@ export default function ReportDesktop() {
                     {moment(val?.createdAt).format("DD MMM YYYY")}
                   </Td>
                   <Td textAlign={"center"}>
-                    {val?.Room?.main_price.toLocaleString("id-ID", {
+                    {val?.Room?.main_price?.toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
                     })}
@@ -312,10 +312,12 @@ export default function ReportDesktop() {
                   borderTop={"1px solid #dbdbdb"}
                   textAlign={"center"}
                 >
-                  {totalAmount.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
+                  {totalAmount
+                    ? totalAmount?.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      })
+                    : 0}
                 </Th>
               </Tr>
             </Tfoot>

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import "../styles/Slideshow1.css";
 import "@fontsource/gilda-display";
-import videos1 from "../assets/1.mp4";
+// import videos1 from "../assets/1.mp4";
 import videos2 from "../assets/2.mp4";
 export default function Slideshow() {
-  const videosArr = [videos1, videos2];
+  const videosArr = [videos2];
   const [currentSlide, setCurrentSlide] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {

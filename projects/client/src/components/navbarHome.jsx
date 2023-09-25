@@ -51,7 +51,7 @@ export default function NavbarHome() {
             fontFamily={`'Gilda Display', sans-serif`}
             alignItems={"center"}
             position={"fixed"}
-            zIndex={2}
+            zIndex={4}
           >
             <Box
               display={"flex"}
@@ -130,13 +130,13 @@ export default function NavbarHome() {
                   >
                     <PopoverArrow />
                     <PopoverHeader>{userSelector?.first_name}</PopoverHeader>
-                    <PopoverBody
+                    {/* <PopoverBody
                       display={"flex"}
                       alignItems={"center"}
                       gap={"0.8em"}
                     >
                       <Icon as={CgProfile} /> Profile
-                    </PopoverBody>
+                    </PopoverBody> */}
                     <PopoverFooter
                       display={"flex"}
                       alignItems={"center"}

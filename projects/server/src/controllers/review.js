@@ -4,17 +4,17 @@ const reviewController = {
   addReview: async (req, res) => {
     try {
       const { review, property_id } = req.body;
-      console.log(req.body);
       const reviewNumber = parseFloat(review);
-      const property_id_Number = parseFloat(property_id);
 
       if (isNaN(reviewNumber) || reviewNumber < 0 || reviewNumber > 10) {
         throw new Error("Review must be a number between 1 and 10");
       }
-      await db.ReviewModel.create({
-        review: reviewNumber,
-        property_id: property_id_Number,
-      });
+      await db.PropertyModel.update(
+        {
+          rating: reviewNumber,
+        },
+        { where: { id: property_id } }
+      );
       return res.status(200).send(`Success add review`);
     } catch (error) {
       console.log(error.message);
@@ -46,7 +46,7 @@ const reviewController = {
   getReviewByPropertyID: async (req, res) => {
     try {
       const { property_id } = req.query;
-      const allReview = await db.ReviewModel.findAll({
+      const allReview = await db.PropertyModel.findAll({
         where: { property_id },
       });
 

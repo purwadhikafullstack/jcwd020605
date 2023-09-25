@@ -68,16 +68,8 @@ export default function LoginTenant() {
       }
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string().required().email("Example : test@gmail.com"),
-      password: Yup.string()
-        .required()
-        .min(
-          8,
-          "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
-        )
-        .minUppercase(1)
-        .minNumbers(1)
-        .minSymbols(1),
+      email: Yup.string().required(),
+      password: Yup.string().required(),
     }),
   });
   return (
@@ -143,6 +135,7 @@ export default function LoginTenant() {
                             variant={"flushed"}
                             bgColor={"transparent"}
                             color={"white"}
+                            autoComplete="off"
                             name="email"
                             onChange={formik.handleChange}
                           ></Input>
@@ -161,6 +154,7 @@ export default function LoginTenant() {
                               variant={"flushed"}
                               type={seePassword ? "text" : "password"}
                               bgColor={"transparent"}
+                              autoComplete="off"
                               color={"white"}
                               name="password"
                               onChange={formik.handleChange}

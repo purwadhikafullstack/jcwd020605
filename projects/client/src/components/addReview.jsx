@@ -8,11 +8,8 @@ import {
   useToast,
   Box,
   Input,
-  Flex,
-  Image,
-  Select,
 } from "@chakra-ui/react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { api } from "../api/api";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -27,6 +24,7 @@ export default function AddOrders(props) {
     const { target } = e;
     formik.setFieldValue(target.id, target.value);
   };
+
   const formik = useFormik({
     initialValues: {
       review: "",
@@ -35,18 +33,19 @@ export default function AddOrders(props) {
     onSubmit: async () => {
       try {
         await api
-          .post("/review/addreview", {
+          .patch("/review/addreview", {
             review: formik.values.review,
             property_id: props.id,
           })
           .then((res) => {
             toast({
-              title: "Success add Order",
+              title: "Success add Review",
               status: "success",
               position: "top",
-              duration: 1000,
+              duration: 2000,
             });
             formik.resetForm();
+            props.fetch();
             props.onClose();
           })
           .catch((error) => {
