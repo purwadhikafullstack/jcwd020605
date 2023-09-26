@@ -42,7 +42,6 @@ export default function NavbarDesktop() {
       console.log(error);
     }
   };
-  console.log(tenantData);
 
   return (
     <>

@@ -299,6 +299,7 @@ export default function LoginTenant() {
                           variant={"flushed"}
                           bgColor={"transparent"}
                           color={"white"}
+                          autoComplete="off"
                           name="email"
                           onChange={formik.handleChange}
                         ></Input>
@@ -319,6 +320,7 @@ export default function LoginTenant() {
                             bgColor={"transparent"}
                             color={"white"}
                             name="password"
+                            autoComplete="off"
                             onChange={formik.handleChange}
                           ></Input>
                           <InputRightElement>

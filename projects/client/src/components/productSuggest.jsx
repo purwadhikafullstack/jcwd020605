@@ -1,4 +1,13 @@
-import { Box, Image, Button, Icon, Text, Flex, Center } from "@chakra-ui/react";
+import {
+  Box,
+  Image,
+  Button,
+  Icon,
+  Text,
+  Flex,
+  Center,
+  Link,
+} from "@chakra-ui/react";
 import "@fontsource/gilda-display";
 import "@fontsource/barlow";
 import a from "../assets/1 (2).jpg";
@@ -8,32 +17,24 @@ import { BiShower } from "react-icons/bi";
 import { BsArrowRightShort } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { api } from "../api/api";
+import { FcInfo } from "react-icons/fc";
 import { useSelector } from "react-redux";
+import { useFetchProperty } from "../hooks/useProperty";
+import Pagination from "./Pagination";
+import "../styles/productSuggest.css";
 export default function ProductSuggest() {
-  const [productData, setProductData] = useState([]);
   const userSelector = useSelector((state) => state.auth);
-  const [id, setId] = useState(userSelector.id);
+  const { properties, totalPage, handlePageClick, fetch } = useFetchProperty();
   useEffect(() => {
-    fetchProduct();
+    fetch();
   }, []);
-
-  const fetchProduct = async () => {
-    try {
-      const productData = await api.get("/properties/propertieslist", {
-        params: { id: id },
-      });
-      setProductData(productData.data.property);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
       <Box bgColor={"#f8f5f0"} display={"flex"} justifyContent={"center"}>
         <Box
           my={"2em"}
-          py={"8em"}
+          py={{ lg: "6em", base: "2em" }}
           fontFamily={`'Barlow', sans-serif`}
           fontSize={"15px"}
           fontWeight={"none"}
@@ -45,10 +46,32 @@ export default function ProductSuggest() {
             letterSpacing={"1px"}
             px={"10px"}
           >
-            <Box textTransform={"uppercase"} color={"#666666"} fontSize={"2em"}>
+            <Flex
+              align={"center"}
+              gap={"1em"}
+              fontSize={{ base: "12px" }}
+              py={{ lg: "2em", base: "0.5em" }}
+              pb={{ base: "3em" }}
+            >
+              <Icon as={FcInfo} boxSize={8} />
+              We apologize for the inconvenience, but the "user" feature is
+              still under development. We will provide an update as soon as
+              possible. Please navigate to the tenant page accessible in the
+              navbar for features that are already completed. We apologize for
+              any inconvenience this may cause.
+            </Flex>
+            <Box
+              textTransform={"uppercase"}
+              color={"#666666"}
+              fontSize={{ lg: "2em", base: "1.7em" }}
+              pb={{ base: "1em" }}
+            >
               The Cappa Luxury Hotel
             </Box>
-            <Box fontSize={"4em"} fontFamily={`'Gilda Display', sans-serif`}>
+            <Box
+              fontSize={{ lg: "4em", base: "2.7em" }}
+              fontFamily={`'Gilda Display', sans-serif`}
+            >
               Rooms & Suites
             </Box>
           </Box>
@@ -62,70 +85,102 @@ export default function ProductSuggest() {
             justifyContent={"center"}
             py={"4em"}
           >
-            {productData?.map((product) => (
-              <Box px={"0.5em"} h={"50vh"} pos={"relative"}>
-                <Image
-                  src={a}
-                  objectFit={"cover"}
-                  maxW={{ lg: "400px" }}
-                  mb={"2em"}
-                  h={"50vh"}
-                  key={product.id}
-                  borderRadius={"3%"}
-                />
+            {properties?.map((product) => (
+              <Flex flexDir={"column"} align={"center"}>
                 <Flex
-                  boxShadow={"lg"}
-                  borderRadius={"3%"}
-                  position={"absolute"}
-                  color={"white"}
-                  fontFamily={`'Gilda Display', sans-serif`}
-                  display={"flex"}
-                  flexDir={"column"}
-                  justifyContent={"end"}
-                  gap={"2em"}
-                  w={{ base: "96%", lg: "100%" }}
-                  px={{ base: "1em", lg: "2em" }}
-                  h={"100%"}
-                  top={{ base: -10 }}
+                  w={{ base: "95%", lg: "100%" }}
+                  h={"50vh"}
+                  pos={"relative"}
+                  transition="transform 0.5s ease"
+                  _hover={{ transform: "translateY(-10px)" }}
                 >
-                  <Box display={"flex"} flexDir={"column"} gap={"10px"}>
-                    <Text
-                      fontFamily={`'Barlow', sans-serif`}
-                      textTransform={"uppercase"}
-                    >
-                      {/* ${product.Room.main_price} / Night */}
-                    </Text>
-                    <Text fontSize={"27px"}>{product.property_name}</Text>
-                    <Text borderBottom={"1px solid white"} w={"4em"}></Text>
+                  <Box className="image-container">
+                    <Image
+                      borderRadius={"3%"}
+                      src={`${process.env.REACT_APP_API_BASE_URL}${product?.PropertyImages[0]?.picture}`}
+                      objectFit={"cover"}
+                      maxW={{ lg: "400px" }}
+                      mb={"2em"}
+                      h={"50vh"}
+                      key={product.id}
+                      boxShadow={"lg"}
+                    />
                   </Box>
-                  <Box
+                  <Flex
+                    borderRadius={"3%"}
+                    position={"absolute"}
+                    color={"white"}
+                    fontFamily={`'Gilda Display', sans-serif`}
                     display={"flex"}
+                    flexDir={"column"}
+                    justifyContent={"end"}
                     gap={"2em"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
+                    w={{ base: "96%", lg: "100%" }}
+                    px={{ base: "1em", lg: "2em" }}
+                    h={"100%"}
+                    top={{ base: -5 }}
+                    textShadow={"2px 2px 4px rgba(0, 0, 0, 1)"}
                   >
-                    <Flex gap={"0.5em"} fontSize={"20px"}>
-                      <Icon as={LiaBedSolid} />
-                      <Icon as={BiShower} />
-                      <Icon as={IoFastFoodOutline} />
-                    </Flex>
+                    <Box display={"flex"} flexDir={"column"} gap={"10px"}>
+                      <Text fontSize={"2em"}>{product.property_name}</Text>
+                      <Text
+                        fontFamily={`'Barlow', sans-serif`}
+                        textTransform={"uppercase"}
+                        fontSize={"1em"}
+                      >
+                        {product?.City?.city_name}, {product?.City?.province}
+                      </Text>
+                      <Text
+                        fontFamily={`'Barlow', sans-serif`}
+                        textTransform={"uppercase"}
+                        fontSize={"1em"}
+                      >
+                        {product?.Rooms[0]?.main_price
+                          ? product?.Rooms[0]?.main_price?.toLocaleString(
+                              "id-ID",
+                              {
+                                style: "currency",
+                                currency: "IDR",
+                              }
+                            )
+                          : "-"}{" "}
+                        / Day
+                      </Text>
+
+                      <Text borderBottom={"2px solid white"} w={"8em"}></Text>
+                    </Box>
                     <Box
                       display={"flex"}
-                      gap={"0.5em"}
+                      gap={"2em"}
                       alignItems={"center"}
-                      fontFamily={`'Barlow', sans-serif`}
-                      textTransform={"uppercase"}
-                      letterSpacing={"2px"}
+                      justifyContent={"space-between"}
                     >
-                      Details
-                      <Icon as={BsArrowRightShort} />
+                      <Flex gap={"0.5em"} fontSize={"20px"} color={"#ECFCFC"}>
+                        <Icon as={LiaBedSolid} />
+                        <Icon as={BiShower} />
+                        <Icon as={IoFastFoodOutline} />
+                      </Flex>
+                      <Link
+                        display={"flex"}
+                        gap={"0.5em"}
+                        alignItems={"center"}
+                        fontFamily={`'Barlow', sans-serif`}
+                        textTransform={"uppercase"}
+                        letterSpacing={"2px"}
+                      >
+                        Details
+                        <Icon as={BsArrowRightShort} />
+                      </Link>
                     </Box>
-                  </Box>
+                  </Flex>
                 </Flex>
-              </Box>
+              </Flex>
             ))}
           </Box>
         </Box>
+      </Box>
+      <Box bgColor={"#f8f5f0"}>
+        <Pagination data={{ totalPage, handlePageClick }} />
       </Box>
     </>
   );

@@ -47,11 +47,7 @@ export default function RoomPropertyDekstop() {
   const userSelector = useSelector((state) => state.auth);
   const [propertyId, setPropertyId] = useState();
   const { rooms, totalPage, handlePageClick, fetch } = useFetchRoom(propertyId);
-  // const { roomsByProperty, fetchRoom } = useFetchRoomByPropertyID(propertyId);
   const { properties } = useFetchProperty();
-  // console.log(roomsByProperty);
-  console.log(propertyId);
-  console.log(properties);
 
   useEffect(() => {
     fetch();
@@ -129,8 +125,8 @@ export default function RoomPropertyDekstop() {
         </Box>
 
         {/* filter */}
-        <Flex justify={"center"} mb={"2em"}>
-          <Box w={"90%"} bgColor={"white"} borderRadius={"1em"}>
+        <Flex justify={"center"} mb={"1em"}>
+          <Box w={"50%"} bgColor={"white"} borderRadius={"1em"}>
             <Select
               px={"1em"}
               placeholder="Select Property"
@@ -269,7 +265,6 @@ export default function RoomPropertyDekstop() {
                           onClick={() => {
                             DeleteRoom.onOpen();
                             setRoomId(val?.id);
-                            // setProperty(val);
                           }}
                           display={"flex"}
                           gap={"10px"}

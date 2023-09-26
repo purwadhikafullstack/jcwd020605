@@ -123,10 +123,7 @@ export default function AddPropertyModal(props) {
               variant={"ghost"}
               onClick={() => {
                 setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                  formik.handleSubmit();
-                }, 2000);
+                formik.handleSubmit();
               }}
             >
               Save
@@ -139,6 +136,7 @@ export default function AddPropertyModal(props) {
                 variant={"flushed"}
                 placeholder="Property Name : "
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 
@@ -148,6 +146,7 @@ export default function AddPropertyModal(props) {
                 variant={"flushed"}
                 placeholder="Property description :"
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 

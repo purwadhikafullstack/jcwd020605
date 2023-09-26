@@ -121,6 +121,7 @@ const specialPriceController = {
         nominal,
         percent,
       });
+
       return res.status(200).send({
         success: true,
         message: "Successfully set special price",

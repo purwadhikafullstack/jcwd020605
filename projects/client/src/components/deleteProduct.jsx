@@ -35,6 +35,9 @@ export default function DeleteProduct(props) {
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     } catch (err) {
       console.log(err.message);
@@ -74,11 +77,8 @@ export default function DeleteProduct(props) {
                   variant={"ghost"}
                   onClick={() => {
                     setIsLoading(true);
-                    setTimeout(() => {
-                      setIsLoading(false);
-                      DeleteProperty();
-                      nav("/propertiestenant");
-                    }, 2000);
+                    DeleteProperty();
+                    nav("/propertiestenant");
                   }}
                 >
                   Delete

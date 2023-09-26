@@ -117,7 +117,10 @@ export default function NavbarHome() {
 
                 <Popover>
                   <PopoverTrigger>
-                    <Avatar size={"sm"}></Avatar>
+                    <Avatar
+                      size={"sm"}
+                      src={`${process.env.REACT_APP_API_BASE_URL}${userSelector?.profile_picture}`}
+                    ></Avatar>
                   </PopoverTrigger>
                   <PopoverContent
                     w={"100%"}

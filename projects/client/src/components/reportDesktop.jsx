@@ -39,7 +39,6 @@ import NavbarDesktop from "./navbarDesktop";
 export default function ReportDesktop() {
   const userSelector = useSelector((state) => state.auth);
   const [orderData, setOrderData] = useState([]);
-  console.log(orderData);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
   const [datesRange, setDatesRange] = useState([]);
@@ -259,6 +258,9 @@ export default function ReportDesktop() {
                   Property Name
                 </Th>
                 <Th textAlign={"center"} borderRight={"1px solid #dbdbdb"}>
+                  Room Type
+                </Th>
+                <Th textAlign={"center"} borderRight={"1px solid #dbdbdb"}>
                   Customer
                 </Th>
                 <Th textAlign={"center"} borderRight={"1px solid #dbdbdb"}>
@@ -278,6 +280,9 @@ export default function ReportDesktop() {
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
                     {val?.Property?.property_name}
+                  </Td>
+                  <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
+                    {val?.Room?.room_name}
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
                     {val?.username}
@@ -300,7 +305,7 @@ export default function ReportDesktop() {
             <Tfoot>
               <Tr>
                 <Th
-                  colSpan={4}
+                  colSpan={5}
                   textAlign={"center"}
                   borderRight={"1px solid #dbdbdb"}
                   borderTop={"1px solid #dbdbdb"}

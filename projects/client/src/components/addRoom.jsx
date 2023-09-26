@@ -9,6 +9,8 @@ import {
   Box,
   Input,
   Image,
+  Flex,
+  Icon,
 } from "@chakra-ui/react";
 import { useState, useRef } from "react";
 import { api } from "../api/api";
@@ -17,6 +19,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { useSelector } from "react-redux";
+import { FcInfo } from "react-icons/fc";
 
 export default function AddRooms(props) {
   YupPassword(Yup);
@@ -116,17 +119,24 @@ export default function AddRooms(props) {
               variant={"ghost"}
               onClick={() => {
                 setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                  setImage("");
-                  formik.handleSubmit();
-                }, 2000);
+                setImage("");
+                formik.handleSubmit();
               }}
             >
               Save
             </Button>
           </ModalHeader>
-          <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>
+          <ModalBody
+            display={"flex"}
+            flexDir={"column"}
+            gap={"10px"}
+            fontWeight={"bold"}
+          >
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              You can view the rooms you have added through the "Room" section
+              in the navbar.
+            </Flex>
             <form onSubmit={formik.handleSubmit}>
               <Box pb={"10px"}>
                 <Input
@@ -134,6 +144,7 @@ export default function AddRooms(props) {
                   variant={"flushed"}
                   placeholder="Room Name :"
                   onChange={inputHandler}
+                  autoComplete="off"
                 />
               </Box>
 
@@ -143,6 +154,7 @@ export default function AddRooms(props) {
                   variant={"flushed"}
                   placeholder="Room Description :"
                   onChange={inputHandler}
+                  autoComplete="off"
                 />
               </Box>
 
@@ -152,6 +164,7 @@ export default function AddRooms(props) {
                   variant={"flushed"}
                   placeholder="Price :"
                   onChange={inputHandler}
+                  autoComplete="off"
                 />
               </Box>
 
@@ -161,6 +174,7 @@ export default function AddRooms(props) {
                   variant={"flushed"}
                   placeholder="max guest :"
                   onChange={inputHandler}
+                  autoComplete="off"
                 />
               </Box>
 

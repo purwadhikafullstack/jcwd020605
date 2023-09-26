@@ -276,7 +276,7 @@ export default function Filter() {
               fontWeight={"none"}
               _hover={{ bgColor: "#aa8453", color: "white" }}
             >
-              <Link href="/searchPage">Check Now</Link>
+              <Link href="#">Check Now</Link>
             </Button>
           </Box>
         </Box>

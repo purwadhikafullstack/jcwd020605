@@ -11,6 +11,7 @@ import {
   Box,
   Text,
   Flex,
+  Icon,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { api } from "../api/api";
@@ -18,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { Image } from "react-bootstrap";
 import paymentproof from "../assets/payment.png";
+import { FcInfo } from "react-icons/fc";
 export default function OrderDetail(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +75,8 @@ export default function OrderDetail(props) {
         isClosable: true,
       });
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,6 +100,19 @@ export default function OrderDetail(props) {
             fontSize={"18px"}
             fontWeight={"bold"}
           >
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              You can delete the payment proof photo by clicking the "reject"
+              button.
+            </Flex>
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              Payment status mean "Menunggu Pembayaran"
+            </Flex>
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              Confirm to send an email.
+            </Flex>
             <Box>
               <Image
                 src={
@@ -179,10 +196,7 @@ export default function OrderDetail(props) {
                 isLoading={isLoading}
                 onClick={() => {
                   setIsLoading(true);
-                  setTimeout(() => {
-                    setIsLoading(false);
-                    confirmOrReject({ status: "PROCESSING", id: props.id });
-                  }, 3000);
+                  confirmOrReject({ status: "PROCESSING", id: props.id });
                 }}
                 value="PROCESSING"
               >

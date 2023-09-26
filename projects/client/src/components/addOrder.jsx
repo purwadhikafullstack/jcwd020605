@@ -11,6 +11,8 @@ import {
   Image,
   Select,
   Text,
+  Flex,
+  Icon,
 } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import { api } from "../api/api";
@@ -20,6 +22,7 @@ import YupPassword from "yup-password";
 import { useSelector } from "react-redux";
 import { useFetchRoom, useFetchRoomByPropertyID } from "../hooks/useRoom";
 import { useFetchProperty } from "../hooks/useProperty";
+import { FcInfo } from "react-icons/fc";
 export default function AddOrders(props) {
   YupPassword(Yup);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,6 +104,7 @@ export default function AddOrders(props) {
               onClick={() => {
                 props.onClose();
                 setImage("");
+                setSelectedFile("");
               }}
             >
               Cancel
@@ -120,16 +124,29 @@ export default function AddOrders(props) {
               variant={"ghost"}
               onClick={() => {
                 setIsLoading(true);
-                // setTimeout(() => {
                 formik.handleSubmit();
                 setImage("");
-                // }, 2000);
               }}
             >
               Save
             </Button>
           </ModalHeader>
-          <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>
+          <ModalBody
+            display={"flex"}
+            flexDir={"column"}
+            gap={"10px"}
+            fontWeight={"bold"}
+          >
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              You can try clicking on "Details" in the order to send an email
+              regarding the hotel rules.
+            </Flex>
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              "Beta" means that the "User" feature we added here is intended to
+              enhance the user experience.
+            </Flex>
             <form onSubmit={formik.handleSubmit}>
               <Box pb={"10px"}>
                 <Text color={"grey"}>Select Property :</Text>
@@ -171,6 +188,7 @@ export default function AddOrders(props) {
                   variant={"flushed"}
                   placeholder="Email :"
                   onChange={inputHandler}
+                  autoComplete="off"
                 />
               </Box>
               <Box pb={"10px"}>
@@ -179,6 +197,7 @@ export default function AddOrders(props) {
                   variant={"flushed"}
                   placeholder="Username :"
                   onChange={inputHandler}
+                  autoComplete="off"
                 />
               </Box>
               <Box

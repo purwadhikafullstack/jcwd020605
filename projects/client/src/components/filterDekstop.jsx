@@ -314,7 +314,7 @@ export default function FilterDekstop() {
               display={"flex"}
               alignItems={"center"}
               justifyContent={"center"}
-              href="/searchPage"
+              href="#"
             >
               Check Now
             </Link>

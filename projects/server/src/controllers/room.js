@@ -12,10 +12,10 @@ const roomController = {
       const offset = limit * page;
       const roomDataList = await db.RoomModel.findAll({});
       const roomAvailable = await db.RoomModel.findAll({
-        where: { room_status: "available" },
+        where: { room_status: "available", tenant_id },
       });
       const roomUnavailable = await db.RoomModel.findAll({
-        where: { room_status: "unavailable" },
+        where: { room_status: "unavailable", tenant_id },
       });
 
       if (property_id === "") {

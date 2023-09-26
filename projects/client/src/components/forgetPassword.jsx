@@ -103,6 +103,7 @@ export default function ForgetPassword() {
                 placeholder="Email"
                 variant={"flushed"}
                 fontSize={"14px"}
+                autoComplete="off"
                 focusBorderColor="#e2e2e2"
                 onChange={(e) => {
                   setEmail(e.target.value);

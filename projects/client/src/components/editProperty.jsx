@@ -146,6 +146,7 @@ export default function AddPropertyModal(props) {
                 defaultValue={formik?.values?.property_name}
                 placeholder="Property Name : "
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 
@@ -156,6 +157,7 @@ export default function AddPropertyModal(props) {
                 defaultValue={formik?.values?.details_text}
                 placeholder="Property description :"
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 

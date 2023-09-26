@@ -52,7 +52,6 @@ export const useFetchRoomById = (id) => {
 
 export const useFetchRoomByPropertyID = (property_id) => {
   const [roomsByProperty, setRoomsByProperty] = useState();
-  console.log(roomsByProperty);
   const fetchRoom = async () => {
     try {
       const res = await api.get("/room/getroombyproperty/" + property_id);

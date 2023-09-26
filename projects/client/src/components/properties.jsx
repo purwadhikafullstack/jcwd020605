@@ -22,6 +22,7 @@ import DeleteProduct from "./deleteProduct";
 import EditProperty from "./editProperty";
 import FooterLandingPage from "./footerLandingPage";
 import Pagination from "./Pagination";
+import AddReview from "./addReview";
 import AddRooms from "./addRoom";
 import PropertyDetail from "./propertyDetail";
 import AddPropertyModal from "./addProperty";
@@ -56,6 +57,7 @@ export default function PropertiesComp() {
   const DeleteModal = useDisclosure();
   const addProperty = useDisclosure();
   const addRoom = useDisclosure();
+  const addReview = useDisclosure();
   const propertyDetail = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
   const [pcm, setPcm] = useState([]);
@@ -77,9 +79,9 @@ export default function PropertiesComp() {
   const { properties, totalPage, handlePageClick, fetch } =
     useFetchProperty(filter);
 
-  const provinces = () => {
-    api
-      .get("/properties")
+  const provinces = async () => {
+    await api
+      .get("/properties/getprovincebytenantid/" + userSelector.id)
       .then((res) => {
         setPcm(res.data);
       })
@@ -243,6 +245,8 @@ export default function PropertiesComp() {
         </Box>
       </motion.div>
 
+      {/* filter */}
+
       <Select
         p={2}
         mt={"1em"}
@@ -372,7 +376,32 @@ export default function PropertiesComp() {
                         gap={"10px"}
                       >
                         <Icon as={BiPlus} />
-                        add Room
+                        Add Room
+                      </MenuItem>
+
+                      <Divider />
+
+                      <MenuItem
+                        onClick={() => {
+                          addReview.onOpen();
+                          setPropertyID(val?.id);
+                        }}
+                        display={"flex"}
+                        gap={"10px"}
+                      >
+                        <Icon as={BiPlus} />
+                        Add Review
+                        <motion.div
+                          initial={{ rotate: 0 }}
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
+                        >
+                          (Beta)
+                        </motion.div>
                       </MenuItem>
 
                       <Divider />
@@ -429,7 +458,7 @@ export default function PropertiesComp() {
                         alignItems={"center"}
                       >
                         <Icon as={FcRating} />
-                        Rating
+                        {val?.rating ? val?.rating : 0} / 10
                       </Text>
                     </Flex>
                   </Box>
@@ -441,6 +470,7 @@ export default function PropertiesComp() {
           isOpen={addProperty.isOpen}
           onClose={addProperty.onClose}
           fetch={fetch}
+          fetchProv={provinces}
           id={userSelector.id}
         />
         <EditProperty
@@ -451,12 +481,15 @@ export default function PropertiesComp() {
           }}
           data={selectedProperty}
           fetch={fetch}
+          id={userSelector.id}
+          fetchProv={provinces}
         />
         <DeleteProduct
           isOpen={DeleteModal.isOpen}
           onClose={DeleteModal.onClose}
           id={propertyId}
           fetch={fetch}
+          fetchProv={provinces}
         />
         <AddRooms
           isOpen={addRoom.isOpen}
@@ -469,6 +502,12 @@ export default function PropertiesComp() {
           onClose={propertyDetail.onClose}
           id={propertyId}
           properties={properties}
+        />
+        <AddReview
+          isOpen={addReview.isOpen}
+          onClose={addReview.onClose}
+          id={propertyId}
+          fetch={fetch}
         />
       </Grid>
       <Pagination data={{ totalPage, handlePageClick }} />

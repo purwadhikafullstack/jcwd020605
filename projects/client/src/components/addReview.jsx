@@ -8,12 +8,15 @@ import {
   useToast,
   Box,
   Input,
+  Flex,
+  Icon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { api } from "../api/api";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
+import { FcInfo } from "react-icons/fc";
 
 export default function AddOrders(props) {
   YupPassword(Yup);
@@ -80,7 +83,7 @@ export default function AddOrders(props) {
               gap={"5px"}
               fontSize={"17px"}
             >
-              Add Order(Beta)
+              Add Review(Beta)
             </Box>
             <Button
               bgColor={"#edf2f7"}
@@ -88,23 +91,35 @@ export default function AddOrders(props) {
               variant={"ghost"}
               onClick={() => {
                 setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                  formik.handleSubmit();
-                }, 2000);
+                formik.handleSubmit();
               }}
             >
               Save
             </Button>
           </ModalHeader>
-          <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>
+          <ModalBody
+            display={"flex"}
+            flexDir={"column"}
+            gap={"10px"}
+            fontWeight={"bold"}
+          >
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              Please input 1-10 number.
+            </Flex>
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              "Beta" means that the "User" feature we added here is intended to
+              enhance the user experience.
+            </Flex>
             <form onSubmit={formik.handleSubmit}>
               <Box pb={"10px"}>
                 <Input
                   id="review"
                   variant={"flushed"}
-                  placeholder="rating :"
+                  placeholder="Rating :"
                   onChange={inputHandler}
+                  autoComplete="off"
                 />
               </Box>
             </form>

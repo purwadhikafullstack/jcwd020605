@@ -381,6 +381,29 @@ export default function Report() {
                           fontSize={"1.2em"}
                           gap={"0.5em"}
                         >
+                          <Icon as={HiHomeModern} />
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            Room type
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {val?.Room?.room_name}
+                            </Box>
+                          </Box>
+                        </Text>
+
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
                           <Icon as={BiSolidUser} />
                           <Box
                             w={"100%"}

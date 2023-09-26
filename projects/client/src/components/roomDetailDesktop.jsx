@@ -58,14 +58,13 @@ export default function RoomDetailDesktop(props) {
   const [percent, setPercent] = useState("");
   const [radioValue, setRadioValue] = useState("1");
   const toast = useToast();
+  const [specialPriceUpdate, setSpecialPriceUpdate] = useState([]);
   const [unavailable, setUnavailable] = useState([]);
   const [specialPrice, setSpecialPrice] = useState([]);
   const [allSpecialPrice, setAllSpecialPrice] = useState([]);
   const [allUnavailable, setAllUnavailable] = useState([]);
   const [specialPriceId, setspecialPriceId] = useState([]);
   const [unavailableId, setUnavailableId] = useState([]);
-
-  console.log(rooms);
   const [unavailableDates, setUnavailableDates] = useState([]);
   useEffect(() => {
     fetch(id);
@@ -137,6 +136,7 @@ export default function RoomDetailDesktop(props) {
           duration: 3000,
           isClosable: true,
         });
+        setSpecialPriceUpdate(res.data);
         window.location.reload();
       } else {
         toast({
@@ -411,9 +411,14 @@ export default function RoomDetailDesktop(props) {
                         display={"flex"}
                         gap={"0.2em"}
                       >
-                        Rp
                         <Text>
-                          {rooms?.main_price ? rooms?.main_price : "0"},00 / day
+                          {rooms?.main_price
+                            ? rooms?.main_price.toLocaleString("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                              })
+                            : "0"}
+                          / day
                         </Text>
                       </Text>
                     </Flex>

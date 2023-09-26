@@ -12,6 +12,7 @@ import {
   Divider,
   MenuList,
   MenuItem,
+  Select,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BsList, BsFillPersonFill } from "react-icons/bs";
@@ -34,14 +35,18 @@ import { useFetchRoom } from "../hooks/useRoom";
 import { motion } from "framer-motion";
 import NavbarMobile from "./navbarMobile";
 import PaginationRoom from "./Pagination_room";
+import { useFetchProperty } from "../hooks/useProperty";
 export default function RoomProperty() {
   const EditRoom = useDisclosure();
   const DeleteRoom = useDisclosure();
   const [roomId, setRoomId] = useState();
-  const { rooms, fetch, totalPage, handlePageClick } = useFetchRoom();
+  const [selectedRoom, setSelectedRoom] = useState();
+  const [propertyId, setPropertyId] = useState();
+  const { rooms, fetch, totalPage, handlePageClick } = useFetchRoom(propertyId);
+  const { properties } = useFetchProperty();
   useEffect(() => {
     fetch();
-  }, []);
+  }, [propertyId]);
   return (
     <>
       <Box
@@ -106,6 +111,33 @@ export default function RoomProperty() {
           </Flex>
         </Box>
 
+        {/* filter */}
+        <Flex justify={"center"} mt={"1em"}>
+          <Flex
+            w={"90%"}
+            bgColor={"white"}
+            borderRadius={"1em"}
+            h={"40px"}
+            align={"center"}
+          >
+            <Select
+              px={"1em"}
+              placeholder="Select Property"
+              id="property_id"
+              onChange={(e) => {
+                setPropertyId(e?.target?.value);
+              }}
+              variant="unstyled"
+            >
+              {properties?.map((val) => (
+                <option key={val?.id} value={val?.id}>
+                  {val?.property_name}
+                </option>
+              ))}
+            </Select>
+          </Flex>
+        </Flex>
+
         {/* room */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -117,7 +149,7 @@ export default function RoomProperty() {
             justifyContent={"center"}
             bgColor={"#edf2f9"}
             w={"100%"}
-            pt={"2em"}
+            pt={"1em"}
           >
             <Text
               fontSize={"20px"}
@@ -205,7 +237,7 @@ export default function RoomProperty() {
                         onClick={() => {
                           EditRoom.onOpen();
                           setRoomId(val?.id);
-                          // setProperty(val);
+                          setSelectedRoom(val);
                         }}
                         display={"flex"}
                         gap={"10px"}
@@ -220,7 +252,6 @@ export default function RoomProperty() {
                         onClick={() => {
                           DeleteRoom.onOpen();
                           setRoomId(val?.id);
-                          // setProperty(val);
                         }}
                         display={"flex"}
                         gap={"10px"}
@@ -317,8 +348,12 @@ export default function RoomProperty() {
 
           <EditRooms
             isOpen={EditRoom.isOpen}
-            onClose={EditRoom.onClose}
+            onClose={() => {
+              EditRoom.onClose();
+              setSelectedRoom(null);
+            }}
             id={roomId}
+            data={selectedRoom}
             fetch={fetch}
           />
 

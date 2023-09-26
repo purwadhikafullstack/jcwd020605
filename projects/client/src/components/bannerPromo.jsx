@@ -3,6 +3,12 @@ import a from "../assets/1 (2).jpg";
 import b from "../assets/3 (2).jpg";
 import c from "../assets/4(1).jpg";
 import d from "../assets/wallpaperflare.com_wallpaper.jpg";
+import promo1 from "../assets/promo1.png";
+import promo2 from "../assets/promo2.png";
+import promo3 from "../assets/promo3.png";
+import promo4 from "../assets/promo4.png";
+import promo5 from "../assets/promo5.png";
+
 import "@fontsource/gilda-display";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -48,16 +54,19 @@ export default function BannerPromo() {
           >
             <Swiper navigation={true} modules={[Navigation]}>
               <SwiperSlide>
-                <Image src={a} />
+                <Image src={promo1} />
               </SwiperSlide>
               <SwiperSlide>
-                <Image src={b} />
+                <Image src={promo2} />
               </SwiperSlide>
               <SwiperSlide>
-                <Image src={c} />
+                <Image src={promo3} />
               </SwiperSlide>
               <SwiperSlide>
-                <Image src={d} />
+                <Image src={promo4} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image src={promo5} />
               </SwiperSlide>
             </Swiper>
           </Box>
