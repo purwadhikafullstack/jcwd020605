@@ -6,7 +6,6 @@ import {
   useDisclosure,
   IconButton,
   Drawer,
-  DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
   DrawerHeader,
@@ -29,13 +28,14 @@ import { BsList } from "react-icons/bs";
 import { BiLogOutCircle } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import LogOut from "./Logout";
-
 export default function NavbarHome() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const logOutModal = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
-
+  const nav = useNavigate();
+  const isLoggedIn = userSelector.id;
   return (
     <>
       <Center>
@@ -51,12 +51,7 @@ export default function NavbarHome() {
             fontFamily={`'Gilda Display', sans-serif`}
             alignItems={"center"}
             position={"fixed"}
-            zIndex={2}
-            bgColor={"black"}
-            bgBlendMode={"Overlay"}
-            bgPos={"center"}
-            bgSize={"cover"}
-            bg={`rgba(0, 0, 0, 0.15)`}
+            zIndex={4}
           >
             <Box
               display={"flex"}
@@ -67,7 +62,12 @@ export default function NavbarHome() {
                 <Text fontSize={"25px"} letterSpacing={"1px"} color={"#ab854f"}>
                   The Cappa
                 </Text>
-                <Text fontSize={"11px"} color={"white"} letterSpacing={"3px"}>
+                <Text
+                  fontSize={"11px"}
+                  color={"white"}
+                  letterSpacing={"3px"}
+                  textShadow={"1px 1px 2px rgba(0, 0 ,0 ,1)"}
+                >
                   Luxury Hotel
                 </Text>
               </Box>
@@ -82,9 +82,11 @@ export default function NavbarHome() {
                 color={"white"}
               >
                 <Link
-                  href="/dashboardtenant"
+                  // onClick={redirectRoute}
+                  href={isLoggedIn ? "/dashboardtenant" : "/logintenant"}
                   className="dekstop-navbar"
                   _hover={{ color: "#ab854f" }}
+                  textShadow={"1px 1px 2px rgba(0, 0 ,0 ,1)"}
                 >
                   Tenant Page
                 </Link>
@@ -92,6 +94,7 @@ export default function NavbarHome() {
                   href="#"
                   className="dekstop-navbar"
                   _hover={{ color: "#ab854f" }}
+                  textShadow={"1px 1px 2px rgba(0, 0 ,0 ,1)"}
                 >
                   Home
                 </Link>
@@ -99,6 +102,7 @@ export default function NavbarHome() {
                   href="#"
                   className="dekstop-navbar"
                   _hover={{ color: "#ab854f" }}
+                  textShadow={"1px 1px 2px rgba(0, 0 ,0 ,1)"}
                 >
                   Content
                 </Link>
@@ -106,13 +110,17 @@ export default function NavbarHome() {
                   href="#"
                   className="dekstop-navbar"
                   _hover={{ color: "#ab854f" }}
+                  textShadow={"1px 1px 2px rgba(0, 0 ,0 ,1)"}
                 >
                   Contact
                 </Link>
 
                 <Popover>
                   <PopoverTrigger>
-                    <Avatar size={"sm"}></Avatar>
+                    <Avatar
+                      size={"sm"}
+                      src={`${process.env.REACT_APP_API_BASE_URL}${userSelector?.profile_picture}`}
+                    ></Avatar>
                   </PopoverTrigger>
                   <PopoverContent
                     w={"100%"}
@@ -125,13 +133,13 @@ export default function NavbarHome() {
                   >
                     <PopoverArrow />
                     <PopoverHeader>{userSelector?.first_name}</PopoverHeader>
-                    <PopoverBody
+                    {/* <PopoverBody
                       display={"flex"}
                       alignItems={"center"}
                       gap={"0.8em"}
                     >
                       <Icon as={CgProfile} /> Profile
-                    </PopoverBody>
+                    </PopoverBody> */}
                     <PopoverFooter
                       display={"flex"}
                       alignItems={"center"}
@@ -155,7 +163,7 @@ export default function NavbarHome() {
                 icon={<BsList />}
                 size="md"
                 fontSize={"25px"}
-                color={"white"}
+                color={"#b0b2b2"}
                 variant="none"
                 display={{ base: "flex", lg: "none" }}
                 onClick={onOpen}
@@ -181,7 +189,8 @@ export default function NavbarHome() {
                       <Text
                         fontSize={"11px"}
                         letterSpacing={"3px"}
-                        color={"black"}
+                        color={"white"}
+                        textShadow={"1px 1px 2px rgba(0, 0 ,0 ,1)"}
                       >
                         Luxury Hotel
                       </Text>
@@ -197,7 +206,8 @@ export default function NavbarHome() {
                       gap={"2em"}
                     >
                       <Link
-                        href="/dashboardtenant"
+                        // onClick={redirectRoute}
+                        href={isLoggedIn ? "/dashboardtenant" : "/logintenant"}
                         py={2}
                         _hover={{ color: "#ab854f" }}
                       >

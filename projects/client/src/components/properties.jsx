@@ -3,16 +3,7 @@ import {
   useDisclosure,
   Text,
   Flex,
-  IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Grid,
   Image,
   Menu,
@@ -31,10 +22,11 @@ import DeleteProduct from "./deleteProduct";
 import EditProperty from "./editProperty";
 import FooterLandingPage from "./footerLandingPage";
 import Pagination from "./Pagination";
-
+import AddReview from "./addReview";
 import AddRooms from "./addRoom";
 import PropertyDetail from "./propertyDetail";
 import AddPropertyModal from "./addProperty";
+import NavbarMobile from "./navbarMobile";
 import { api } from "../api/api";
 import { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -42,18 +34,12 @@ import { EffectCards } from "swiper/modules";
 import { motion } from "framer-motion";
 import { useFetchProperty } from "../hooks/useProperty";
 import { useSelector } from "react-redux";
-import { BsList } from "react-icons/bs";
 import { SlTrash } from "react-icons/sl";
 import { ImLocation } from "react-icons/im";
-import { MdOutlineBedroomChild } from "react-icons/md";
 import { FcRating } from "react-icons/fc";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
-import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle, BiDotsHorizontalRounded } from "react-icons/bi";
-import { CgProfile, CgDetailsMore } from "react-icons/cg";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { CgDetailsMore } from "react-icons/cg";
 import { BsPatchPlusFill } from "react-icons/bs";
 import { BiPlus, BiPencil } from "react-icons/bi";
 import "@fontsource/barlow";
@@ -66,14 +52,12 @@ import "../styles/sliderLocation.css";
 import "../styles/sliderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
-import NavbarMobile from "./navbarMobile";
-
 export default function PropertiesComp() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const Edit = useDisclosure();
   const DeleteModal = useDisclosure();
   const addProperty = useDisclosure();
   const addRoom = useDisclosure();
+  const addReview = useDisclosure();
   const propertyDetail = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
   const [pcm, setPcm] = useState([]);
@@ -95,15 +79,14 @@ export default function PropertiesComp() {
   const { properties, totalPage, handlePageClick, fetch } =
     useFetchProperty(filter);
 
-  const provinces = () => {
-    api
-      .get("/properties")
+  const provinces = async () => {
+    await api
+      .get("/properties/getprovincebytenantid/" + userSelector.id)
       .then((res) => {
         setPcm(res.data);
       })
       .catch((err) => console.log(err.response.data));
   };
-  console.log(properties);
 
   return (
     <Box
@@ -236,7 +219,7 @@ export default function PropertiesComp() {
 
       {/* list based on location */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
@@ -261,6 +244,8 @@ export default function PropertiesComp() {
           </Text>
         </Box>
       </motion.div>
+
+      {/* filter */}
 
       <Select
         p={2}
@@ -326,10 +311,10 @@ export default function PropertiesComp() {
                   modules={[EffectCards]}
                   className="swipercard"
                 >
-                  {val?.propertyImages?.map((pict) => (
+                  {val?.PropertyImages?.map((pict) => (
                     <SwiperSlide className="swipercard-slide ">
                       <Image
-                        src={`${process.env.REACT_APP_API_BASE_URL}${pict.picture}`}
+                        src={`${process.env.REACT_APP_API_BASE_URL}${pict?.picture}`}
                         h={"250px"}
                         objectFit={"cover"}
                         borderRadius={"md"}
@@ -391,7 +376,32 @@ export default function PropertiesComp() {
                         gap={"10px"}
                       >
                         <Icon as={BiPlus} />
-                        add Room
+                        Add Room
+                      </MenuItem>
+
+                      <Divider />
+
+                      <MenuItem
+                        onClick={() => {
+                          addReview.onOpen();
+                          setPropertyID(val?.id);
+                        }}
+                        display={"flex"}
+                        gap={"10px"}
+                      >
+                        <Icon as={BiPlus} />
+                        Add Review
+                        <motion.div
+                          initial={{ rotate: 0 }}
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
+                        >
+                          (Beta)
+                        </motion.div>
                       </MenuItem>
 
                       <Divider />
@@ -438,7 +448,7 @@ export default function PropertiesComp() {
                         alignItems={"center"}
                       >
                         <Icon as={ImLocation} />
-                        {val?.city?.city_name}, {val?.city?.province},
+                        {val?.City?.city_name}, {val?.City?.province}
                       </Text>
 
                       <Text
@@ -448,7 +458,7 @@ export default function PropertiesComp() {
                         alignItems={"center"}
                       >
                         <Icon as={FcRating} />
-                        Rating
+                        {val?.rating ? val?.rating : 0} / 10
                       </Text>
                     </Flex>
                   </Box>
@@ -460,6 +470,7 @@ export default function PropertiesComp() {
           isOpen={addProperty.isOpen}
           onClose={addProperty.onClose}
           fetch={fetch}
+          fetchProv={provinces}
           id={userSelector.id}
         />
         <EditProperty
@@ -470,12 +481,15 @@ export default function PropertiesComp() {
           }}
           data={selectedProperty}
           fetch={fetch}
+          id={userSelector.id}
+          fetchProv={provinces}
         />
         <DeleteProduct
           isOpen={DeleteModal.isOpen}
           onClose={DeleteModal.onClose}
           id={propertyId}
           fetch={fetch}
+          fetchProv={provinces}
         />
         <AddRooms
           isOpen={addRoom.isOpen}
@@ -488,6 +502,12 @@ export default function PropertiesComp() {
           onClose={propertyDetail.onClose}
           id={propertyId}
           properties={properties}
+        />
+        <AddReview
+          isOpen={addReview.isOpen}
+          onClose={addReview.onClose}
+          id={propertyId}
+          fetch={fetch}
         />
       </Grid>
       <Pagination data={{ totalPage, handlePageClick }} />

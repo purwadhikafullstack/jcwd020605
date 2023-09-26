@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const ProvinceModel = sequelize.define(
-    "provinces",
+    "Provinces",
     {
       province_id: {
         type: Sequelize.INTEGER,

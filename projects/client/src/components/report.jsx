@@ -1,67 +1,32 @@
 import {
   Box,
-  Drawer,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   useDisclosure,
   Text,
   Link,
   Flex,
   IconButton,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Grid,
   Image,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   Select,
   InputGroup,
   Input,
 } from "@chakra-ui/react";
-
 import { useState, useEffect } from "react";
-import { BsList, BsFillPersonFill } from "react-icons/bs";
-import { LuLayoutDashboard } from "react-icons/lu";
 import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
-import {
-  BiLogOutCircle,
-  BiDotsHorizontalRounded,
-  BiSolidUser,
-  BiMoney,
-} from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
+import { BiSolidUser } from "react-icons/bi";
 import { useSelector } from "react-redux";
-import { CgDetailsMore } from "react-icons/cg";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
 import { BsFillCalendar2DateFill } from "react-icons/bs";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { FcMoneyTransfer } from "react-icons/fc";
 import { GiMoneyStack } from "react-icons/gi";
-
 import { GrStatusInfo } from "react-icons/gr";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
-import OrderDetail from "./orderDetail";
 import Pagination from "./Pagination";
-
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
 import bgContent from "../assets/bgcontent.jpg";
-import PropertyDetail from "./propertyDetail";
 import "@fontsource/barlow";
 import "@fontsource/gilda-display";
 import "swiper/css";
@@ -83,7 +48,7 @@ export default function Report() {
   const [page, setPage] = useState(0);
   const [datesRange, setDatesRange] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [id, setId] = useState(userSelector.id);
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
@@ -116,6 +81,7 @@ export default function Report() {
           startDate,
           endDate,
           search,
+          id,
         },
       });
       setOrderData(res.data.orders);
@@ -125,7 +91,6 @@ export default function Report() {
       console.log(error);
     }
   };
-
   return (
     <>
       <Box
@@ -190,7 +155,7 @@ export default function Report() {
         </Box>
         {/* orderList */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }} // Efek muncul dari bawah
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -416,6 +381,29 @@ export default function Report() {
                           fontSize={"1.2em"}
                           gap={"0.5em"}
                         >
+                          <Icon as={HiHomeModern} />
+                          <Box
+                            w={"100%"}
+                            borderLeft={"2px solid #dbdbdb"}
+                            pl={"0.3em"}
+                          >
+                            Room type
+                            <Box
+                              fontSize={"0.6em"}
+                              pt={"0.5em"}
+                              borderTop={"2px solid #dbdbdb"}
+                            >
+                              {val?.Room?.room_name}
+                            </Box>
+                          </Box>
+                        </Text>
+
+                        <Text
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"1.2em"}
+                          gap={"0.5em"}
+                        >
                           <Icon as={BiSolidUser} />
                           <Box
                             w={"100%"}
@@ -428,7 +416,7 @@ export default function Report() {
                               pt={"0.5em"}
                               borderTop={"2px solid #dbdbdb"}
                             >
-                              {val?.User?.first_name}
+                              {val?.username}
                             </Box>
                           </Box>
                         </Text>
@@ -516,7 +504,6 @@ export default function Report() {
             </Box>
           ))}
         </Grid>
-
         <Pagination data={{ totalPage, handlePageClick }} />
         <FooterLandingPage></FooterLandingPage>
       </Box>

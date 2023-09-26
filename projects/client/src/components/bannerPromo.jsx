@@ -1,36 +1,21 @@
-import { Box, Image, Button, Icon } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import a from "../assets/1 (2).jpg";
 import b from "../assets/3 (2).jpg";
 import c from "../assets/4(1).jpg";
 import d from "../assets/wallpaperflare.com_wallpaper.jpg";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import promo1 from "../assets/promo1.png";
+import promo2 from "../assets/promo2.png";
+import promo3 from "../assets/promo3.png";
+import promo4 from "../assets/promo4.png";
+import promo5 from "../assets/promo5.png";
 
-import React, { useState } from "react";
 import "@fontsource/gilda-display";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-
 import "../styles/promoSlider.css";
-
-// import required modules
 import { Navigation } from "swiper/modules";
-
 export default function BannerPromo() {
-  const images = [a, b, c, d];
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const nextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
-  };
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prevSlide) => (prevSlide - 1 + images.length) % images.length
-    );
-  };
   return (
     <>
       <Box
@@ -69,16 +54,19 @@ export default function BannerPromo() {
           >
             <Swiper navigation={true} modules={[Navigation]}>
               <SwiperSlide>
-                <Image src={a} />
+                <Image src={promo1} />
               </SwiperSlide>
               <SwiperSlide>
-                <Image src={b} />
+                <Image src={promo2} />
               </SwiperSlide>
               <SwiperSlide>
-                <Image src={c} />
+                <Image src={promo3} />
               </SwiperSlide>
               <SwiperSlide>
-                <Image src={d} />
+                <Image src={promo4} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Image src={promo5} />
               </SwiperSlide>
             </Swiper>
           </Box>

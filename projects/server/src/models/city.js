@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const CitiesModel = sequelize.define(
-    "cities",
+    "Cities",
     {
       city_id: {
         type: Sequelize.INTEGER,

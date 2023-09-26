@@ -1,4 +1,4 @@
-import { Box, Text, Link, Center, Flex } from "@chakra-ui/react";
+import { Box, Text, Center, Flex } from "@chakra-ui/react";
 import "@fontsource/gilda-display";
 import "@fontsource/barlow";
 import moment from "moment";
@@ -28,9 +28,7 @@ export default function Navbar() {
             position={{ lg: "fixed", base: "fixed" }}
             zIndex={2}
           >
-            {/* Navbar */}
-            {/* dekstop */}
-
+            {/* Navbar dekstop */}
             <Box
               display={"flex"}
               justifyContent={{

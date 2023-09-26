@@ -3,16 +3,13 @@ import {
   Center,
   Flex,
   Button,
-  Icon,
   Select,
   DrawerContent,
   DrawerCloseButton,
-  DrawerHeader,
   DrawerBody,
   Drawer,
   useDisclosure,
   IconButton,
-  Text,
   Link,
 } from "@chakra-ui/react";
 import "@fontsource/barlow";
@@ -21,36 +18,26 @@ import "react-calendar/dist/Calendar.css";
 import { CiCalendarDate } from "react-icons/ci";
 import React, { useState, useEffect } from "react";
 import { api } from "../api/api";
-
 export default function Filter() {
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
-
   const onChangeDate1 = (date) => {
     setDate1(date);
   };
-
   const onChangeDate2 = (date) => {
     setDate2(date);
   };
   const calendar1 = useDisclosure();
   const calendar2 = useDisclosure();
-
-  //location
-
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
   const [provinceId, setProvinceId] = useState("");
-  // console.log(provinceId);
-
   useEffect(() => {
     fetchProvinces();
   }, []);
-
   useEffect(() => {
     fetchCities(provinceId);
   }, [provinceId]);
-
   const fetchProvinces = async () => {
     try {
       const response = await api.get("/provincelist");
@@ -59,17 +46,14 @@ export default function Filter() {
       console.error("Error fetching provinces:", error);
     }
   };
-
   const fetchCities = async (id) => {
     try {
       const response = await api.get("/provincelist/" + id);
       setCities(response.data.cities);
-      // console.log(response.data.cities);
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
   };
-
   return (
     <>
       <Center>
@@ -94,7 +78,6 @@ export default function Filter() {
                   month: "short",
                   year: "numeric",
                 })}
-                {/* {console.log(date1)} */}
               </Box>
               <Box h={"3em"} display={"flex"} alignItems={"center"}>
                 <Box display={"flex"}>
@@ -105,7 +88,6 @@ export default function Filter() {
                     icon={<CiCalendarDate />}
                     size="md"
                     fontSize={"25px"}
-                    // color={"white"}
                     variant="none"
                     display={{ base: "flex", md: "none" }}
                     onClick={calendar1.onOpen}
@@ -294,7 +276,7 @@ export default function Filter() {
               fontWeight={"none"}
               _hover={{ bgColor: "#aa8453", color: "white" }}
             >
-              <Link href="/searchPage">Check Now</Link>
+              <Link href="#">Check Now</Link>
             </Button>
           </Box>
         </Box>

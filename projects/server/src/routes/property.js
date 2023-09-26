@@ -5,7 +5,8 @@ const propertyController = require("../controllers").propertyController;
 
 router.get("/propertieslist", propertyController.getAllProperties);
 router.get("/:id", propertyController.getPropertiesDetailById);
-router.get("/", propertyController.getPropertyProv);
+router.get("/getprovincebytenantid/:id", propertyController.getPropertyProv);
+
 router.post(
   "/",
   fileUploader({

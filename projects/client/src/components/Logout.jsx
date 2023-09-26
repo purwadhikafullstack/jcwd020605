@@ -4,27 +4,20 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  useToast,
-  Icon,
   Box,
   Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { api } from "../api/api";
 
-import { BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
 export default function LogOut(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
   const LogOut = async () => {
     localStorage.removeItem("tenant");
-    return nav("/logintenant");
+    window.location.reload();
   };
 
   return (
@@ -61,7 +54,7 @@ export default function LogOut(props) {
                     setTimeout(() => {
                       setIsLoading(false);
                       LogOut();
-                      nav("/logintenant");
+                      // nav("/");
                     }, 2000);
                   }}
                 >

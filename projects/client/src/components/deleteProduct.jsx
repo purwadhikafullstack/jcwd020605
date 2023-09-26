@@ -4,9 +4,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useToast,
   Box,
   Text,
@@ -19,13 +17,11 @@ export default function DeleteProduct(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-
   const DeleteProperty = async () => {
     try {
       await api
         .delete("/properties/" + props.id)
         .then((res) => {
-          console.log(res.data);
           toast({
             title: res.data.message,
             status: "success",
@@ -34,11 +30,14 @@ export default function DeleteProduct(props) {
             isClosable: true,
           });
           props.fetch();
+          props.fetchProv();
           props.onClose();
-          nav("/propertiestenant");
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     } catch (err) {
       console.log(err.message);
@@ -78,11 +77,8 @@ export default function DeleteProduct(props) {
                   variant={"ghost"}
                   onClick={() => {
                     setIsLoading(true);
-                    setTimeout(() => {
-                      setIsLoading(false);
-                      DeleteProperty();
-                      nav("/propertiestenant");
-                    }, 2000);
+                    DeleteProperty();
+                    nav("/propertiestenant");
                   }}
                 >
                   Delete

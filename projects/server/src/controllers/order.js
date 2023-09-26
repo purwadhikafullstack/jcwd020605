@@ -51,7 +51,6 @@ const orderController = {
   getOrderById: async (req, res) => {
     try {
       const { id } = req.params;
-      console.log(id);
       const orderById = await db.OrderModel.findOne({
         include: [
           {
@@ -68,7 +67,6 @@ const orderController = {
           id,
         },
       });
-      console.log(orderById);
       return res.status(200).send(orderById);
     } catch (error) {
       console.log(error);
@@ -82,7 +80,6 @@ const orderController = {
       if (status) {
         whereCondition.status = status;
       }
-      console.log(whereCondition);
       const userOrders = await db.OrderModel.findAll(
         {
           include: [
@@ -103,13 +100,20 @@ const orderController = {
   },
   addOrder: async (req, res) => {
     try {
+      const { customAlphabet } = require("nanoid");
+      const invoicePrefix = "2023";
+      const generateInvoiceNumber = customAlphabet(
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+        6
+      );
+      const nextInvoice = `${invoicePrefix}-${generateInvoiceNumber()}`;
       const {
-        room_id,
         property_id,
-        user_id,
-        checkin_date,
-        checkout_date,
-        no_invoice,
+        room_id,
+        email,
+        username,
+        // checkin_date,
+        // checkout_date,
         tenant_id,
       } = req.body;
       let imageUrl = null;
@@ -117,14 +121,35 @@ const orderController = {
       if (req.file && req.file.filename) {
         imageUrl = "/payment_proof/" + req.file.filename;
       }
+      if (
+        property_id === "" ||
+        room_id === "" ||
+        email === "" ||
+        username === ""
+      ) {
+        throw new Error("Please fill all data field");
+      }
+
+      const roomStatus = await db.RoomModel.findOne({ where: { id: room_id } });
+
+      if (roomStatus.dataValues.room_status === "unavailable") {
+        throw new Error("Cannot booking room with unavailable status");
+      }
+      await db.RoomModel.update(
+        {
+          room_status: "unavailable",
+        },
+        { where: { id: room_id } }
+      );
 
       const order = await db.OrderModel.create({
-        room_id,
         property_id,
-        user_id,
-        checkin_date,
-        checkout_date,
-        no_invoice,
+        room_id,
+        email,
+        username,
+        // checkin_date,
+        // checkout_date,
+        no_invoice: nextInvoice,
         payment_proof: imageUrl,
         status: "CONFIRM_PAYMENT",
         tenant_id,
@@ -132,12 +157,12 @@ const orderController = {
       return res.status(200).send(order);
     } catch (error) {
       console.log(error);
-      res.status(500).send(error);
+      res.status(500).send(error.message);
     }
   },
   confirmOrReject: async (req, res) => {
     try {
-      const { status, id } = req.body;
+      const { status, id, room_id } = req.body;
       let message = "";
 
       if (status === "PROCESSING") {
@@ -167,27 +192,34 @@ const orderController = {
         );
 
         const email = await db.OrderModel.findOne({
-          include: [{ model: db.UserModel }],
           where: { id },
         });
 
         await mailer({
           subject: "Hotel Rules",
-          to: email?.User?.dataValues?.email,
+          to: email?.email,
           text: `
-          Dear ${email?.User?.dataValues?.first_name},
+          Dear ${email?.username},
 
 
           To ensure a pleasant and comfortable stay for everyone, we kindly ask you to abide by the following rules:
+          
           1. Hotel rooms are rented for hotel days.
+
           2. A hotel day starts at 2:00 p.m. on the day of arrival and ends at 12:00 a.m. of the following day. Failure to check out by 12:00 p.m. will result in an additional fee for extending a hotel day. A charge for the extension until 4:00 
              p.m. amounts to PLN 80.00, after 4:00 p.m. the hotel will charge for an additional hotel day.
+
           3. The hotel reserves the right to pre-authorize your credit card upon check-in or collect a fee for the entire stay in the form of a cash deposit. 
+
           4. In case the guest fails to appear in the hotel by 6 p.m. of the accommodation day despite making a reservation, the fee for the room shall be charged by the hotel.
+
           5. The hotel guest cannot hand over a room to third persons, even if the period for which the guest paid has not yet expired.
+
           6. Persons who are not checked in the hotel may stay in a hotel room from 07:00 a.m. till 10:00 p.m. Persons staying in a room after 10:00 p.m. must check in the hotel.
+
           7. The hotel may refuse to accept the guests who grossly violated the Hotel Rules and Regulations during the last stay by damaging the hotel's or guests' property or by inflicting damage on other guests, hotel employees 
              or other persons staying in the hotel or in other way violated the stay of other guests or the functioning of the hotel.
+             
           8. The hotel accepts guests traveling with pets. Only one pet is allowed per room for an extra charge and the guest bears full responsibility for any damage caused by their pet. Pets must be leashed in common areas.
              Due to hygienic reasons, pets are not allowed in the hotel restaurant.
 
@@ -208,6 +240,7 @@ const orderController = {
         if (!order) {
           return res.status(404).send("Order not found");
         }
+
         const imagePath = path.join(
           __dirname,
           `../public/${order?.dataValues?.payment_proof}`
@@ -239,6 +272,13 @@ const orderController = {
         if (value !== null) {
           throw new Error("Can't cancel when order has payment proof");
         }
+
+        await db.RoomModel.update(
+          {
+            room_status: "available",
+          },
+          { where: { id: room_id } }
+        );
 
         await db.OrderModel.update(
           {
@@ -296,11 +336,12 @@ const orderController = {
       const { status, startDate, endDate } = req?.query || "";
       const { sort, order } = req?.query?.filter || "";
       let search = req?.query?.search || "";
+      let tenant_id = req?.query?.id || "";
       const page = parseInt(req?.query?.page) || 0;
       const limit = 5;
       const offset = page * limit;
-      console.log(req.query);
       let where = { status };
+
       // default
       let orderDirection = "asc";
       if (sort === "desc") {
@@ -326,6 +367,7 @@ const orderController = {
           ],
           where: {
             status,
+            tenant_id,
           },
           order: [orderAttribute],
         });
@@ -351,6 +393,7 @@ const orderController = {
           ],
           where: {
             status,
+            tenant_id,
             createdAt: {
               [Op.between]: [formattedStartDate, formattedEndDate],
             },
@@ -372,7 +415,7 @@ const orderController = {
             },
 
             {
-              "$User.first_name$": {
+              $username$: {
                 [Op.like]: `%${search}%`,
               },
             },
@@ -391,7 +434,13 @@ const orderController = {
                 [Op.like]: `%${search}%`,
               },
             },
+            {
+              "$Room.room_name$": {
+                [Op.like]: `%${search}%`,
+              },
+            },
           ],
+          tenant_id,
         };
 
         orders = await db.OrderModel.findAndCountAll({
@@ -424,6 +473,7 @@ const orderController = {
           ],
           where: {
             status,
+            tenant_id,
           },
           order: [orderAttribute],
         });

@@ -24,22 +24,25 @@ import NavbarMobile from "./navbarMobile";
 import FooterLandingPage from "./footerLandingPage";
 export default function DashboardTenantMobile() {
   const userSelector = useSelector((state) => state.auth);
-  const [orderData, setOrderData] = useState([]);
+  const [orderData, setOrderData] = useState();
   const [totalAmount, setTotalAmount] = useState(0);
   const [roomLength, setRoomLength] = useState([]);
+  const [roomAvailable, setRoomAvailable] = useState([]);
+  const [roomUnavailable, setRoomUnavailable] = useState([]);
   const [properties, setProperties] = useState([]);
+  const [id, setId] = useState(userSelector.id);
   useEffect(() => {
     fetchOrderData();
     fetchProperyData();
     fetchRoomData();
   }, []);
-
   const fetchOrderData = async () => {
     try {
       const status = "DONE";
       const res = await api.get(`/order/done`, {
         params: {
           status,
+          id,
         },
       });
       setOrderData(res.data.orders);
@@ -51,8 +54,12 @@ export default function DashboardTenantMobile() {
 
   const fetchRoomData = async () => {
     try {
-      const res = await api.get("/room");
+      const res = await api.get("/room", {
+        params: { id: id },
+      });
       setRoomLength(res.data.roomData);
+      setRoomAvailable(res.data.roomAvailable);
+      setRoomUnavailable(res.data.roomUnavailable);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +67,9 @@ export default function DashboardTenantMobile() {
 
   const fetchProperyData = async () => {
     try {
-      const res = await api.get(`/properties/propertieslist`);
+      const res = await api.get(`/properties/propertieslist`, {
+        params: { id: id },
+      });
       setProperties(res.data.property);
     } catch (err) {
       console.log(err);
@@ -148,7 +157,13 @@ export default function DashboardTenantMobile() {
             animate={{ opacity: 1, y: 10 }}
             transition={{ duration: 0.5, delay: 3 }}
           >
-            <Flex p={"0.5em"} borderRadius={"0.5em"} boxShadow={"md"}>
+            <Flex
+              p={"0.5em"}
+              borderRadius={"0.5em"}
+              boxShadow={"md"}
+              transition="transform 0.5s ease"
+              _hover={{ transform: "translateY(10px)" }}
+            >
               <Flex
                 flex={4}
                 flexDir={"column"}
@@ -164,10 +179,12 @@ export default function DashboardTenantMobile() {
                   fontSize={"18px"}
                 />
                 <Text fontWeight={"bold"} color={"black"} fontSize={"15px"}>
-                  {totalAmount?.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
+                  {totalAmount
+                    ? totalAmount?.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      })
+                    : 0}
                 </Text>
                 Total Earnings
               </Flex>
@@ -188,6 +205,8 @@ export default function DashboardTenantMobile() {
               borderRadius={"0.5em"}
               mt={"1em"}
               boxShadow={"md"}
+              transition="transform 0.5s ease"
+              _hover={{ transform: "translateY(10px)" }}
             >
               <Flex
                 flex={4}
@@ -204,7 +223,7 @@ export default function DashboardTenantMobile() {
                   fontSize={"18px"}
                 />
                 <Text fontWeight={"bold"} color={"black"} fontSize={"15px"}>
-                  {orderData.length} orders
+                  {orderData?.length} orders
                 </Text>
                 Total Order
               </Flex>
@@ -225,6 +244,8 @@ export default function DashboardTenantMobile() {
               borderRadius={"0.5em"}
               mt={"1em"}
               boxShadow={"md"}
+              transition="transform 0.5s ease"
+              _hover={{ transform: "translateY(10px)" }}
             >
               <Flex
                 flex={4}
@@ -241,7 +262,7 @@ export default function DashboardTenantMobile() {
                   fontSize={"18px"}
                 />
                 <Text fontWeight={"bold"} color={"black"} fontSize={"15px"}>
-                  {properties.length} properties
+                  {properties?.length} properties
                 </Text>
                 Total Property
               </Flex>
@@ -262,6 +283,8 @@ export default function DashboardTenantMobile() {
               borderRadius={"0.5em"}
               mt={"1em"}
               boxShadow={"md"}
+              transition="transform 0.5s ease"
+              _hover={{ transform: "translateY(10px)" }}
             >
               <Flex
                 flex={4}
@@ -278,7 +301,7 @@ export default function DashboardTenantMobile() {
                   fontSize={"18px"}
                 />
                 <Text fontWeight={"bold"} color={"black"} fontSize={"15px"}>
-                  {roomLength.length} Rooms
+                  {roomLength?.length} Rooms
                 </Text>
                 Total Room
               </Flex>
@@ -299,6 +322,8 @@ export default function DashboardTenantMobile() {
               borderRadius={"0.5em"}
               mt={"1em"}
               boxShadow={"md"}
+              transition="transform 0.5s ease"
+              _hover={{ transform: "translateY(10px)" }}
             >
               <Flex
                 flex={4}
@@ -315,7 +340,7 @@ export default function DashboardTenantMobile() {
                   fontSize={"18px"}
                 />
                 <Text fontWeight={"bold"} color={"black"} fontSize={"15px"}>
-                  {roomLength.length - orderData.length} Available
+                  {roomAvailable?.length} Available
                 </Text>
                 Available Room
               </Flex>
@@ -337,6 +362,8 @@ export default function DashboardTenantMobile() {
               mt={"1em"}
               mb={"3em"}
               boxShadow={"md"}
+              transition="transform 0.5s ease"
+              _hover={{ transform: "translateY(10px)" }}
             >
               <Flex
                 flex={4}
@@ -353,7 +380,7 @@ export default function DashboardTenantMobile() {
                   fontSize={"18px"}
                 />
                 <Text fontWeight={"bold"} color={"black"} fontSize={"15px"}>
-                  {orderData.length} Rooms
+                  {roomUnavailable?.length} Rooms
                 </Text>
                 Booked Room
               </Flex>

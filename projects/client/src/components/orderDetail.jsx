@@ -10,26 +10,22 @@ import {
   useToast,
   Box,
   Text,
-  Input,
   Flex,
-  // Image,
   Icon,
-  Select,
 } from "@chakra-ui/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { Image } from "react-bootstrap";
 import paymentproof from "../assets/payment.png";
-
+import { FcInfo } from "react-icons/fc";
 export default function OrderDetail(props) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [orderData, setOrderData] = useState([]);
   const [update, setUpdate] = useState();
   const toast = useToast();
-
   const orderDataByID = async () => {
     try {
       const res = await api.get("order/orderbyid/" + props.id);
@@ -79,6 +75,8 @@ export default function OrderDetail(props) {
         isClosable: true,
       });
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -102,6 +100,19 @@ export default function OrderDetail(props) {
             fontSize={"18px"}
             fontWeight={"bold"}
           >
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              You can delete the payment proof photo by clicking the "reject"
+              button.
+            </Flex>
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              Payment status mean "Menunggu Pembayaran"
+            </Flex>
+            <Flex align={"center"} gap={"1em"} fontSize={"0.8em"}>
+              <Icon as={FcInfo} boxSize={6} />
+              Confirm to send an email.
+            </Flex>
             <Box>
               <Image
                 src={
@@ -124,17 +135,20 @@ export default function OrderDetail(props) {
 
             <Box>
               <Text fontSize={"12px"}>Room price :</Text>
-              {orderData?.Room?.main_price}
+              {orderData?.Room?.main_price.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              })}
             </Box>
 
             <Box>
               <Text fontSize={"12px"}>Username :</Text>
-              {orderData?.User?.first_name}
+              {orderData?.username}
             </Box>
 
             <Box>
               <Text fontSize={"12px"}>Email :</Text>
-              {orderData?.User?.email}
+              {orderData?.email}
             </Box>
 
             <Box>
@@ -166,7 +180,10 @@ export default function OrderDetail(props) {
                     "Foto bukti pembayaran juga akan dihapus, yakin?"
                   );
                   if (shouldReject) {
-                    confirmOrReject({ status: "PAYMENT", id: props.id });
+                    confirmOrReject({
+                      status: "PAYMENT",
+                      id: props.id,
+                    });
                   }
                 }}
                 value="PAYMENT"
@@ -179,10 +196,7 @@ export default function OrderDetail(props) {
                 isLoading={isLoading}
                 onClick={() => {
                   setIsLoading(true);
-                  setTimeout(() => {
-                    setIsLoading(false);
-                    confirmOrReject({ status: "PROCESSING", id: props.id });
-                  }, 3000);
+                  confirmOrReject({ status: "PROCESSING", id: props.id });
                 }}
                 value="PROCESSING"
               >
@@ -199,7 +213,11 @@ export default function OrderDetail(props) {
                     "Apakah Anda yakin ingin menolak pesanan ini?"
                   );
                   if (shouldReject) {
-                    confirmOrReject({ status: "CANCELED", id: props.id });
+                    confirmOrReject({
+                      status: "CANCELED",
+                      id: props.id,
+                      room_id: orderData?.Room?.id,
+                    });
                   }
                 }}
                 value="CANCELED"

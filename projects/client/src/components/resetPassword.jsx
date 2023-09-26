@@ -21,31 +21,24 @@ import { api } from "../api/api";
 import { useNavigate, useLocation } from "react-router-dom";
 import bgforget from "../assets/bgforget.jpg";
 import Navbar from "./navbarLoginRegister";
-
 export default function ResetPassword() {
   const [token, setToken] = useState();
-  const [user, setUser] = useState([]);
   const location = useLocation();
   const toast = useToast();
-  console.log(token);
-
   useEffect(() => {
     const tokenUrl = location.pathname.split("/")[2];
     setToken(tokenUrl);
   }, []);
-
   const nav = useNavigate();
   YupPassword(Yup);
   const [seePassword, setSeePassword] = useState(false);
   const [seePassword1, setSeePassword1] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       password: "",
       confirm: "",
     },
-
     validationSchema: Yup.object().shape({
       password: Yup.string()
         .required()
@@ -75,7 +68,6 @@ export default function ResetPassword() {
             return nav("/logintenant");
           });
       } catch (error) {
-        console.log(error);
         toast({
           title: error.response.data.message,
           status: "error",

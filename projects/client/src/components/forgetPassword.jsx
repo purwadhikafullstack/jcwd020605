@@ -14,12 +14,10 @@ import { api } from "../api/api";
 import bgforget from "../assets/bgforget.jpg";
 import { PiArrowLeftLight } from "react-icons/pi";
 import Navbar from "./navbarLoginRegister";
-
 export default function ForgetPassword() {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const ForgotPassword = async () => {
     if (!email) {
       toast({
@@ -35,7 +33,6 @@ export default function ForgetPassword() {
           email,
         })
         .then((res) => {
-          console.log(res.data);
           toast({
             title: res.data.message,
             status: "success",
@@ -45,7 +42,6 @@ export default function ForgetPassword() {
           });
         })
         .catch((err) => {
-          console.log(err);
           toast({
             title: err.response.data,
             status: "error",
@@ -107,6 +103,7 @@ export default function ForgetPassword() {
                 placeholder="Email"
                 variant={"flushed"}
                 fontSize={"14px"}
+                autoComplete="off"
                 focusBorderColor="#e2e2e2"
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -121,7 +118,7 @@ export default function ForgetPassword() {
                 letterSpacing={"2px"}
                 fontSize={"14px"}
                 isLoading={isLoading}
-                transition="transform 1s ease"
+                transition="transform 0.5s ease"
                 _hover={{
                   bgColor: "transparent",
                   transform: "translateY(-5px)",

@@ -1,6 +1,5 @@
 import ReactPaginate from "react-paginate";
 import "../styles/pagination.css";
-import { useState } from "react";
 
 const PaginationRoom = (props) => {
   return (

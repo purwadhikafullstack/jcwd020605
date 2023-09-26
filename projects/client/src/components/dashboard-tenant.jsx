@@ -1,13 +1,4 @@
-import {
-  Box,
-  useDisclosure,
-  Link,
-  Text,
-  Flex,
-  Icon,
-  Image,
-} from "@chakra-ui/react";
-
+import { Box, Link, Text, Flex, Icon, Image } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
@@ -28,6 +19,8 @@ export default function DashboardTenant() {
   const [orderData, setOrderData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [roomLength, setRoomLength] = useState([]);
+  const [roomAvailable, setRoomAvailable] = useState([]);
+  const [roomUnavailable, setRoomUnavailable] = useState([]);
   const [properties, setProperties] = useState([]);
   const [id, setId] = useState(userSelector.id);
 
@@ -36,12 +29,14 @@ export default function DashboardTenant() {
     fetchProperyData();
     fetchRoomData();
   }, []);
+
   const fetchOrderData = async () => {
     try {
       const status = "DONE";
       const res = await api.get(`/order/done`, {
         params: {
           status,
+          id,
         },
       });
       setOrderData(res.data.orders);
@@ -57,6 +52,8 @@ export default function DashboardTenant() {
         params: { id: id },
       });
       setRoomLength(res.data.roomData);
+      setRoomAvailable(res.data.roomAvailable);
+      setRoomUnavailable(res.data.roomUnavailable);
     } catch (error) {
       console.log(error);
     }
@@ -72,7 +69,6 @@ export default function DashboardTenant() {
       console.log(err);
     }
   };
-  console.log(orderData);
   return (
     <>
       <Box
@@ -87,7 +83,6 @@ export default function DashboardTenant() {
         {/* title */}
         <Box py={"5%"}>
           <Flex
-            // pt={"4em"}
             flexDir={"column"}
             pos={"relative"}
             h={"20vh"}
@@ -198,10 +193,12 @@ export default function DashboardTenant() {
                   Total Earnings
                 </Flex>
                 <Text fontWeight={"bold"} color={"black"} fontSize={"2.7em"}>
-                  {totalAmount?.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
+                  {totalAmount
+                    ? totalAmount?.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      })
+                    : 0}
                 </Text>
                 <Link
                   href="/report"
@@ -375,7 +372,7 @@ export default function DashboardTenant() {
                   Available Rooms
                 </Flex>
                 <Text fontWeight={"bold"} color={"black"} fontSize={"2.7em"}>
-                  {roomLength.length - orderData.length} Available
+                  {roomAvailable?.length} Available
                 </Text>
                 <Link
                   href="/roompropertiestenant"
@@ -425,7 +422,7 @@ export default function DashboardTenant() {
                     fontSize={"2.7em"}
                     textAlign={"right"}
                   >
-                    {orderData.length} Rooms
+                    {roomUnavailable?.length} Rooms
                   </Text>
                   <Link
                     href="/roompropertiestenant"
@@ -440,7 +437,6 @@ export default function DashboardTenant() {
             </motion.div>
           </Flex>
         </Flex>
-
         <FooterLandingPage></FooterLandingPage>
       </Box>
     </>

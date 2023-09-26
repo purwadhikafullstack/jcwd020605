@@ -12,19 +12,36 @@ import {
   PopoverBody,
   PopoverFooter,
   Avatar,
+  useDisclosure,
 } from "@chakra-ui/react";
-
 import { LuLayoutDashboard } from "react-icons/lu";
 import { HiHomeModern } from "react-icons/hi2";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle } from "react-icons/bi";
+import { BiLogOutCircle, BiSolidHomeSmile } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlineBedroomChild } from "react-icons/md";
 import { useSelector } from "react-redux";
-
+import LogOut from "./Logout";
+import EditProfile from "./editProfile";
+import { useFetchProperty } from "../hooks/useProperty";
+import { useEffect, useState } from "react";
+import { api } from "../api/api";
 export default function NavbarDesktop() {
   const userSelector = useSelector((state) => state.auth);
+  const logOutModal = useDisclosure();
+  const editProfile = useDisclosure();
+  const { properties, fetch } = useFetchProperty();
+  const [tenantData, setTenantData] = useState();
+
+  const tenantDatas = async () => {
+    try {
+      const res = await api.get("/tenant/tenantbyid/" + userSelector.id);
+      setTenantData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -98,12 +115,22 @@ export default function NavbarDesktop() {
                 Report
               </Link>
             </Flex>
+
+            <Flex align={"center"} gap={"1em"} _hover={{ color: "#ab854f" }}>
+              <Icon as={BiSolidHomeSmile} />
+              <Link href="/" _hover={{ color: "#ab854f" }}>
+                Landing page
+              </Link>
+            </Flex>
           </Flex>
 
           {/* avatar profile */}
           <Popover>
             <PopoverTrigger>
-              <Avatar size={"sm"}></Avatar>
+              <Avatar
+                size={"sm"}
+                src={`${process.env.REACT_APP_API_BASE_URL}${userSelector?.profile_picture}`}
+              ></Avatar>
             </PopoverTrigger>
             <PopoverContent
               w={"100%"}
@@ -113,13 +140,25 @@ export default function NavbarDesktop() {
             >
               <PopoverArrow />
               <PopoverHeader>{userSelector?.first_name}</PopoverHeader>
-              <PopoverBody display={"flex"} alignItems={"center"} gap={"0.8em"}>
+              <PopoverBody
+                display={"flex"}
+                alignItems={"center"}
+                gap={"0.8em"}
+                onClick={() => {
+                  editProfile.onOpen();
+                  tenantDatas();
+                }}
+              >
                 <Icon as={CgProfile} /> Profile
               </PopoverBody>
               <PopoverFooter
                 display={"flex"}
                 alignItems={"center"}
                 gap={"0.8em"}
+                cursor={"pointer"}
+                onClick={() => {
+                  logOutModal.onOpen();
+                }}
               >
                 <Icon as={BiLogOutCircle} /> LogOut
               </PopoverFooter>
@@ -127,6 +166,17 @@ export default function NavbarDesktop() {
           </Popover>
         </Flex>
       </Box>
+      <LogOut isOpen={logOutModal.isOpen} onClose={logOutModal.onClose} />
+      <EditProfile
+        fetch={fetch}
+        isOpen={editProfile.isOpen}
+        onClose={editProfile.onClose}
+        data={{
+          email: tenantData?.email,
+          idNumber: tenantData?.id_Number,
+          phone_number: tenantData?.phone_number,
+        }}
+      />
     </>
   );
 }

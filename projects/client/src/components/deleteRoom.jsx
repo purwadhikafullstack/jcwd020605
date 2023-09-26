@@ -4,9 +4,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useToast,
   Box,
   Text,
@@ -16,17 +14,14 @@ import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 export default function DeleteRooms(props) {
-  // console.log(props);
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-
   const DeleteRoom = async () => {
     try {
       await api
         .delete("/room/" + props.id)
         .then((res) => {
-          console.log(res.data);
           toast({
             title: res.data.message,
             status: "success",
@@ -83,7 +78,6 @@ export default function DeleteRooms(props) {
                     setTimeout(() => {
                       setIsLoading(false);
                       DeleteRoom();
-                      // nav("/profile");
                     }, 2000);
                   }}
                 >

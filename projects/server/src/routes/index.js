@@ -5,6 +5,7 @@ const roomRoutes = require("./room");
 const specialPriceRoutes = require("./specialPrice");
 const unavailableRoomsRoutes = require("./unavailableRooms");
 const orderRoutes = require("./order");
+const reviewRoutes = require("./review");
 
 module.exports = {
   propertyRoutes,
@@ -14,4 +15,5 @@ module.exports = {
   specialPriceRoutes,
   unavailableRoomsRoutes,
   orderRoutes,
+  reviewRoutes,
 };

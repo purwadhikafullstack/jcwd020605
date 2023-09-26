@@ -1,7 +1,6 @@
 import ReactPaginate from "react-paginate";
 import "../styles/pagination.css";
-import { useState } from "react";
-
+import { Box } from "@chakra-ui/react";
 const Pagination = (props) => {
   return (
     <ReactPaginate

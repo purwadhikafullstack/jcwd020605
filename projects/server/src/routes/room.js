@@ -6,6 +6,7 @@ const roomController = require("../controllers").roomController;
 
 router.get("/", roomController.getAllRoom);
 router.get("/:id", roomController.getAllRoomById);
+router.get("/getroombyproperty/:id", roomController.getRoomByPropertyId);
 router.patch("/:id", roomController.editRoom);
 router.delete("/:id", roomController.deleteRoom);
 

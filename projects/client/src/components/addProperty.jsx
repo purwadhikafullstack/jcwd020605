@@ -12,14 +12,13 @@ import {
   Image,
   Select,
 } from "@chakra-ui/react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { useFetchCity, useFetchProv } from "../hooks/useProvAndCity";
-
 export default function AddPropertyModal(props) {
   YupPassword(Yup);
   const nav = useNavigate();
@@ -57,7 +56,6 @@ export default function AddPropertyModal(props) {
       city_id: "",
       tenant_id: "",
     },
-
     onSubmit: async () => {
       const formData = new FormData();
       formData.append("property_name", formik.values.property_name);
@@ -80,8 +78,10 @@ export default function AddPropertyModal(props) {
               duration: 1000,
             });
             props.fetch();
+            formik.setFieldValue("");
+            setSelectedImages("");
+            props.fetchProv();
             props.onClose();
-            nav("/propertiestenant");
           })
           .catch((error) => {
             toast({
@@ -99,10 +99,7 @@ export default function AddPropertyModal(props) {
         console.log(error);
       }
     },
-
-    // validationSchema: Yup.object().shape({}),
   });
-
   return (
     <>
       <Modal size={"sm"} isOpen={props.isOpen}>
@@ -126,10 +123,7 @@ export default function AddPropertyModal(props) {
               variant={"ghost"}
               onClick={() => {
                 setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                  formik.handleSubmit();
-                }, 2000);
+                formik.handleSubmit();
               }}
             >
               Save
@@ -142,6 +136,7 @@ export default function AddPropertyModal(props) {
                 variant={"flushed"}
                 placeholder="Property Name : "
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 
@@ -151,6 +146,7 @@ export default function AddPropertyModal(props) {
                 variant={"flushed"}
                 placeholder="Property description :"
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 

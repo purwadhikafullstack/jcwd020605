@@ -21,23 +21,37 @@ import {
   PopoverFooter,
   Avatar,
 } from "@chakra-ui/react";
-
 import { BsList } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { HiHomeModern } from "react-icons/hi2";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle } from "react-icons/bi";
+import { BiLogOutCircle, BiSolidHomeSmile } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import { MdOutlineBedroomChild } from "react-icons/md";
 import LogOut from "./Logout";
+import EditProfile from "./editProfile";
+import { useFetchProperty } from "../hooks/useProperty";
+import { useState } from "react";
+import { api } from "../api/api";
 
 export default function NavbarMobile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const logOutModal = useDisclosure();
   const userSelector = useSelector((state) => state.auth);
+  const editProfile = useDisclosure();
+  const { properties, fetch } = useFetchProperty();
+  const [tenantData, setTenantData] = useState();
 
+  const tenantDatas = async () => {
+    try {
+      const res = await api.get("/tenant/tenantbyid/" + userSelector.id);
+      setTenantData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Box
@@ -78,7 +92,10 @@ export default function NavbarMobile() {
 
         <Popover>
           <PopoverTrigger>
-            <Avatar size={"sm"}></Avatar>
+            <Avatar
+              size={"sm"}
+              src={`${process.env.REACT_APP_API_BASE_URL}${userSelector?.profile_picture}`}
+            ></Avatar>
           </PopoverTrigger>
           <PopoverContent
             w={"100%"}
@@ -88,7 +105,15 @@ export default function NavbarMobile() {
           >
             <PopoverArrow />
             <PopoverHeader>{userSelector.first_name}</PopoverHeader>
-            <PopoverBody display={"flex"} alignItems={"center"} gap={"0.8em"}>
+            <PopoverBody
+              display={"flex"}
+              alignItems={"center"}
+              gap={"0.8em"}
+              onClick={() => {
+                editProfile.onOpen();
+                tenantDatas();
+              }}
+            >
               <Icon as={CgProfile} /> Profile
             </PopoverBody>
             <PopoverFooter
@@ -138,7 +163,9 @@ export default function NavbarMobile() {
                   _hover={{ color: "#ab854f" }}
                 >
                   <Icon as={LuLayoutDashboard} />
-                  <Link _hover={{ color: "#ab854f" }}>Dashboard</Link>
+                  <Link href="/dashboardtenant" _hover={{ color: "#ab854f" }}>
+                    Dashboard
+                  </Link>
                 </Flex>
 
                 <Flex
@@ -187,6 +214,17 @@ export default function NavbarMobile() {
                     Report
                   </Link>
                 </Flex>
+
+                <Flex
+                  align={"center"}
+                  gap={"1em"}
+                  _hover={{ color: "#ab854f" }}
+                >
+                  <Icon as={BiSolidHomeSmile} />
+                  <Link href="/" _hover={{ color: "#ab854f" }}>
+                    Landing page
+                  </Link>
+                </Flex>
               </Flex>
             </DrawerBody>
             <DrawerFooter justifyContent={"left"}>
@@ -205,6 +243,16 @@ export default function NavbarMobile() {
         </Drawer>
       </Box>
       <LogOut isOpen={logOutModal.isOpen} onClose={logOutModal.onClose} />
+      <EditProfile
+        fetch={fetch}
+        isOpen={editProfile.isOpen}
+        onClose={editProfile.onClose}
+        data={{
+          email: tenantData?.email,
+          idNumber: tenantData?.id_Number,
+          phone_number: tenantData?.phone_number,
+        }}
+      />
     </>
   );
 }

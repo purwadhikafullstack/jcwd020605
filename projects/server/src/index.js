@@ -10,7 +10,7 @@ const routes = require("./routes");
 const PORT = process.env.PORT || 8000;
 const app = express();
 
-// db.sequelize.sync({ alter: true });
+db.sequelize.sync({ alter: true });
 
 app.use(cors());
 
@@ -38,8 +38,7 @@ app.use("/api/room", routes.roomRoutes);
 app.use("/api/specialprice", routes.specialPriceRoutes);
 app.use("/api/unavailableroom", routes.unavailableRoomsRoutes);
 app.use("/api/order", routes.orderRoutes);
-
-// app.use("/api/post", express.static(`${__dirname}/public/id_card`));
+app.use("/api/review", routes.reviewRoutes);
 app.use("/api/id_card", express.static(`${__dirname}/public/id_card`));
 
 app.use(
@@ -50,6 +49,10 @@ app.use("/api/room_img", express.static(`${__dirname}/public/room_img`));
 app.use(
   "/api/payment_proof",
   express.static(`${__dirname}/public/payment_proof`)
+);
+app.use(
+  "/api/profile_picture",
+  express.static(`${__dirname}/public/profile_picture`)
 );
 // ===========================
 

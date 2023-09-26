@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 import { useSelector } from "react-redux";
-
 export const useFetchProperty = (filter) => {
-  const [properties, setProperties] = useState();
+  const [properties, setProperties] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
   const userSelector = useSelector((state) => state.auth);
@@ -11,9 +10,6 @@ export const useFetchProperty = (filter) => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-  console.log(id);
-  console.log(properties);
-
   const fetch = async () => {
     try {
       const res = await api.get(`/properties/propertieslist?page=${page}`, {
@@ -28,7 +24,6 @@ export const useFetchProperty = (filter) => {
       console.log(err);
     }
   };
-
   useEffect(() => {
     fetch();
   }, [page]);

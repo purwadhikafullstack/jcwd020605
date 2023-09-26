@@ -14,14 +14,11 @@ import {
   RadioGroup,
   Stack,
   VStack,
-  useToast,
 } from "@chakra-ui/react";
 import { RangeDatepicker } from "chakra-dayzed-datepicker";
 import { useState } from "react";
-
 export default function SpecialPrice(props) {
   const [isLoading, setIsLoading] = useState(false);
-
   return (
     <>
       <Modal isOpen={props.data.isOpen} onClose={props.data.onClose}>

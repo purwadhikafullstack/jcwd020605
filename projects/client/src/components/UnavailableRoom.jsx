@@ -2,7 +2,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,19 +9,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
-  Stack,
   VStack,
   useToast,
 } from "@chakra-ui/react";
 import { RangeDatepicker } from "chakra-dayzed-datepicker";
 import { useState } from "react";
-
 export default function UnavailableRooms(props) {
-  const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
-
   return (
     <>
       <Modal isOpen={props.data.isOpen} onClose={props.data.onClose}>

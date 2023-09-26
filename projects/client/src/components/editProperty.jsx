@@ -4,23 +4,17 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useToast,
   Box,
-  Text,
   Input,
   Flex,
   Image,
-  Icon,
   Select,
-  requiredChakraThemeKeys,
 } from "@chakra-ui/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
@@ -34,10 +28,8 @@ export default function AddPropertyModal(props) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [provinceId, setProvinceId] = useState("");
-  const [CitiesName, setCitiesName] = useState("");
   const { provinces } = useFetchProv();
   const { cities } = useFetchCity(provinceId);
-  // || props?.data?.city?.province_id);
 
   const formik = useFormik({
     initialValues: {
@@ -45,17 +37,16 @@ export default function AddPropertyModal(props) {
       details_text: "",
       province: "",
       city_id: "",
+      tenant_id: "",
     },
-    // validationSchema: Yup.object().shape({
-    //   property_name: Yup.string().required(),
-    //   details_text: Yup.string().required(),
-    // }),
+
     onSubmit: async () => {
       const formData = new FormData();
       formData.append("property_name", formik.values.property_name);
       formData.append("details_text", formik.values.details_text);
       formData.append("city_id", formik.values.city_id);
       formData.append("province", formik.values.province);
+      formData.append("tenant_id", props.id);
 
       for (const files of selectedFiles) {
         formData.append("property_img", files);
@@ -71,17 +62,17 @@ export default function AddPropertyModal(props) {
               duration: 1000,
             });
             props.fetch();
+            props.fetchProv();
             props.onClose();
-            nav("/propertiestenant");
           })
           .catch((error) => {
+            console.log(error);
             toast({
-              description: error.response.data.message,
+              description: error.response.data,
               status: "error",
-              duration: 1000,
+              duration: 2000,
               position: "top",
             });
-            console.log(error.response.data);
           })
           .finally(() => {
             setIsLoading(false);
@@ -141,7 +132,6 @@ export default function AddPropertyModal(props) {
                 setTimeout(() => {
                   setIsLoading(false);
                   formik.handleSubmit();
-                  // nav("/profile");
                 }, 2000);
               }}
             >
@@ -151,23 +141,23 @@ export default function AddPropertyModal(props) {
           <ModalBody display={"flex"} flexDir={"column"} gap={"10px"}>
             <Box pb={"10px"}>
               <Input
-                // py={"20px"}
                 id="property_name"
                 variant={"flushed"}
                 defaultValue={formik?.values?.property_name}
                 placeholder="Property Name : "
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 
             <Box pb={"10px"}>
               <Input
-                // py={"20px"}
                 id="details_text"
                 variant={"flushed"}
                 defaultValue={formik?.values?.details_text}
                 placeholder="Property description :"
                 onChange={inputHandler}
+                autoComplete="off"
               />
             </Box>
 
@@ -199,16 +189,6 @@ export default function AddPropertyModal(props) {
                     </option>
                   )
                 )}
-
-              {/* {provinces &&
-                provinces.map((val) => (
-                  <option
-                    key={val.province_id}
-                    value={`${val.province}/${val.province_id}`}
-                  >
-                    {val.province}
-                  </option>
-                ))} */}
             </Select>
 
             <Select
@@ -233,7 +213,6 @@ export default function AddPropertyModal(props) {
                 type="file"
                 accept="image/png, image/jpeg"
                 variant={"flushed"}
-                // ref={inputFileRef}
                 onChange={handleImageChange}
               />
               {selectedImages.length ? (

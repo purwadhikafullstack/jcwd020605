@@ -10,7 +10,6 @@ router.post(
   }).single("id_card"),
   tenantController.registerTenant
 );
-
 router.post("/login", tenantController.loginTenant);
 router.post("/forgetpassword", tenantController.forgetPassword);
 router.get(
@@ -18,11 +17,17 @@ router.get(
   tenantController.getToken,
   tenantController.getTenantByToken
 );
-
+router.get("/tenantbyid/:id", tenantController.getTenantById);
 router.patch(
   "/resetpassword",
   tenantController.getTokenReset,
   tenantController.resetPassword
 );
-
+router.patch(
+  "/editprofile/:id",
+  fileUploader({
+    destinationFolder: "profile_picture",
+  }).single("profile_picture"),
+  tenantController.editProfile
+);
 module.exports = router;

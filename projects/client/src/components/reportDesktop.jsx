@@ -1,18 +1,7 @@
 import {
   Box,
-  useDisclosure,
   Text,
-  Link,
   Flex,
-  Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  Avatar,
   Image,
   Select,
   Table,
@@ -22,25 +11,13 @@ import {
   Th,
   Td,
   Tfoot,
-  Button,
   InputGroup,
   Input,
-  InputRightAddon,
 } from "@chakra-ui/react";
-
 import { useState, useEffect } from "react";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiHomeModern } from "react-icons/hi2";
-import { AiOutlineDollarCircle } from "react-icons/ai";
-import { BsArrowDown, BsArrowUp } from "react-icons/bs";
-import { TbReportAnalytics } from "react-icons/tb";
-import { BiLogOutCircle } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
-import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-calendar/dist/Calendar.css";
-import { MdOutlineBedroomChild, MdApartment } from "react-icons/md";
 import "@fontsource/barlow";
 import FooterLandingPage from "./footerLandingPage";
 import Pagination from "./Pagination";
@@ -66,6 +43,7 @@ export default function ReportDesktop() {
   const [page, setPage] = useState(0);
   const [datesRange, setDatesRange] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [id, setId] = useState(userSelector.id);
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
@@ -98,6 +76,7 @@ export default function ReportDesktop() {
           startDate,
           endDate,
           search,
+          id,
         },
       });
       setOrderData(res.data.orders);
@@ -279,6 +258,9 @@ export default function ReportDesktop() {
                   Property Name
                 </Th>
                 <Th textAlign={"center"} borderRight={"1px solid #dbdbdb"}>
+                  Room Type
+                </Th>
+                <Th textAlign={"center"} borderRight={"1px solid #dbdbdb"}>
                   Customer
                 </Th>
                 <Th textAlign={"center"} borderRight={"1px solid #dbdbdb"}>
@@ -300,7 +282,10 @@ export default function ReportDesktop() {
                     {val?.Property?.property_name}
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
-                    {val?.User?.first_name}
+                    {val?.Room?.room_name}
+                  </Td>
+                  <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
+                    {val?.username}
                   </Td>
                   <Td borderRight={"1px solid #dbdbdb"} textAlign={"center"}>
                     {val?.status}
@@ -309,7 +294,7 @@ export default function ReportDesktop() {
                     {moment(val?.createdAt).format("DD MMM YYYY")}
                   </Td>
                   <Td textAlign={"center"}>
-                    {val?.Room?.main_price.toLocaleString("id-ID", {
+                    {val?.Room?.main_price?.toLocaleString("id-ID", {
                       style: "currency",
                       currency: "IDR",
                     })}
@@ -320,7 +305,7 @@ export default function ReportDesktop() {
             <Tfoot>
               <Tr>
                 <Th
-                  colSpan={4}
+                  colSpan={5}
                   textAlign={"center"}
                   borderRight={"1px solid #dbdbdb"}
                   borderTop={"1px solid #dbdbdb"}
@@ -332,10 +317,12 @@ export default function ReportDesktop() {
                   borderTop={"1px solid #dbdbdb"}
                   textAlign={"center"}
                 >
-                  {totalAmount.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
+                  {totalAmount
+                    ? totalAmount?.toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      })
+                    : 0}
                 </Th>
               </Tr>
             </Tfoot>
