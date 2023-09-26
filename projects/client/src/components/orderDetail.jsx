@@ -34,6 +34,7 @@ export default function OrderDetail(props) {
       console.log(error);
     }
   };
+
   const confirmOrReject = async (status) => {
     try {
       const res = await api.post("/order/confirmorreject", status);
@@ -172,59 +173,62 @@ export default function OrderDetail(props) {
             flexDir={"column"}
             gap={"1em"}
           >
-            <Flex w={"100%"} justify={"space-around"}>
-              <Button
-                w={"48%"}
-                onClick={() => {
-                  const shouldReject = window.confirm(
-                    "Foto bukti pembayaran juga akan dihapus, yakin?"
-                  );
-                  if (shouldReject) {
-                    confirmOrReject({
-                      status: "PAYMENT",
-                      id: props.id,
-                    });
-                  }
-                }}
-                value="PAYMENT"
-              >
-                Reject
-              </Button>
+            {orderData?.status !== "DONE" ? (
+              <>
+                <Flex w={"100%"} justify={"space-around"}>
+                  <Button
+                    w={"48%"}
+                    onClick={() => {
+                      const shouldReject = window.confirm(
+                        "Foto bukti pembayaran juga akan dihapus, yakin?"
+                      );
+                      if (shouldReject) {
+                        confirmOrReject({
+                          status: "PAYMENT",
+                          id: props.id,
+                        });
+                      }
+                    }}
+                    value="PAYMENT"
+                  >
+                    Reject
+                  </Button>
 
-              <Button
-                w={"48%"}
-                isLoading={isLoading}
-                onClick={() => {
-                  setIsLoading(true);
-                  confirmOrReject({ status: "PROCESSING", id: props.id });
-                }}
-                value="PROCESSING"
-              >
-                Confirm
-              </Button>
-            </Flex>
-
-            <Flex w={"100%"}>
-              <Button
-                w={"100%"}
-                colorScheme="red"
-                onClick={() => {
-                  const shouldReject = window.confirm(
-                    "Apakah Anda yakin ingin menolak pesanan ini?"
-                  );
-                  if (shouldReject) {
-                    confirmOrReject({
-                      status: "CANCELED",
-                      id: props.id,
-                      room_id: orderData?.Room?.id,
-                    });
-                  }
-                }}
-                value="CANCELED"
-              >
-                Cancel Order
-              </Button>
-            </Flex>
+                  <Button
+                    w={"48%"}
+                    isLoading={isLoading}
+                    onClick={() => {
+                      setIsLoading(true);
+                      confirmOrReject({ status: "PROCESSING", id: props.id });
+                    }}
+                    value="PROCESSING"
+                  >
+                    Confirm
+                  </Button>
+                </Flex>
+                <Flex w={"100%"}>
+                  <Button
+                    w={"100%"}
+                    colorScheme="red"
+                    onClick={() => {
+                      const shouldReject = window.confirm(
+                        "Apakah Anda yakin ingin menolak pesanan ini?"
+                      );
+                      if (shouldReject) {
+                        confirmOrReject({
+                          status: "CANCELED",
+                          id: props.id,
+                          room_id: orderData?.Room?.id,
+                        });
+                      }
+                    }}
+                    value="CANCELED"
+                  >
+                    Cancel Order
+                  </Button>
+                </Flex>
+              </>
+            ) : null}
 
             <Box>The Cappa</Box>
           </ModalFooter>
