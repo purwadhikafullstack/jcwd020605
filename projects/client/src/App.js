@@ -1,26 +1,35 @@
-import axios from "axios";
-import logo from "./logo.svg";
 import "./App.css";
+import { Routes } from "react-router-dom";
+import routes from "./routes/routes";
 import { useEffect, useState } from "react";
+import HashLoader from "react-spinners/HashLoader";
+import { Box } from "@chakra-ui/react";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
-    </div>
+    <>
+      {loading ? (
+        <Box
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          h={"100vh"}
+          bgColor={"#edf2f9"}
+        >
+          <HashLoader color="#2c7be5" size={100} />
+        </Box>
+      ) : (
+        <Routes>{routes.map((val) => val)}</Routes>
+      )}
+    </>
   );
 }
 
