@@ -10,7 +10,7 @@ const routes = require("./routes");
 const PORT = process.env.PORT || 8000;
 const app = express();
 
-db.sequelize.sync({ alter: true });
+// db.sequelize.sync({ alter: true });
 
 app.use(cors());
 

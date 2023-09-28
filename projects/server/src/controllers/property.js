@@ -55,6 +55,8 @@ const propertyController = {
         distinct: true,
       });
       const property = content.rows.slice(offset, limit * (page + 1));
+      console.log(property.length);
+
       return res.status(200).send({
         property: property,
         totalPage: Math.ceil(content.count / limit),
