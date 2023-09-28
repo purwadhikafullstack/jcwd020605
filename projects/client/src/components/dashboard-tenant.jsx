@@ -69,6 +69,7 @@ export default function DashboardTenant() {
       console.log(err);
     }
   };
+  console.log(properties);
   return (
     <>
       <Box

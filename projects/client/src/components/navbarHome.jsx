@@ -140,16 +140,29 @@ export default function NavbarHome() {
                     >
                       <Icon as={CgProfile} /> Profile
                     </PopoverBody> */}
-                    <PopoverFooter
-                      display={"flex"}
-                      alignItems={"center"}
-                      gap={"0.8em"}
-                      cursor={"pointer"}
-                      onClick={() => {
-                        logOutModal.onOpen();
-                      }}
-                    >
-                      <Icon as={BiLogOutCircle} /> LogOut
+
+                    <PopoverFooter>
+                      {userSelector?.id ? (
+                        <Flex
+                          alignItems={"center"}
+                          gap={"0.8em"}
+                          cursor={"pointer"}
+                          onClick={() => {
+                            logOutModal.onOpen();
+                          }}
+                        >
+                          <Icon as={BiLogOutCircle} /> LogOut
+                        </Flex>
+                      ) : (
+                        <Link
+                          display={"flex"}
+                          justifyContent={"center"}
+                          w={"100%"}
+                          href="/logintenant"
+                        >
+                          Login
+                        </Link>
+                      )}
                     </PopoverFooter>
                   </PopoverContent>
                 </Popover>
@@ -225,16 +238,22 @@ export default function NavbarHome() {
                     </Flex>
                   </DrawerBody>
                   <DrawerFooter justifyContent={"left"}>
-                    <Flex
-                      align={"center"}
-                      gap={"1em"}
-                      onClick={() => {
-                        logOutModal.onOpen();
-                      }}
-                    >
-                      <Icon as={BiLogOutCircle} />
-                      <Link>Logout</Link>
-                    </Flex>
+                    {userSelector?.id ? (
+                      <Flex
+                        alignItems={"center"}
+                        gap={"0.8em"}
+                        cursor={"pointer"}
+                        onClick={() => {
+                          logOutModal.onOpen();
+                        }}
+                      >
+                        <Icon as={BiLogOutCircle} /> LogOut
+                      </Flex>
+                    ) : (
+                      <Link display={"flex"} w={"100%"} href="/logintenant">
+                        Login
+                      </Link>
+                    )}
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>
