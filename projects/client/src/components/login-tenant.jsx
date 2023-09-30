@@ -57,6 +57,7 @@ export default function LoginTenant() {
         });
         nav("/landingpage");
       } catch (error) {
+        console.log(error.response);
         toast({
           description: error.response.data.message,
           status: "error",
