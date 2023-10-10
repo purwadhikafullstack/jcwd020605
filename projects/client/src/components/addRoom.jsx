@@ -202,6 +202,15 @@ export default function AddRooms(props) {
                   }}
                 />
               </Box>
+              <Flex
+                align={"center"}
+                justify={"center"}
+                gap={"0.5em"}
+                fontSize={"0.8em"}
+                fontWeight={"bold"}
+              >
+                Maximum upload file size: 1 MB
+              </Flex>
             </form>
           </ModalBody>
         </ModalContent>

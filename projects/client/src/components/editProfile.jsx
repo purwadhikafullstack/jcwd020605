@@ -20,6 +20,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { api } from "../api/api";
 import { RxCross2 } from "react-icons/rx";
+import { FcInfo } from "react-icons/fc";
 import { MdOutlineDone } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { fetch } from "../hoc/authProvider";
@@ -142,7 +143,7 @@ export default function EditProfile(props) {
                 />
               </Box>
 
-              <Box display={"flex"} justifyContent={"center"}>
+              <Box display={"flex"} flexDir={"column"} alignItems={"center"}>
                 <Box
                   w={"50%"}
                   color={"blue.300"}
@@ -157,6 +158,15 @@ export default function EditProfile(props) {
                 >
                   Edit picture or avatar{" "}
                 </Box>
+                <Flex
+                  align={"center"}
+                  gap={"0.5em"}
+                  fontSize={"0.8em"}
+                  fontWeight={"bold"}
+                >
+                  <Icon as={FcInfo} boxSize={6} />
+                  Maximum upload file size: 1 MB
+                </Flex>
               </Box>
             </Box>
 

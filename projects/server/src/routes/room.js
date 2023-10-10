@@ -4,6 +4,7 @@ const { fileUploader } = require("../middlewares/multer");
 
 const roomController = require("../controllers").roomController;
 
+router.get("/getroomlength", roomController.getRoomsLength);
 router.get("/", roomController.getAllRoom);
 router.get("/:id", roomController.getAllRoomById);
 router.get("/getroombyproperty/:id", roomController.getRoomByPropertyId);

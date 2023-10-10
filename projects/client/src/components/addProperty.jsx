@@ -11,6 +11,7 @@ import {
   Flex,
   Image,
   Select,
+  Icon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { api } from "../api/api";
@@ -19,6 +20,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { useFetchCity, useFetchProv } from "../hooks/useProvAndCity";
+import { FcInfo } from "react-icons/fc";
 export default function AddPropertyModal(props) {
   YupPassword(Yup);
   const nav = useNavigate();
@@ -205,6 +207,16 @@ export default function AddPropertyModal(props) {
                 </Flex>
               ) : null}
             </Box>
+            <Flex
+              align={"center"}
+              justify={"center"}
+              gap={"0.5em"}
+              fontSize={"0.8em"}
+              fontWeight={"bold"}
+            >
+              <Icon as={FcInfo} boxSize={6} />
+              Maximum upload file size: 1 MB
+            </Flex>
           </ModalBody>
         </ModalContent>
       </Modal>

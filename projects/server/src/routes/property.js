@@ -3,6 +3,7 @@ const { fileUploader } = require("../middlewares/multer");
 const router = express.Router();
 const propertyController = require("../controllers").propertyController;
 
+router.get("/propertieslength", propertyController.getPropertiesLength);
 router.get("/propertieslist", propertyController.getAllProperties);
 router.get("/:id", propertyController.getPropertiesDetailById);
 router.get("/getprovincebytenantid/:id", propertyController.getPropertyProv);

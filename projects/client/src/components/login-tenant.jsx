@@ -55,7 +55,7 @@ export default function LoginTenant() {
           duration: 3000,
           isClosable: true,
         });
-        nav("/landingpage");
+        // nav("/landingpage");
       } catch (error) {
         console.log(error.response);
         toast({
@@ -397,6 +397,19 @@ export default function LoginTenant() {
                     justifyContent={"center"}
                   >
                     Forget password?
+                  </Flex>
+                </Link>
+
+                <Link href={"/"}>
+                  <Flex
+                    className="go-login text-2"
+                    alignItems={"center"}
+                    display={"flex"}
+                    fontSize={"15px"}
+                    mt={"1em"}
+                    justifyContent={"center"}
+                  >
+                    Landing Page
                   </Flex>
                 </Link>
               </Flex>

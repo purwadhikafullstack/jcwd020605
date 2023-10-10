@@ -255,6 +255,19 @@ const propertyController = {
       return res.status(500).send(error);
     }
   },
+  getPropertiesLength: async (req, res) => {
+    try {
+      const { tenant_id } = req.query;
+      const find = await db.PropertyModel.findAll({
+        where: { tenant_id },
+      });
+      console.log(find.length);
+      return res.status(200).send(find);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
 };
 
 module.exports = propertyController;

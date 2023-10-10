@@ -154,6 +154,19 @@ const roomController = {
       res.status(500).send(error);
     }
   },
+  getRoomsLength: async (req, res) => {
+    try {
+      const { tenant_id } = req.query;
+      const find = await db.RoomModel.findAll({
+        where: { tenant_id },
+      });
+      console.log(find.length);
+      return res.status(200).send(find);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
 };
 
 module.exports = roomController;
