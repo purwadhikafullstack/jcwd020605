@@ -28,6 +28,7 @@ export default function DashboardTenant() {
     fetchOrderData();
     fetchProperyData();
     fetchRoomData();
+    fetchRoomLength();
   }, []);
 
   const fetchOrderData = async () => {
@@ -51,7 +52,6 @@ export default function DashboardTenant() {
       const res = await api.get("/room", {
         params: { id: id },
       });
-      setRoomLength(res.data.roomData);
       setRoomAvailable(res.data.roomAvailable);
       setRoomUnavailable(res.data.roomUnavailable);
     } catch (error) {
@@ -59,12 +59,23 @@ export default function DashboardTenant() {
     }
   };
 
+  const fetchRoomLength = async () => {
+    try {
+      const res = await api.get("/room/getroomlength", {
+        params: { tenant_id: id },
+      });
+      setRoomLength(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchProperyData = async () => {
     try {
-      const res = await api.get(`/properties/propertieslist`, {
-        params: { id: id },
+      const res = await api.get(`/properties/propertieslength`, {
+        params: { tenant_id: id },
       });
-      setProperties(res.data.property);
+      setProperties(res.data);
     } catch (err) {
       console.log(err);
     }
